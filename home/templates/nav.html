@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Navigation</title>
+    <link rel="stylesheet" href="{% static '/styles/index.css' %}">
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/cats">Cats</a></li>
+            <li><a href="/colonies">Colonias</a></li>
+            <li><a href="/municipality">Municipality</a></li>
+            <li><a href="/veterinarian">Veterinarian</a></li>
+            <li><a href="/users">Users</a></li>
+            <li><a href="/association">Association</a></li>
+        </ul>
+    </nav>
+</header>
+
+{% block content %}
+{% endblock %}
+</body>
+</html>

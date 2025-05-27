@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mishilovers Home</title>
+    </head>
+    <body>
+        {% extends 'nav.html' %}
+        {% block content %}
+        <main>
+            <div class="card">
+                <h2>Bienvenido a nuestro progama en progreso </h2>
+                <p>Aqui haremos una pequeña explicacion sobre la APP</p>
+            </div>
+            <section>
+                <h3>Sobre la APP</h3>
+                <h4>Funcionalitats principals</h4>
+                <p>L'aplicació cobreix un ecosistema complet de gestió que inclou</p>
+                <h4>Gestió d'usuaris:</h4>
+                <p>Usuaris amb diferents rols (voluntaris, administradors, etc.)
+                    Associacions de protecció animal amb els seus membres
+                    Ajuntaments i centres veterinaris</p>
+                <h4>Gestió territorial:</h4>
+                <p>Municipis organitzats per zones territorials
+                    Colònies de gats geolocalitzades amb gestors assignats
+                    Mapa interactiu per visualitzar ubicacions</p>
+                    
+                <h4>Seguiment dels animals:</h4>
+                <p>Registre individual de cada gat
+                    Historial d'observacions (estat de salut, comportament,desaparicions)
+                    Control veterinari amb registre de visites</p>
+                <h4>Coordinació institucional:</h4>
+                    
+                <p>Convenis entre administracions públiques i centres veterinaris
+                    Gestió de serveis veterinaris disponibles</p>
+            </section>
+        </main>
+        {% include 'footer.html' %}
+        {% endblock %}
+    </body>
+</html>

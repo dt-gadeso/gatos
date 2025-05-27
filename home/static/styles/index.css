@@ -1,0 +1,138 @@
+body {
+    background: linear-gradient(135deg, #f0f0f0 60%, #ffe4e1 100%);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    max-width: 600px;
+    margin: 40px auto 24px auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    animation: fadeIn 1s;
+}
+
+.card {
+    background: #ffe4e1;
+    border-radius: 14px;
+    padding: 24px 18px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(255,192,203,0.15);
+    text-align: center;
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: scale(1.03);
+}
+
+h2, h3 {
+    color: #d2691e;
+    margin-top: 0;
+    letter-spacing: 1px;
+}
+
+section {
+    margin-top: 18px;
+}
+
+footer {
+    background: #ffe4e1;
+    color: #d2691e;
+    text-align: center;
+    padding: 18px 0 10px 0;
+    font-size: 1.1em;
+    border-top: 2px solid #ffd1cc;
+    margin-top: auto;
+    box-shadow: 0 -2px 8px rgba(255,192,203,0.10);
+}
+footer a {
+    text-decoration: none;
+    margin: 0 8px;
+    transition: color 0.2s;
+}
+footer a:hover i {
+    color: #d2691e !important;
+}
+footer i {
+    font-size: 1.4em;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+nav {
+    background: #ffe4e1;
+    padding: 12px 0;
+    box-shadow: 0 2px 8px rgba(255,192,203,0.15);
+    display: flex;
+    justify-content: center;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+nav li {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: 500;
+    line-height: 1.5;
+    transition: color 0.2s;
+    position: relative;
+    padding: 0 30px;
+}
+
+nav a {
+    color: #d2691e;
+    text-decoration: none;
+    margin: 0 12px;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+nav a:hover {
+    color: #a0522d;
+}
+nav a.active {
+    color: #a0522d;
+    border-bottom: 2px solid #a0522d;
+}
+
+
+@media (max-width: 700px) {
+    main {
+        max-width: 98vw;
+        padding: 12px;
+    }
+    .card {
+        padding: 14px 8px;
+    }
+    h2 {
+        font-size: 1.5em;
+    }
+    h3 {
+        font-size: 1.1em;
+    }
+    footer {
+        font-size: 1em;
+        padding: 12px 0 6px 0;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+
