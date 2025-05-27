@@ -1,3 +1,48 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator, MaxValueValidator
+# from association.models import Association  # REMOVE
+# from cats.models import Cat  # REMOVE
 
-# Create your models here.
+class Role(models.Model):
+    name = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        db_table = 'roles'
+
+class User(AbstractUser):
+    email = models.EmailField(unique=True)
+    email_verified_at = models.DateTimeField(null=True, blank=True)
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
+    avatar_file = models.CharField(max_length=255, null=True, blank=True)
+    volunteer_number = models.CharField(max_length=50, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'users'
+
+class Member(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    association = models.ForeignKey('association.Association', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'members'
+        unique_together = ['user', 'association']
+
+class Observation(models.Model):
+    cat = models.ForeignKey('cats.Cat', on_delete=models.CASCADE)
+    observation = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Observation for {self.cat.name}"
+    
+    class Meta:
+        db_table = 'observations'
