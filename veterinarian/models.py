@@ -2,8 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
 from municipality.models import Municipality, Location, Council
-# from users.models import User  # REMOVE
-# from cats.models import Cat  # REMOVE
+
 
 class VetCenter(models.Model):
     name = models.CharField(max_length=100)

@@ -1,8 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
-# from users.models import User  # REMOVE
-# from colonies.models import Colony  # REMOVE
+
 
 class Cat(models.Model):
     SEX_CHOICES = [

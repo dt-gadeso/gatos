@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
-# from users.models import User  # REMOVE
+
 
 class Association(models.Model):
     name = models.CharField(max_length=100)
