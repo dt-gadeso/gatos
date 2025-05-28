@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .form import createnewuser, loginuser
 from django.contrib import auth
@@ -61,4 +59,20 @@ def signout(request):
     logout(request)
     return redirect('/')
 
-
+# def role(request):
+#     if request.method == 'GET':
+#         return render(request, 'signup.html', {
+#             'form': createrole()
+#         })
+#     else:
+#         # Handle form submission for role creation here
+#         form = createrole(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('/')
+#         else:
+#             return render(request, 'signup.html', {
+#                 'form': form,
+#                 'error': 'Invalid data for role creation'
+#             })
+        

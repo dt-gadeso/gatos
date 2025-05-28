@@ -35,9 +35,9 @@ class loginuser(forms.Form):
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter your password'})
     )
 
-class createrole(forms.Form):
-    name = forms.CharField(
-        label='Name',
-        max_length=30,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Your Role'})
-    )
+# class createrole(forms.Form):
+#     name = forms.CharField(
+#         label='Name',
+#         max_length=30,
+#         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Your Role'})
+#     )
