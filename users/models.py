@@ -13,7 +13,9 @@ class Role(models.Model):
         db_table = 'roles'
 
 class User(AbstractUser):
-    email = models.EmailField(unique=True)
+    usernames = models.CharField(max_length=30, null=True, blank=True)
+    password = models.CharField(max_length=128, null=True, blank=True)
+    email = models.EmailField(max_length=242,unique=True)
     email_verified_at = models.DateTimeField(null=True, blank=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
     avatar_file = models.CharField(max_length=255, null=True, blank=True)

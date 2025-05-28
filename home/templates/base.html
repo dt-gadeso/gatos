@@ -19,6 +19,12 @@
             <li><a href="/veterinarian">Veterinarian</a></li>
             <li><a href="/users">Users</a></li>
             <li><a href="/association">Association</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="/users/logout">logout</a></li>
+            {% else %}
+            <li><a href="/users/signin">signin</a></li>
+            <li><a href="/users/signup">signup</a></li>
+            {% endif %}
         </ul>
     </nav>
 </header>

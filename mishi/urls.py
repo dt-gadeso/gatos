@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from users import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -10,4 +11,7 @@ urlpatterns = [
     path('association/', include('association.urls'), name='association'),
     path('municipality/', include('municipality.urls'), name='municipality'),
     path('users/', include('users.urls'), name='users'),
+    path('users/signup/', views.signup, name='signup'),
+    path('users/signin/', views.signin, name='signin'),
+    path('users/logout/', views.signout, name='logout')
 ]

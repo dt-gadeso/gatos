@@ -1,7 +1,5 @@
-<p>hola tonotos</p>
-
 <h1>Login</h1>
-<form method="POST" action="/login/">
+<form method="POST" action="/users/signin/">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Login</button>
