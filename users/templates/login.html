@@ -1,6 +1,10 @@
 <h1>Login</h1>
 <form method="POST" action="/users/signin/">
     {% csrf_token %}
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
     {{ form.as_p }}
     <button type="submit">Login</button>
 </form>

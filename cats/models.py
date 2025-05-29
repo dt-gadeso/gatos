@@ -1,6 +1,4 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
-from decimal import Decimal
 
 
 class Cat(models.Model):
@@ -9,10 +7,10 @@ class Cat(models.Model):
         ('F', 'Female'),
     ]
     
-    name = models.CharField(max_length=50)
-    photo_file = models.CharField(max_length=255, null=True, blank=True)
-    chip = models.CharField(max_length=50, unique=True, null=True, blank=True)
-    birthday = models.DateField(null=True, blank=True)
+    catname = models.CharField(max_length=50)
+    photo_file = models.ImageField(upload_to='cats/img/') # Carpeta donde se guardan las imágenes
+    chip = models.CharField(max_length=50, unique=True, null=False)
+    birthday = models.DateField(null=False)
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     sterilized = models.BooleanField(default=False)
     dead = models.BooleanField(default=False)
@@ -22,7 +20,7 @@ class Cat(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return self.name
+        return self.catname
     
     class Meta:
         db_table = 'cats'

@@ -2,6 +2,10 @@
 
 <form action="/users/signup/" method="POST">
     {% csrf_token %}
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
     {{ form.as_p }}
     <button type="submit">Sign Up</button>
 </form>

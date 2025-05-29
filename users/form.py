@@ -1,7 +1,7 @@
 from django import forms
 
 
-class createnewuser(forms.Form):
+class CreateNewUser(forms.Form):
     username = forms.CharField(
         label='Username',
         max_length=30,
@@ -23,7 +23,7 @@ class createnewuser(forms.Form):
         widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email'})
     )
 
-class loginuser(forms.Form):
+class LoginUser(forms.Form):
     username = forms.CharField(
         label='Username',
         max_length=30,
@@ -35,9 +35,9 @@ class loginuser(forms.Form):
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter your password'})
     )
 
-# class createrole(forms.Form):
-#     name = forms.CharField(
-#         label='Name',
-#         max_length=30,
-#         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Your Role'})
-#     )
+class CreateRole(forms.Form):
+    name = forms.CharField(
+        label='Name',
+        max_length=30,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Your Role'})
+    )
