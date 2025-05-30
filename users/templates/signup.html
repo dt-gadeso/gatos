@@ -1,11 +1,23 @@
-<h1>signup</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'styles/login.css' %}">
+</head>
+<body>
+    <h1>Registrar-se</h1>
+    <form action="/users/signup/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if error %}
+        <p style="color:red;">{{ error }}</p>
+        {% endif %}
 
-<form action="/users/signup/" method="POST">
-    {% csrf_token %}
-    {% if error %}
-    <p style="color:red;">{{ error }}</p>
-    {% endif %}
-
-    {{ form.as_p }}
-    <button type="submit">Sign Up</button>
-</form>
+        {{ form.as_p }}
+        <button type="submit">Crear Cuenta</button>
+    </form>
+</body>
+</html>
+{% endblock %}

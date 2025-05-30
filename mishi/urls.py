@@ -12,8 +12,8 @@ urlpatterns = [
     path('colonies/', include('colonies.urls'), name='colonies'),
     path('association/', include('association.urls'), name='association'),
     path('municipality/', include('municipality.urls'), name='municipality'),
-    path('users/', include('users.urls'), name='users'),
-    path('users/signup/', views.signup, name='signup'),
-    path('users/signin/', views.signin, name='signin'),
-    path('users/logout/', views.signout, name='logout')
+    path('users/', include('users.urls'), name='users')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

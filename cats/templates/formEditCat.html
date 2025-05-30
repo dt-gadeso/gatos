@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edita Gat</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block content %}
+        {% if cat.photo_file %}
+            <img src="{{ cat.photo_file.url }}" alt="Foto actual del gato" style="max-width:200px;max-height:200px;">
+        {% endif %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Guardar</button>
+        </form>
+    {% endblock %}
+</body>
+</html>

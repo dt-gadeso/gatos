@@ -1,4 +1,4 @@
- body{
+body {
     background: linear-gradient(135deg, #f0f0f0 60%, #ffe4e1 100%);
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #333;
@@ -7,7 +7,6 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease;
 }
 
 main {
@@ -18,7 +17,6 @@ main {
     border-radius: 18px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.08);
     animation: fadeIn 1s;
-    transition: all 0.3s ease;
 }
 
 .card {
@@ -38,7 +36,6 @@ h2, h3 {
     color: #d2691e;
     margin-top: 0;
     letter-spacing: 1px;
-    transition: color 0.3s ease;
 }
 
 section {
@@ -54,7 +51,6 @@ footer {
     border-top: 2px solid #ffd1cc;
     margin-top: auto;
     box-shadow: 0 -2px 8px rgba(255,192,203,0.10);
-    transition: all 0.3s ease;
 }
 footer a {
     text-decoration: none;
@@ -76,7 +72,6 @@ nav {
     box-shadow: 0 2px 8px rgba(255,192,203,0.15);
     display: flex;
     justify-content: center;
-    transition: all 0.3s ease;
 }
 
 nav ul {
@@ -114,110 +109,6 @@ nav a.active {
     border-bottom: 2px solid #a0522d;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.dark-mode {
-    background-color: #222;
-    color: #fff;
-}
-
-button {
-    padding: 10px;
-    margin: 20px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.dark-mode button {
-    background-color: #fff;
-    color: #222;
-}
-
-.dark-mode {
-    background: linear-gradient(135deg, #1a1a1a 60%, #2a2a2a 100%) !important;
-    color: #f0f0f0 !important;
-}
-
-.dark-mode main {
-    background: #232323 !important;
-    color: #f1f1f1 !important;
-}
-
-.dark-mode .card {
-    background: #2a2a2a !important;
-    color: #f1f1f1 !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
-}
-
-.dark-mode h2, 
-.dark-mode h3 {
-    color: #ffb380 !important;
-}  
-
-.dark-mode nav {
-    background: #222 !important;
-    color: #f1f1f1 !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
-}
-
-.dark-mode footer {
-    background: #222 !important;
-    color: #f1f1f1 !important;
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.3) !important;
-    border-top-color: #444 !important;
-}
-
-.dark-mode nav a {
-    color: #f1f1f1 !important;
-}
-
-.dark-mode nav a.active {
-    color: #ffb380 !important;
-    border-bottom-color: #ffb380 !important;
-}
-
-.dark-mode nav a:hover {
-    color: #ffb380 !important;
-}
-
-.dark-mode footer a {
-    color: #ffb380 !important;
-}
-
-.dark-mode footer i {
-    color: #ffb380 !important;
-}
-
-#darkModeToggle {
-    background: #d2691e !important;
-    color: white !important;
-    border: none !important;
-    padding: 12px 16px !important;
-    border-radius: 25px !important;
-    cursor: pointer !important;
-    font-weight: bold !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3) !important;
-}
-
-#darkModeToggle:hover {
-    background: #a0522d !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(210, 105, 30, 0.4) !important;
-}
-
-.dark-mode #darkModeToggle {
-    background: #ffb380 !important;
-    color: #222 !important;
-}
-
-.dark-mode #darkModeToggle:hover {
-    background: #ff9f4a !important;
-}
 
 @media (max-width: 700px) {
     main {
@@ -237,15 +128,11 @@ button {
         font-size: 1em;
         padding: 12px 0 6px 0;
     }
-    
-    nav li {
-        padding: 0 15px;
-        font-size: 1em;
-    }
-    
 }
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(30px);}
     to { opacity: 1; transform: translateY(0);}
 }
+
+

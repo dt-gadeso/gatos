@@ -1,19 +1,19 @@
 from django import forms
-
+from .models import Role
 
 class CreateNewUser(forms.Form):
     username = forms.CharField(
-        label='Username',
+        label='Nombre de usuario',
         max_length=30,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your username'})
     )
     password = forms.CharField(
-        label='Password',
+        label='Contraseña',
         max_length=128,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter your password'})
     )
     confirm_password = forms.CharField(
-        label='Confirm Password',
+        label='Confirmar Contraseña',
         max_length=128,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm your password'})
     )
@@ -22,22 +22,32 @@ class CreateNewUser(forms.Form):
         max_length=242,
         widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email'})
     )
+    avatar_file = forms.ImageField(
+        label='Foto de avatar (opcional)',
+        required=False,
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
+    )
+    volunteer_number = forms.CharField(
+        label='Numero de Voluntario (opcional)',
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
 
 class LoginUser(forms.Form):
     username = forms.CharField(
-        label='Username',
+        label='Nombre de usuario',
         max_length=30,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your username'})
     )
     password = forms.CharField(
-        label='Password',
+        label='Contraseña',
         max_length=128,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter your password'})
     )
 
 class CreateRole(forms.Form):
     name = forms.CharField(
-        label='Name',
+        label='Role',
         max_length=30,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Your Role'})
     )

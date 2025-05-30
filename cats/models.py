@@ -8,7 +8,7 @@ class Cat(models.Model):
     ]
     
     catname = models.CharField(max_length=50)
-    photo_file = models.ImageField(upload_to='cats/img/') # Carpeta donde se guardan las imágenes
+    photo_file = models.ImageField(upload_to='cats/img/') # Carpeta donde se guardan las cats/imágenes/
     chip = models.CharField(max_length=50, unique=True, null=False)
     birthday = models.DateField(null=False)
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)

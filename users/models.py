@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Role(models.Model):
@@ -17,6 +16,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=242,unique=True)
     email_verified_at = models.DateTimeField(null=True, blank=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
+    #avatar_file = models.ImageField(upload_to='users/img/') # Carpeta donde se guardan las users/imágenes/
     avatar_file = models.CharField(max_length=255, null=True, blank=True)
     volunteer_number = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

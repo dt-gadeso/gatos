@@ -13,17 +13,21 @@
     <nav>
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/cats">Cats</a></li>
-            <li><a href="/colonies">Colonias</a></li>
-            <li><a href="/municipality">Municipality</a></li>
-            <li><a href="/veterinarian">Veterinarian</a></li>
-            <li><a href="/users">Users</a></li>
-            <li><a href="/association">Association</a></li>
             {% if user.is_authenticated %}
-            <li><a href="/users/logout">logout</a></li>
+            <li><a href="/users/areaStaff">Usuario</a></li>
             {% else %}
-            <li><a href="/users/signin">signin</a></li>
-            <li><a href="/users/signup">signup</a></li>
+            <li><a href="/users">Usuario</a></li>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <li><a href="/cats">Gatos</a></li>
+            <li><a href="/colonies">Colonias</a></li>
+            <li><a href="/municipality">Municipalidad</a></li>
+            <li><a href="/veterinarian">Veterinario</a></li>
+            <li><a href="/association">Assosiacion</a></li>
+            <li><a href="/users/logout">Cerrar Sesión</a></li>
+            {% else %}
+            <li><a href="/users/signin">Iniciar Sesión</a></li>
+            <li><a href="/users/signup">Registrar-se</a></li>
             {% endif %}
         </ul>
     </nav>
@@ -32,11 +36,13 @@
 {% block content %}
 {% endblock %}
 <footer>
-    &copy; 2024 Mishilovers
+    &copy; 2025 Mishilovers
     <br>
     <a href="https://www.tiktok.com/@montsecasaoliva?_t=8rKvWX2696v&_r=1" target="_blank"><i style="color: black;" class="fa-brands fa-tiktok"></i></a> <b>Tiktok</b>
     <br>
     <a href="https://www.instagram.com/mishiloversss/profilecard/" target="_blank"><i style="color: black;" class="fa-brands fa-square-instagram"></i></a> <b>Instagram</b>
+    <button id="darkModeToggle" style="position:fixed;bottom:20px;right:20px;z-index:1000;">Modo oscuro</button>
 </footer>
+<script src="{% static 'js/index.js' %}"></script>
 </body>
 </html>

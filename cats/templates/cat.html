@@ -18,6 +18,10 @@
                 <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
             </section>
             <a href="/cats/formNewCat">crear gatos</a>
+            <form action="/cats/buscarEditarGato" method="get" style="display:inline;">
+                <input type="text" name="chip" placeholder="Número de chip" required>
+                <button type="submit">editar gatos</button>
+            </form>
         </main>
     {% endblock %}
 </body>

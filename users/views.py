@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .form import CreateNewUser, LoginUser, CreateRole
-from django.contrib import auth
+from .models import User
+from django.contrib.auth.decorators import login_required
 
 def users(request):
-    return render(request, 'users.html')
+    if request.user.is_authenticated:
+        return render(request, 'areaStaff.html')
+    else:
+        return render(request, 'users.html')
 
 def signup(request):    
     if request.method == 'GET':
@@ -18,24 +22,33 @@ def signup(request):
                 "error": 'La contraseña no coincide o informacion invalida'
             })
         else:
-            User = auth.get_user_model()
+            form = CreateNewUser(request.POST, request.FILES)
             if User.objects.filter(username=request.POST["username"]).exists():
                 return render(request, 'signup.html', { 
                     'form': CreateNewUser(),
                     'error': 'El usuario ya existe'
                 })
             try:
-                user = User.objects.create_user(
-                    username=request.POST["username"],
-                    password=request.POST["password"],
-                    email=request.POST["email"]
-                )
-                user.save()
-                return redirect('signin')
-            except Exception as usuari:
+                if form.is_valid():
+                    print("Cleaned data:", form.cleaned_data)
+                    user = User(
+                        username=form.cleaned_data.get('username'),
+                        email=form.cleaned_data.get('email'),
+                        avatar_file=form.cleaned_data.get('avatar_file'),
+                        volunteer_number=form.cleaned_data.get('volunteer_number')
+                    )
+                    user.set_password(form.cleaned_data.get('password'))
+                    user.save()
+                    return redirect('signin')
+                else:
+                    return render(request, 'signup.html', { 
+                        'form': form,
+                        'error': 'Información inválida para crear el usuario'
+                    })
+            except Exception as e:
                 return render(request, 'signup.html', { 
                     'form': CreateNewUser(),
-                    'error': f'Error al crear el usuario: {str(usuari)}'
+                    'error': f'Error al crear el usuario: {str(e)}'
                 })
 
 def signin(request):
@@ -56,10 +69,12 @@ def signin(request):
                 'error': 'Contraseña incorrecta o usuario no existe'
             })
 
+@login_required
 def signout(request):
     logout(request)
     return redirect('/')
 
+@login_required
 def role(request):
     if request.method == 'GET':
         return render(request, 'role.html', {
@@ -75,4 +90,8 @@ def role(request):
                 'form': form,
                 'error': 'Informacion invalida para la creacion del role'
             })
+        
+@login_required
+def view_data_user(request):
+    d
         
