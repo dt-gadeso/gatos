@@ -1,5 +1,6 @@
 from django import forms
-from .models import Role
+from .models import Role, User
+
 
 class CreateNewUser(forms.Form):
     username = forms.CharField(
@@ -51,3 +52,19 @@ class CreateRole(forms.Form):
         max_length=30,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Your Role'})
     )
+
+class EditUser(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'avatar_file', 'volunteer_number']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'avatar_file': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'volunteer_number': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.required = False

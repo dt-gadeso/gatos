@@ -45,7 +45,7 @@ def newCat(request):
             })
         
 @login_required
-def buscarEditarGato(request):
+def searchEditCat(request):
     chip = request.GET.get('chip')
     try:
         cat = Cat.objects.get(chip=chip, user=request.user)

@@ -1,16 +1,63 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Staff</title>
+    <link rel="stylesheet" href="{% static 'styles/areaStaff.css' %}">
 </head>
 <body>
-    <h1>Mi Area Personal</h1>
-    
+<div class="staff-container mt-4">
+    <div class="staff-header">
+        <h1 class>Mi Área Personal</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card staff-form">
+                <div class="card-body">
+                    <h5 class="card-title">Mi Perfil</h5>
+                    <p class="card-text">Bienvenido, {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    {% if user.volunteer_number %}
+                    <p><strong>Número de voluntario:</strong> {{ user.volunteer_number }} </p>
+                    {% endif %}
+                    {% if user.avatar_file %}
+                    <img src="{{ user.avatar_file.url }}" alt="Avatar"
+                        width="100">
+                    {% endif %}
+                    <br>
+                    <br>
+                    <a href="{% url 'areaEdit' %}" class="staff-button">Editar Perfil</a>
+                    <form method="POST" action="{% url 'delete_user' %}" onsubmit="return confirm('¿Estás seguro de que deseas borrar tu cuenta?');">
+                        {% csrf_token %}
+                        <button type="submit" class="staff-delete">Borra Cuenta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Mis Actividades</h5>
+                    <table class="staff-table">
+                        <tbody>
+                            <tr>
+                                <td>Mis Penes</td>
+                            </tr>
+                            <tr>
+                                <td>Mis Pedidos</td>
+                            </tr>
+                            <tr>
+                                <td>Mis Mensajes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
 {% endblock %}

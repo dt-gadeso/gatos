@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .form import CreateNewUser, LoginUser, CreateRole
+from .form import CreateNewUser, LoginUser, CreateRole, EditUser
 from .models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import JsonResponse
 
 def users(request):
     if request.user.is_authenticated:
@@ -90,8 +92,42 @@ def role(request):
                 'form': form,
                 'error': 'Informacion invalida para la creacion del role'
             })
-        
+
 @login_required
-def view_data_user(request):
-    d
-        
+def delete_user(request):
+    if request.method == "POST":
+        request.user.delete()
+        return JsonResponse({"message": "Cuenta eliminada con éxito"}, status=200)
+    return JsonResponse({"error": "Método no permitido"}, status=400)
+
+@login_required
+def areaEdit(request):
+    if request.method == 'GET':
+        form = EditUser()
+        return render(request, 'areaEdit.html', {
+            'user': request.user,
+            'form': form
+        })
+    else:
+        try:
+            form = EditUser(request.POST, request.FILES)
+            if form.is_valid():
+                user = request.user
+                # Solo actualiza los campos que el usuario llenó
+                for field, value in form.cleaned_data.items():
+                    if value not in [None, '', [], {}]:
+                        setattr(user, field, value)
+                user.save()
+                return redirect('areaStaff')
+            else:
+                return render(request, 'areaEdit.html', {
+                    'form': form,
+                    'user': request.user,
+                    'error': 'Formulario inválido'
+                })
+        except Exception as e:
+            return render(request, 'areaEdit.html', {
+                'form': EditUser(),
+                'user': request.user,
+                'error': f'Error al editar el usuario: {str(e)}'
+            })
