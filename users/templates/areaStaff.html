@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'styles/areaStaff.css' %}">
 </head>
 <body>
-<div class="staff-container mt-4">
+<main class="staff-container mt-4">
     <div class="staff-header">
         <h1 class>Mi Área Personal</h1>
     </div>
@@ -16,19 +16,19 @@
         <div class="col-md-4">
             <div class="card staff-form">
                 <div class="card-body">
-                    <h5 class="card-title">Mi Perfil</h5>
+                    <h3 class="card-title">Mi Perfil</h3>
+                    <hr>
                     <p class="card-text">Bienvenido, {{ user.username }}</p>
                     <p><strong>Email:</strong> {{ user.email }}</p>
                     {% if user.volunteer_number %}
                     <p><strong>Número de voluntario:</strong> {{ user.volunteer_number }} </p>
                     {% endif %}
                     {% if user.avatar_file %}
-                    <img src="{{ user.avatar_file.url }}" alt="Avatar"
-                        width="100">
+                    <img src="{{ user.avatar_file.url }}" alt="Avatar" width="100">
                     {% endif %}
                     <br>
                     <br>
-                    <a href="{% url 'areaEdit' %}" class="staff-button">Editar Perfil</a>
+                    <button class="staff-button" onclick="window.location.href='{% url 'areaEdit' %}'">Editar Perfil</button>
                     <form method="POST" action="{% url 'delete_user' %}" onsubmit="return confirm('¿Estás seguro de que deseas borrar tu cuenta?');">
                         {% csrf_token %}
                         <button type="submit" class="staff-delete">Borra Cuenta</button>
@@ -39,25 +39,58 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Mis Actividades</h5>
-                    <table class="staff-table">
-                        <tbody>
-                            <tr>
-                                <td>Mis Penes</td>
-                            </tr>
-                            <tr>
-                                <td>Mis Pedidos</td>
-                            </tr>
-                            <tr>
-                                <td>Mis Mensajes</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h3 class="card-title">Tú Role</h3>
+                    <hr>
+                    {% if user.is_superuser %}
+                    <form method="POST" action="{% url 'giveRole' %}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="staff-button mt-2">Crear Rol</button>
+                    </form>
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <h4>Roles Existentes</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Usuarios</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for role in roles %}
+                                <tr>
+                                    <td>
+                                        <form method="POST" action="{% url 'giveRole' role.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <select name="user_id" class="form-control form-control-sm d-inline" style="width: auto;">
+                                                {% for available_user in users %}
+                                                    <option value="{{ available_user.id }}">{{ available_user.username }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-primary">Asignar</button>
+                                        </form>
+                                        {{ role.name }}
+                                    </td>
+                                    <td>{{ role.user.username }}</td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteRole('{{ role.id }}')">Eliminar</button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-</div>
+</main>
 </body>
 </html>
 {% endblock %}

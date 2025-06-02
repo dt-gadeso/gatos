@@ -22,7 +22,7 @@ class User(AbstractUser):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        username = self.usernames if self.usernames else self.username
+        username = self.username if self.username else "No User"
         role_name = self.role.name if self.role else "No Role"
         return f"{username} - {role_name}"
     

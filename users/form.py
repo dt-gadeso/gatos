@@ -46,12 +46,15 @@ class LoginUser(forms.Form):
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter your password'})
     )
 
-class CreateRole(forms.Form):
+class CreateRole(forms.ModelForm):
     name = forms.CharField(
         label='Role',
         max_length=30,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Your Role'})
     )
+    class Meta:
+        model = Role
+        fields = ['name']  
 
 class EditUser(forms.ModelForm):
     class Meta:
@@ -68,3 +71,15 @@ class EditUser(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.required = False
+
+class AssignedRole(forms.ModelForm):
+    role = forms.ModelChoiceField(
+        queryset=Role.objects.all(),
+        label='Role',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = User
+        fields = ['role']
+

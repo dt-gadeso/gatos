@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .form import CreateNewUser, LoginUser, CreateRole, EditUser
-from .models import User
+from .form import CreateNewUser, LoginUser, CreateRole, EditUser, AssignedRole
+from .models import User, Role
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+
 from django.http import JsonResponse
 
 def users(request):
@@ -76,22 +76,61 @@ def signout(request):
     logout(request)
     return redirect('/')
 
+
+
 @login_required
-def role(request):
+def giveRole(request):
     if request.method == 'GET':
-        return render(request, 'role.html', {
-            'form': CreateRole()
+        roles = Role.objects.all()
+        return render(request, 'areaStaff.html', {
+            'form': AssignedRole(),
+            'roles': roles
         })
     else:
-        form = CreateRole(request.POST)
+        form = AssignedRole(request.POST)
+        roles = Role.objects.all()
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('giveRole')
         else:
-            return render(request, 'role.html', {
+            return render(request, 'areaStaff.html', {
                 'form': form,
-                'error': 'Informacion invalida para la creacion del role'
+                'roles': roles,
+                'error': 'Información inválida para la creación del rol'
             })
+
+@login_required
+def AssignedRole(request, role_id=None):
+    roles = Role.objects.all()
+    users = User.objects.all()
+    if request.method == 'GET':
+        return render(request, 'areaStaff.html', {
+            'form': AssignedRole(),
+            'roles': roles,
+            'users': users
+        })
+    else:
+        if role_id:
+            # Assign user to role
+            user_id = request.POST.get('user_id')
+            user = get_object_or_404(User, id=user_id)
+            role = get_object_or_404(Role, id=role_id)
+            user.role = role
+            user.save()
+            return redirect('giveRole')
+        else:
+            form = AssignedRole(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('giveRole')
+            else:
+                return render(request, 'areaStaff.html', {
+                    'form': form,
+                    'roles': roles,
+                    'users': users,
+                    'error': 'Información inválida para la creación del rol'
+                })
+
 
 @login_required
 def delete_user(request):
