@@ -3,14 +3,18 @@ from django.contrib.auth import authenticate, login, logout
 from .form import CreateNewUser, LoginUser, CreateRole, EditUser, AssignedRole
 from .models import User, Role
 from django.contrib.auth.decorators import login_required
+from django.views import View
 
 from django.http import JsonResponse
 
-def users(request):
-    if request.user.is_authenticated:
-        return render(request, 'areaStaff.html')
-    else:
-        return render(request, 'users.html')
+class Staff(View):
+    def get(self, request):
+        # Controla el acceso de usuario autenticado y lista roles
+        if request.user.is_authenticated:
+            roles = Role.objects.all()
+            return render(request, 'areaStaff.html', {'roles': roles})
+        else:
+            return render(request, 'users.html')
 
 def signup(request):    
     if request.method == 'GET':
@@ -77,60 +81,77 @@ def signout(request):
     return redirect('/')
 
 
-
-@login_required
-def giveRole(request):
-    if request.method == 'GET':
-        roles = Role.objects.all()
-        return render(request, 'areaStaff.html', {
-            'form': AssignedRole(),
-            'roles': roles
-        })
-    else:
-        form = AssignedRole(request.POST)
-        roles = Role.objects.all()
-        if form.is_valid():
-            form.save()
-            return redirect('giveRole')
-        else:
-            return render(request, 'areaStaff.html', {
-                'form': form,
-                'roles': roles,
-                'error': 'Información inválida para la creación del rol'
-            })
-
-@login_required
-def AssignedRole(request, role_id=None):
+def area_staff(request):
     roles = Role.objects.all()
     users = User.objects.all()
-    if request.method == 'GET':
-        return render(request, 'areaStaff.html', {
-            'form': AssignedRole(),
-            'roles': roles,
-            'users': users
-        })
-    else:
-        if role_id:
-            # Assign user to role
-            user_id = request.POST.get('user_id')
-            user = get_object_or_404(User, id=user_id)
-            role = get_object_or_404(Role, id=role_id)
-            user.role = role
-            user.save()
-            return redirect('giveRole')
-        else:
-            form = AssignedRole(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('giveRole')
-            else:
-                return render(request, 'areaStaff.html', {
-                    'form': form,
-                    'roles': roles,
-                    'users': users,
-                    'error': 'Información inválida para la creación del rol'
-                })
+    return render(request, 'areaStaff.html', {'roles': roles, 'users': users})
 
+@login_required
+def assign_role(request):
+    if not request.user.is_superuser:
+        return redirect('areaStaff')
+    roles = Role.objects.all()
+    users = User.objects.all()
+    error = None
+
+    if request.method == 'POST':
+        if 'create_role' in request.POST:
+            # Crear un nuevo rol
+            role_name = request.POST.get('new_role_name')
+            if role_name:
+                if not Role.objects.filter(name=role_name).exists():
+                    Role.objects.create(name=role_name)
+                else:
+                    error = 'Ese rol ya existe.'
+            else:
+                error = 'Debes ingresar un nombre para el rol.'
+        
+        elif 'delete_role' in request.POST:
+            # Borrar rol
+            delete_role_id = request.POST.get('delete_role_id')
+            if delete_role_id:
+                try:
+                    role = get_object_or_404(Role, id=delete_role_id)
+                    
+                    # Verificar si hay usuarios con este rol
+                    users_with_role = User.objects.filter(role=role).count()
+                    
+                    if users_with_role > 0:
+                        error = f'No se puede borrar el rol "{role.name}" porque hay {users_with_role} usuario(s) asignado(s) a este rol'
+                    else:
+                        role_name = role.name
+                        role.delete()
+                        # Recargar roles después de borrar
+                        roles = Role.objects.all()
+                        return render(request, 'role.html', {
+                            'roles': roles,
+                            'users': users,
+                            'success': f'Rol "{role_name}" eliminado exitosamente'
+                        })
+                        
+                except Exception as e:
+                    error = f'Error al eliminar rol: {str(e)}'
+            else:
+                error = 'Debes seleccionar un rol para borrar.'
+        
+        else:
+            # Asignar rol a usuario
+            user_id = request.POST.get('user_id')
+            role_id = request.POST.get('role_id')
+            if user_id and role_id:
+                user = get_object_or_404(User, id=user_id)
+                role = get_object_or_404(Role, id=role_id)
+                user.role = role
+                user.save()
+                return redirect('areaStaff')
+            else:
+                error = 'Debes seleccionar un usuario y un rol.'
+
+    return render(request, 'role.html', {
+        'roles': roles,
+        'users': users,
+        'error': error
+    })
 
 @login_required
 def delete_user(request):
@@ -170,3 +191,6 @@ def areaEdit(request):
                 'user': request.user,
                 'error': f'Error al editar el usuario: {str(e)}'
             })
+
+
+

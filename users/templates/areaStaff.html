@@ -1,96 +1,144 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Staff - Mi Área Personal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/areaStaff.css' %}">
+{% endblock %}
+
 {% block content %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Staff</title>
-    <link rel="stylesheet" href="{% static 'styles/areaStaff.css' %}">
-</head>
-<body>
 <main class="staff-container mt-4">
     <div class="staff-header">
-        <h1 class>Mi Área Personal</h1>
+        <h1 class="staff-title">Mi Área Personal</h1>
     </div>
+    
     <div class="row">
+        <!-- Profile Section -->
         <div class="col-md-4">
             <div class="card staff-form">
                 <div class="card-body">
                     <h3 class="card-title">Mi Perfil</h3>
                     <hr>
-                    <p class="card-text">Bienvenido, {{ user.username }}</p>
-                    <p><strong>Email:</strong> {{ user.email }}</p>
-                    {% if user.volunteer_number %}
-                    <p><strong>Número de voluntario:</strong> {{ user.volunteer_number }} </p>
-                    {% endif %}
-                    {% if user.avatar_file %}
-                    <img src="{{ user.avatar_file.url }}" alt="Avatar" width="100">
-                    {% endif %}
-                    <br>
-                    <br>
-                    <button class="staff-button" onclick="window.location.href='{% url 'areaEdit' %}'">Editar Perfil</button>
-                    <form method="POST" action="{% url 'delete_user' %}" onsubmit="return confirm('¿Estás seguro de que deseas borrar tu cuenta?');">
-                        {% csrf_token %}
-                        <button type="submit" class="staff-delete">Borra Cuenta</button>
-                    </form>
+                    <div class="profile-info">
+                        <p class="card-text">Bienvenido, <strong>{{ user.username }}</strong></p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        
+                        {% if user.volunteer_number %}
+                        <p><strong>Número de voluntario:</strong> {{ user.volunteer_number }}</p>
+                        {% endif %}
+                        
+                        {% if user.avatar_file %}
+                        <div class="avatar-container mb-3">
+                            <img src="{{ user.avatar_file.url }}" alt="Avatar de {{ user.username }}" 
+                                 class="avatar-image" width="100" height="100">
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="profile-actions">
+                        <button class="staff-button mb-2" onclick="window.location.href='{% url 'areaEdit' %}'">
+                            Editar Perfil
+                        </button>
+                        
+                        <form method="POST" action="{% url 'delete_user' %}" 
+                              onsubmit="return confirm('¿Estás seguro de que deseas borrar tu cuenta? Esta acción no se puede deshacer.');" 
+                              class="delete-form">
+                            {% csrf_token %}
+                            <button type="submit" class="staff-delete">Borrar Cuenta</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Roles Section -->
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">Tú Role</h3>
+                    <h3 class="card-title">Tu Rol</h3>
                     <hr>
-                    {% if user.is_superuser %}
-                    <form method="POST" action="{% url 'giveRole' %}">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="staff-button mt-2">Crear Rol</button>
-                    </form>
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error }}</div>
-                    {% endif %}
                     
-                    <div class="mt-4">
-                        <h4>Roles Existentes</h4>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Usuarios</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for role in roles %}
-                                <tr>
-                                    <td>
-                                        <form method="POST" action="{% url 'giveRole' role.id %}" class="d-inline">
-                                            {% csrf_token %}
-                                            <select name="user_id" class="form-control form-control-sm d-inline" style="width: auto;">
-                                                {% for available_user in users %}
-                                                    <option value="{{ available_user.id }}">{{ available_user.username }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <button type="submit" class="btn btn-sm btn-primary">Asignar</button>
-                                        </form>
-                                        {{ role.name }}
-                                    </td>
-                                    <td>{{ role.user.username }}</td>
-                                    <td>
-                                        <button class="btn btn-danger btn-sm" onclick="deleteRole('{{ role.id }}')">Eliminar</button>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                    {% if user.is_superuser %}
+                    <div class="admin-actions mb-3">
+                        <a href="{% url 'assign_role' %}" class="btn btn-primary">
+                            <i class="fas fa-user-cog"></i> Asignar Rol a Usuario
+                        </a>
                     </div>
                     {% endif %}
+                        <div class="current-roles mb-4">
+                        <h4>Mis Roles Actuales</h4>
+                        {% if user.role %}
+                        <div class="role-badges">
+                            <span class="badge badge-primary role-badge">{{ user.role.name }}</span>
+                        </div>
+                        {% else %}
+                        <p class="text-muted">No tienes roles asignados.</p>
+                        {% endif %}
+                        </div>
+
+                    </div>
+                    
+                    <!-- All Roles Table -->
+                    <div class="all-roles">
+                        <h4>Todos los Roles Existentes</h4>
+                        
+                        <!-- Debug: Mostrar si hay roles -->
+                        <p><strong>Roles encontrados:</strong> {{ roles|length }}</p>
+                        
+                        {% if roles %}
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Nombre del Rol</th>
+                                            <th>Usuarios Asignados</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for role in roles %}
+                                        <tr>
+                                            <td>
+                                                <strong>{{ role.name }}</strong>
+                                                {% if role.user_set.exists %}
+                                                    <br><small class="text-muted">
+                                                        {{ role.user_set.count }} usuario{{ role.user_set.count|pluralize }}
+                                                    </small>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if role.user_set.exists %}
+                                                    {% for user in role.user_set.all %}
+                                                        <span class="user-tag">{{ user.username }}</span>
+                                                        {% if not forloop.last %}<br>{% endif %}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <span class="text-muted">Sin usuarios asignados</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-info">{{ role.user_set.count }}</span>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                No hay roles disponibles en el sistema.
+                                {% if user.is_superuser %}
+                                    <br><small>Puedes crear roles desde el panel de administración de Django.</small>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
-</body>
-</html>
 {% endblock %}
