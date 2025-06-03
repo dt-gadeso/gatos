@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
 
 
 class Role(models.Model):
@@ -53,3 +55,10 @@ class Observation(models.Model):
     
     class Meta:
         db_table = 'observations'
+
+
+@receiver(post_migrate)
+def create_default_roles(sender, **kwargs):
+    if sender.name == 'users':
+        Role.objects.get_or_create(name='member')
+        Role.objects.get_or_create(name='manager')

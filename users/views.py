@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .form import CreateNewUser, LoginUser, CreateRole, EditUser, AssignedRole
-from .models import User, Role
+from .models import User, Role, Member
+from association.models import Manager
 from django.contrib.auth.decorators import login_required
 from django.views import View
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from django.http import JsonResponse
 
@@ -194,3 +197,17 @@ def areaEdit(request):
 
 
 
+@receiver(post_save, sender=User)
+def role_manager(sender, instance, **kwargs):
+    # Verifica si el usuario tiene un rol y si ese rol es "manager"
+    if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'manager':
+        # Crea o actualiza el registro en la tabla Manager con el user_id
+        Manager.objects.update_or_create(user_id=instance.id, defaults={})
+       
+        
+@receiver(post_save, sender=User)
+def role_member(sender, instance, **kwargs):
+    # Verifica si el usuario tiene un rol y si ese rol es "manager"
+    if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'member':
+        # Crea o actualiza el registro en la tabla Manager con el user_id
+        Member.objects.update_or_create(user_id=instance.id, defaults={})        

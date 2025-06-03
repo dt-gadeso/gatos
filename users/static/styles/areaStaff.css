@@ -1,4 +1,4 @@
-/* Main container styles */
+
 .staff-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -6,7 +6,7 @@
     font-family: Arial, sans-serif;
 }
 
-/* Header styles */
+
 .staff-header {
     background-color: orange;
     padding: 15px;
@@ -15,7 +15,6 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Table styles */
 .staff-table {
     width: 100%;
     border-collapse: collapse;
@@ -40,7 +39,7 @@
     color: black;
 }
 
-/* Button styles */
+
 .staff-button {
     background-color: white;
     color: black;
@@ -68,7 +67,7 @@
 .staff-delete:hover {
     background-color: #ff5e5e;
 }
-/* Form styles */
+
 .staff-form {
     background-color: white;
     padding: 20px;
