@@ -12,13 +12,22 @@
                 <option value="{{ user.id }}">{{ user.username }}</option>
             {% endfor %}
         </select>
-    </div>
+    </div> 
     <div>
         <label for="role_id">Rol:</label>
-        <select name="role_id" id="role_id" required>
+        <select name="role_id" id="role_id" required onchange="toggleAssociationSelect()">
             <option value="" disabled selected>Selecciona un rol</option>
             {% for role in roles %}
                 <option value="{{ role.id }}">{{ role.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div id="association-div" style="display:none;">
+        <label for="association_id">Asociación:</label>
+        <select name="association_id" id="association_id">
+            <option value="" disabled selected>Selecciona una asociación</option>
+            {% for association in associations %}
+                <option value="{{ association.id }}">{{ association.name }}</option>
             {% endfor %}
         </select>
     </div>
@@ -60,5 +69,6 @@
     </div>
     <button type="submit" name="delete_role_btn" onclick="return confirm('¿Estás seguro de que deseas borrar este rol?');">Borrar Rol</button>
 </form>
-
+<script src="{% static 'js/users.js' %}">
+</script>
 {% endblock %}

@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from association.models import Association  
 
 from django.http import JsonResponse
 
@@ -95,6 +96,7 @@ def assign_role(request):
         return redirect('areaStaff')
     roles = Role.objects.all()
     users = User.objects.all()
+    associations = Association.objects.all()
     error = None
 
     if request.method == 'POST':
@@ -141,10 +143,19 @@ def assign_role(request):
             # Asignar rol a usuario
             user_id = request.POST.get('user_id')
             role_id = request.POST.get('role_id')
+            association_id = request.POST.get('association_id')
             if user_id and role_id:
                 user = get_object_or_404(User, id=user_id)
                 role = get_object_or_404(Role, id=role_id)
                 user.role = role
+
+                # Si el rol es manager o member, asigna la asociación
+                if role.name.lower() in ['manager', 'member'] and association_id:
+                    association = get_object_or_404(Association, id=association_id)
+                    user.association = association
+                elif hasattr(user, 'association'):
+                    user.association = None
+
                 user.save()
                 return redirect('areaStaff')
             else:
@@ -153,9 +164,9 @@ def assign_role(request):
     return render(request, 'role.html', {
         'roles': roles,
         'users': users,
+        'associations': associations,
         'error': error
     })
-
 @login_required
 def delete_user(request):
     if request.method == "POST":
@@ -207,7 +218,7 @@ def role_manager(sender, instance, **kwargs):
         
 @receiver(post_save, sender=User)
 def role_member(sender, instance, **kwargs):
-    # Verifica si el usuario tiene un rol y si ese rol es "manager"
+    # Verifica si el usuario tiene un rol y si ese rol es "member"
     if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'member':
-        # Crea o actualiza el registro en la tabla Manager con el user_id
+        # Crea o actualiza el registro en la tabla Member con el user_id
         Member.objects.update_or_create(user_id=instance.id, defaults={})        

@@ -1,105 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mishilovers Home</title>
-</head>
-<body>
-    {% extends 'base.html' %}
-    {% block content %}
-        <main>
-            <div>
-                <h2>¡Hola!</h2>
-                <p>Esta es la página principal de Mishilovers.</p>
-            </div>
-            <section>
-                <h3>Sobre nosotros</h3>
-                <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
-            </section>
-            <!-- Associations Section -->
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Tu Asociación</h3>
-                    <hr>
-                    
-                    {% if user.is_superuser %}
-                    <div class="admin-actions mb-3">
-                        <a href="{% url 'assign_role' %}" class="btn btn-primary">
-                            <i class="fas fa-user-cog"></i> Asignar una Asociación a un Usuario
-                        </a>
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/association.css' %}">
+<main>
+    <div>
+        <h2>¡Hola!</h2>
+        <p>Esta es la página principal de Mishilovers.</p>
+    </div>
+    <section>
+        <h3>Sobre nosotros</h3>
+        <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
+    </section>
+    <!-- Asociación Section -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Tu Asociación</h3>
+                <hr>
+                {% if user.is_superuser %}
+                <div class="admin-actions mb-3">
+                    <a href="{% url 'association' %}" class="btn btn-primary">
+                        <i class="fas fa-user-cog"></i> Asignar una Asociación a un Usuario
+                    </a>
+                </div>
+                {% endif %}
+                <div class="current-associations mb-4">
+                    <h4>Mis Asociaciones Actuales</h4>
+                    {% if user.association_set.exists %}
+                    <div class="association-badges">
+                        {% for association in user.association_set.all %}
+                        <span class="badge badge-primary association-badge">{{ association.name }}</span>
+                        {% endfor %}
                     </div>
+                    {% else %}
+                    <p class="text-muted">No tienes asociaciones asignadas.</p>
                     {% endif %}
-                        <div class="current-roles mb-4">
-                        <h4>Mis Asociaciones Actuales</h4>
-                        {% if user.role.name %}
-                        <div class="role-badges">
-                            <span class="badge badge-primary role-badge">{{ user.role.name }}</span>
-                        </div>
-                        {% else %}
-                        <p class="text-muted">No tienes roles asignados.</p>
-                        {% endif %}
-                        </div>
-
-                    </div>
-                    
-                    <!-- All Roles Table -->
-                    <div class="all-roles">
-                        <h4>Todos los Roles Existentes</h4>
-                        
-                        <!-- Debug: Mostrar si hay roles -->
-                        <p><strong>Roles encontrados:</strong> {{ roles|length }}</p>
-                        
-                        {% if roles %}
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th>Nombre del Rol</th>
-                                            <th>Usuarios Asignados</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for role in roles %}
-                                        <tr>
-                                            <td>
-                                                <strong>{{ role.name }}</strong>
-                                                {% if role.user_set.exists %}
-                                                    <br><small class="text-muted">
-                                                        {{ role.user_set.count }} usuario{{ role.user_set.count|pluralize }}
-                                                    </small>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                {% if role.user_set.exists %}
-                                                    {% for user in role.user_set.all %}
-                                                        <span class="user-tag">{{ user.username }}</span>
-                                                        {% if not forloop.last %}<br>{% endif %}
-                                                    {% endfor %}
-                                                {% else %}
-                                                    <span class="text-muted">Sin usuarios asignados</span>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-info">{{ role.user_set.count }}</span>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% else %}
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle"></i>
-                                No hay roles disponibles en el sistema.
-                                {% if user.is_superuser %}
-                                    <br><small>Puedes crear associaciones desde el panel de administración de Django.</small>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-        </main>
-    {% endblock %}
-</body>
-</html>
+                </div>
+            </div>
+            <!-- All Associations Table -->
+            <div class="all-associations">
+                <h4>Todas las Asociaciones Existentes</h4>
+                <p><strong>Asociaciones encontradas:</strong> {{ associations|length }}</p>
+                {% if associations %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Nombre de la Asociación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for association in associations %}
+                            <tr>
+                                <td class="text-center">
+                                    <strong>{{ association.name }}</strong>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    No hay asociaciones disponibles en el sistema.
+                    {% if user.is_superuser %}
+                        <br><small>Puedes crear asociaciones desde el panel de administración de Django.</small>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

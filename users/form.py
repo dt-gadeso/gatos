@@ -1,5 +1,6 @@
 from django import forms
 from .models import Role, User
+from .models import Association
 
 
 class CreateNewUser(forms.Form):
@@ -77,9 +78,18 @@ class AssignedRole(forms.ModelForm):
         queryset=Role.objects.all(),
         label='Role',
         widget=forms.Select(attrs={'class': 'form-control'})
+    ) 
+    association = forms.ModelChoiceField(
+        queryset=None,
+        label='Association',
+        widget=forms.Select(attrs={'class': 'form-control'})
     )
 
     class Meta:
         model = User
-        fields = ['role']
+        fields = ['role', 'association']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['association'].queryset = Association.objects.all()
 
