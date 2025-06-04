@@ -17,7 +17,7 @@ class Association(models.Model):
         db_table = 'associations'
 
 class Manager(models.Model):
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)  # Use string reference
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name='association_managers', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
