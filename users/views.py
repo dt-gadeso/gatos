@@ -140,26 +140,45 @@ def assign_role(request):
                 error = 'Debes seleccionar un rol para borrar.'
         
         else:
-            # Asignar rol a usuario
             user_id = request.POST.get('user_id')
             role_id = request.POST.get('role_id')
             association_id = request.POST.get('association_id')
+            print("association_id recibido:", association_id)
             if user_id and role_id:
                 user = get_object_or_404(User, id=user_id)
                 role = get_object_or_404(Role, id=role_id)
+                association = None
+                if association_id and association_id != "":
+                    try:
+                        association = Association.objects.get(id=int(association_id))
+                    except Association.DoesNotExist:
+                        association = None
+
+                # Elimina al usuario de ambas tablas antes de asignar el nuevo rol
+                Manager.objects.filter(user=user).delete()
+                Member.objects.filter(user=user).delete()
+
+                # Asigna el usuario a la tabla correspondiente según el rol
+                if role.name.lower() == 'manager':
+                    Manager.objects.update_or_create(
+                        user=user,
+                        defaults={'association': association}
+                    )
+                elif role.name.lower() == 'member':
+                    Member.objects.update_or_create(
+                        user=user,
+                        defaults={'association': association}
+                    )
+
                 user.role = role
-
-                # Si el rol es manager o member, asigna la asociación
-                if role.name.lower() in ['manager', 'member'] and association_id:
-                    association = get_object_or_404(Association, id=association_id)
-                    user.association = association
-                elif hasattr(user, 'association'):
-                    user.association = None
-
                 user.save()
+
+                print("user.association.id guardado:", user.association.id if user.association else None)
                 return redirect('areaStaff')
             else:
                 error = 'Debes seleccionar un usuario y un rol.'
+
+
 
     return render(request, 'role.html', {
         'roles': roles,
@@ -221,4 +240,4 @@ def role_member(sender, instance, **kwargs):
     # Verifica si el usuario tiene un rol y si ese rol es "member"
     if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'member':
         # Crea o actualiza el registro en la tabla Member con el user_id
-        Member.objects.update_or_create(user_id=instance.id, defaults={})        
+        Member.objects.update_or_create(user_id=instance.id, defaults={})

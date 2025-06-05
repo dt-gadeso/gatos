@@ -20,6 +20,7 @@ class User(AbstractUser):
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
     avatar_file = models.ImageField(upload_to='users/img/') # Carpeta donde se guardan las users/imágenes/
     volunteer_number = models.CharField(max_length=50, null=True, blank=True)
+    association = models.ForeignKey(Association, null=True, blank=True, on_delete=models.SET_NULL)  # <-- Añadido
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

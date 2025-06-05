@@ -1,23 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mishilovers Home</title>
-</head>
-<body>
-    {% extends 'base.html' %}
-    {% block content %}
-        <main>
-            <div>
-                <h2>¡Hola!</h2>
-                <p>Esta es la página principal de Mishilovers.</p>
-            </div>
-            <section>
-                <h3>Sobre nosotros</h3>
-                <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
-            </section>
-        </main>
-    {% endblock %}
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div>
+            <h2>¡Hola!</h2>
+            <p>Esta es la página principal de Mishilovers.</p>
+        </div>
+        <section>
+            <h3>Sobre nosotros</h3>
+            <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
+        </section>
+        <section>
+            <h3>Mapa de Sant Pere de Ribes</h3>
+            <div id="map" style="height: 400px; width: 100%;"></div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="{% static 'js/map.js' %}"></script>
+{% endblock %}
