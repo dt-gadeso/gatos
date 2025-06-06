@@ -1,28 +1,109 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block head %}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-{% endblock %}
-
 {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mishilovers Home</title>
+        <link rel="stylesheet" href="{% static 'css/map.css' %}">
+    </head>
+    <body>
     <main>
-        <div>
-            <h2>¡Hola!</h2>
-            <p>Esta es la página principal de Mishilovers.</p>
-        </div>
-        <section>
-            <h3>Sobre nosotros</h3>
-            <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
-        </section>
-        <section>
-            <h3>Mapa de Sant Pere de Ribes</h3>
-            <div id="map" style="height: 400px; width: 100%;"></div>
-        </section>
-    </main>
-{% endblock %}
+        <div class="container">
+            <!-- Overlay -->
+            <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+            
+            <!-- Sidebar Panel -->
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <button class="close-btn" onclick="closeSidebar()">&times;</button>
+                    <h2>Información del Lugar</h2>
+                </div>
+                
+                <div class="sidebar-content">
+                    <h2 class="location-title">Sant Pere de Ribes</h2>
+                    
+                    <!-- Navigation Menu -->
+                    <nav>
+                        <ul class="nav-menu">
+                            <li><a href="#historia">📚 Historia</a></li>
+                            <li><a href="#turismo">🏛️ Turismo</a></li>
+                            <li><a href="#cultura">🎭 Cultura</a></li>
+                            <li><a href="#gastronomia">🍽️ Gastronomía</a></li>
+                            <li><a href="#contacto">📞 Contacto</a></li>
+                        </ul>
+                    </nav>
 
-{% block extra_scripts %}
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+                    <!-- Image Gallery -->
+                    <div class="image-gallery">
+                        <h3>Galería de Imágenes</h3>
+                        <div class="gallery-grid">
+                            <div class="gallery-item">
+                                <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=300&h=200&fit=crop" alt="Paisaje mediterráneo">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop" alt="Arquitectura catalana">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop" alt="Costa mediterránea">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://images.unsplash.com/photo-1520637836862-4d197d17c91a?w=300&h=200&fit=crop" alt="Pueblo catalán">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Information Sections -->
+                    <div class="info-section">
+                        <h3>🏛️ Historia</h3>
+                        <p>Sant Pere de Ribes es un municipio de la provincia de Barcelona, en Cataluña, España. Su historia se remonta a tiempos medievales, con una rica herencia cultural y arquitectónica.</p>
+                    </div>
+
+                    <div class="info-section">
+                        <h3>🌟 Puntos de Interés</h3>
+                        <p>Destaca por sus paisajes mediterráneos, arquitectura tradicional catalana y proximidad a la costa. Es un lugar perfecto para disfrutar de la tranquilidad y la belleza natural.</p>
+                    </div>
+
+                    <div class="info-section">
+                        <h3>🎭 Cultura Local</h3>
+                        <p>La localidad mantiene vivas sus tradiciones catalanas, con festivales locales, mercados tradicionales y una gastronomía típica de la región mediterránea.</p>
+                    </div>
+
+                    <div class="info-section">
+                        <h3>📍 Ubicación</h3>
+                        <p>Coordenadas: 41.383°N, 2.178°E<br>
+                        Provincia: Barcelona<br>
+                        Comunidad: Cataluña<br>
+                        País: España</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="main-content" id="mainContent">
+                <h2>¡Hola!</h2>
+                <p>Esta es la página principal de Mishilovers.</p>
+                <section>
+                    <h3>Sobre nosotros</h3>
+                    <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
+                </section>
+                <section>
+                    <h3>Mapa de Sant Pere de Ribes</h3>
+                    <nav style="margin-bottom: 10px; background: #f0f0f0; padding: 8px; border-radius: 5px;">
+                        <span><strong>Instrucciones:</strong> Haz clic en el mapa para añadir un punto personalizado.</span>
+                    </nav>
+                    <div class="map-container">
+                        <div id="map">
+                            {{ mapa_html|safe }}
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
     <script src="{% static 'js/map.js' %}"></script>
+    </body>
+</html>
 {% endblock %}
