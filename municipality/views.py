@@ -1,36 +1,123 @@
-from django.shortcuts import render
-import folium
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+import json
+from .models import Municipality, Location, Zone
 
-# Create your views here.
-def municipality(request):
-    # Crear un mapa centrado en Sant Pere de Ribes
-    mapa = folium.Map(location=[41.383, 2.178], zoom_start=12)
+def municipality_view(request):
+    """Vista principal para mostrar el mapa con todas las ubicaciones"""
+    locations = Location.objects.filter(latitude__isnull=False, longitude__isnull=False)
+    municipalities = Municipality.objects.all()
+    
+    context = {
+        'locations': locations,
+        'municipalities': municipalities,
+    }
+    return render(request, 'municipality.html', context)
 
-    # Agregar un marcador con popup personalizado
-    popup_html = """
-    <div style="width: 200px;">
-        <h4 style="margin-bottom: 10px; color: #2c3e50;">Sant Pere de Ribes</h4>
-        <p style="margin-bottom: 10px;">¡Haz clic aquí para ver más información!</p>
-        <button onclick="parent.handleMapClick()" style="
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        ">Ver Detalles 📍</button>
-    </div>
-    """
+def get_locations_json(request):
+    """API endpoint para obtener todas las ubicaciones en formato JSON"""
+    locations = Location.objects.filter(latitude__isnull=False, longitude__isnull=False)
+    
+    locations_data = []
+    for location in locations:
+        locations_data.append({
+            'id': location.id,
+            'name': location.nombre or location.address,
+            'description': location.description or '',
+            'address': location.address,
+            'latitude': float(location.latitude),
+            'longitude': float(location.longitude),
+            'municipality': location.municipality.name,
+            'municipality_id': location.municipality.id,
+        })
+    
+    return JsonResponse({'locations': locations_data})
 
-    folium.Marker(
-        [41.383, 2.178],
-        tooltip="Haz clic para más información",
-        popup=folium.Popup(popup_html, max_width=250)
-    ).add_to(mapa)
+@csrf_exempt
+def save_location(request):
+    """API endpoint para guardar nuevas ubicaciones"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            
+            # Obtener o crear municipio por defecto
+            municipality_id = data.get('municipality_id')
+            if municipality_id:
+                municipality = Municipality.objects.get(id=municipality_id)
+            else:
+                # Usar el primer municipio o crear uno por defecto
+                municipality = Municipality.objects.first()
+                if not municipality:
+                    municipality = Municipality.objects.create(name="Default Municipality")
+            
+            location = Location.objects.create(
+                nombre=data.get('name', 'Ubicación sin nombre'),
+                description=data.get('description', ''),
+                address=data.get('address', data.get('name', 'Dirección no especificada')),
+                latitude=data.get('latitude'),
+                longitude=data.get('longitude'),
+                municipality=municipality
+            )
+            
+            return JsonResponse({
+                'success': True,
+                'id': location.id,
+                'message': 'Ubicación guardada exitosamente'
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=400)
+    
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-    # Convertir el mapa a HTML
-    mapa_html = mapa._repr_html_()
+def location_detail(request, location_id):
+    """Vista para mostrar detalles de una ubicación específica"""
+    location = get_object_or_404(Location, id=location_id)
+    
+    context = {
+        'location': location,
+    }
+    return render(request, 'location.html', context)
 
-    # Pasar el HTML del mapa a la plantilla
-    return render(request, 'municipality.html', {'mapa_html': mapa_html})
+@login_required
+def newLocation(request):    
+    if request.method == 'GET':
+        return render(request, 'location.html', {
+            'form': CreateCat(user=request.user)
+        })
+    else:
+        form = CreateCat(request.POST, request.FILES, user=request.user)
+        if form.is_valid():
+            try:
+                print("Cleaned data:", form.cleaned_data)
+                cat = Cat(
+                    catname=form.cleaned_data.get('catname'),
+                    photo_file=form.cleaned_data.get('photo_file'),
+                    chip=form.cleaned_data.get('chip'),
+                    birthday=form.cleaned_data.get('birthday'),
+                    sex=form.cleaned_data.get('sex'),
+                    sterilized=form.cleaned_data.get('sterilized') == 'True',
+                    dead=form.cleaned_data.get('dead') == 'True',
+                    colony=form.cleaned_data.get('colony').id if form.cleaned_data.get('colony') else None,
+                    user=request.user
+                )
+                cat.save()
+                return redirect('cats')  
+            except Exception as e:
+                print("Error:", e)
+                return render(request, 'location.html.html', { 
+                    'form': form,
+                    'error': f'Error al crear el gato: {str(e)}'
+                })
+        else:
+            print("Form errors:", form.errors)
+            return render(request, 'location.html.html', {
+                'form': form,
+                'error': 'Formulario inválido'
+            })
+        

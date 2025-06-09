@@ -9,101 +9,346 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Mishilovers Home</title>
         <link rel="stylesheet" href="{% static 'css/map.css' %}">
+        <!-- Add Leaflet CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     </head>
     <body>
-    <main>
-        <div class="container">
-            <!-- Overlay -->
-            <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-            
-            <!-- Sidebar Panel -->
-            <div class="sidebar" id="sidebar">
-                <div class="sidebar-header">
-                    <button class="close-btn" onclick="closeSidebar()">&times;</button>
-                    <h2>Información del Lugar</h2>
+        <!-- Add Leaflet JavaScript -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        
+        <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+        
+        <!-- Location Info Popup -->
+        <div class="popup-overlay" id="popup-overlay">
+            <div class="popup-modal">
+                <div class="popup-header">
+                    <h3>Información del Lugar</h3>
+                    <button class="close-popup" onclick="closePopup()">&times;</button>
                 </div>
-                
-                <div class="sidebar-content">
-                    <h2 class="location-title">Sant Pere de Ribes</h2>
-                    
-                    <!-- Navigation Menu -->
-                    <nav>
-                        <ul class="nav-menu">
-                            <li><a href="#historia">📚 Historia</a></li>
-                            <li><a href="#turismo">🏛️ Turismo</a></li>
-                            <li><a href="#cultura">🎭 Cultura</a></li>
-                            <li><a href="#gastronomia">🍽️ Gastronomía</a></li>
-                            <li><a href="#contacto">📞 Contacto</a></li>
-                        </ul>
-                    </nav>
-
-                    <!-- Image Gallery -->
-                    <div class="image-gallery">
-                        <h3>Galería de Imágenes</h3>
-                        <div class="gallery-grid">
-                            <div class="gallery-item">
-                                <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=300&h=200&fit=crop" alt="Paisaje mediterráneo">
-                            </div>
-                            <div class="gallery-item">
-                                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop" alt="Arquitectura catalana">
-                            </div>
-                            <div class="gallery-item">
-                                <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop" alt="Costa mediterránea">
-                            </div>
-                            <div class="gallery-item">
-                                <img src="https://images.unsplash.com/photo-1520637836862-4d197d17c91a?w=300&h=200&fit=crop" alt="Pueblo catalán">
+                <div class="popup-content">
+                    <form id="location-form">
+                        <div class="form-group">
+                            <label for="location-name">Nombre del lugar:</label>
+                            <input type="text" id="location-name" placeholder="Ingresa el nombre del lugar" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="location-description">Descripción:</label>
+                            <textarea id="location-description" placeholder="Describe el lugar..." rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Coordenadas:</label>
+                            <div class="coordinates-display">
+                                <span>Lat: <span id="popup-lat">0.000000</span></span>
+                                <span>Lng: <span id="popup-lng">0.000000</span></span>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Information Sections -->
-                    <div class="info-section">
-                        <h3>🏛️ Historia</h3>
-                        <p>Sant Pere de Ribes es un municipio de la provincia de Barcelona, en Cataluña, España. Su historia se remonta a tiempos medievales, con una rica herencia cultural y arquitectónica.</p>
-                    </div>
-
-                    <div class="info-section">
-                        <h3>🌟 Puntos de Interés</h3>
-                        <p>Destaca por sus paisajes mediterráneos, arquitectura tradicional catalana y proximidad a la costa. Es un lugar perfecto para disfrutar de la tranquilidad y la belleza natural.</p>
-                    </div>
-
-                    <div class="info-section">
-                        <h3>🎭 Cultura Local</h3>
-                        <p>La localidad mantiene vivas sus tradiciones catalanas, con festivales locales, mercados tradicionales y una gastronomía típica de la región mediterránea.</p>
-                    </div>
-
-                    <div class="info-section">
-                        <h3>📍 Ubicación</h3>
-                        <p>Coordenadas: 41.383°N, 2.178°E<br>
-                        Provincia: Barcelona<br>
-                        Comunidad: Cataluña<br>
-                        País: España</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Main Content -->
-            <div class="main-content" id="mainContent">
-                <h2>¡Hola!</h2>
-                <p>Esta es la página principal de Mishilovers.</p>
-                <section>
-                    <h3>Sobre nosotros</h3>
-                    <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
-                </section>
-                <section>
-                    <h3>Mapa de Sant Pere de Ribes</h3>
-                    <nav style="margin-bottom: 10px; background: #f0f0f0; padding: 8px; border-radius: 5px;">
-                        <span><strong>Instrucciones:</strong> Haz clic en el mapa para añadir un punto personalizado.</span>
-                    </nav>
-                    <div class="map-container">
-                        <div id="map">
-                            {{ mapa_html|safe }}
+                        <div class="form-group">
+                            <label for="marker-color">Color del marcador:</label>
+                            <select id="marker-color">
+                                <option value="red">🔴 Rojo</option>
+                                <option value="blue">🔵 Azul</option>
+                                <option value="green">🟢 Verde</option>
+                                <option value="orange">🟠 Naranja</option>
+                                <option value="purple">🟣 Morado</option>
+                            </select>
                         </div>
-                    </div>
-                </section>
+                        <div class="form-buttons">
+                            <button type="submit">Guardar Marcador</button>
+                            <button type="button" onclick="closePopup()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </main>
-    <script src="{% static 'js/map.js' %}"></script>
+        
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="close-btn" onclick="closeSidebar()">&times;</button>
+                <h2>Información del Lugar</h2>
+            </div>
+            
+            <div class="sidebar-content">
+                <h2 class="location-title" id="location-title">Sant Pere de Ribes</h2>
+                
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="#historia">📚 Historia</a></li>
+                        <li><a href="#turismo">🏛️ Turismo</a></li>
+                        <li><a href="#cultura">🎭 Cultura</a></li>
+                        <li><a href="#gastronomia">🍽️ Gastronomía</a></li>
+                        <li><a href="#contacto">📞 Contacto</a></li>
+                    </ul>
+                </nav>
+
+                <div class="image-gallery">
+                    <h3>Galería de Imágenes</h3>
+                    <div class="gallery-grid">
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=300&h=200&fit=crop" alt="Paisaje mediterráneo">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop" alt="Arquitectura catalana">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop" alt="Costa mediterránea">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1520637836862-4d197d17c91a?w=300&h=200&fit=crop" alt="Pueblo catalán">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Information Sections -->
+                <div class="info-section">
+                    <h3>🏛️ Historia</h3>
+                    <p>Sant Pere de Ribes es un municipio de la provincia de Barcelona, en Cataluña, España. Su historia se remonta a tiempos medievales, con una rica herencia cultural y arquitectónica.</p>
+                </div>
+
+                <div class="info-section">
+                    <h3>🌟 Puntos de Interés</h3>
+                    <p>Destaca por sus paisajes mediterráneos, arquitectura tradicional catalana y proximidad a la costa. Es un lugar perfecto para disfrutar de la tranquilidad y la belleza natural.</p>
+                </div>
+
+                <div class="info-section">
+                    <h3>🎭 Cultura Local</h3>
+                    <p>La localidad mantiene vivas sus tradiciones catalanas, con festivales locales, mercados tradicionales y una gastronomía típica de la región mediterránea.</p>
+                </div>
+
+                <div class="info-section">
+                    <h3>📍 Ubicación</h3>
+                    <p>Coordenadas: 41.383°N, 2.178°E<br>
+                    Provincia: Barcelona<br>
+                    Comunidad: Cataluña<br>
+                    País: España</p>
+                </div>
+            </div>
+        </div>
+        
+        <main>
+            <div class="card">
+                <h2>¡Hola!</h2>
+                <p>Esta es la página principal de Mishilovers.</p>
+            </div>
+            
+            <div class="card">
+                <h3>Sobre nosotros</h3>
+                <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
+            </div>
+            
+            <div class="card">
+                <h3>Coordenadas</h3>
+                <form id="coordinates-form">
+                    <div class="coordinates-input">
+                        <div class="input-group">
+                            <label for="latitude">Latitud:</label>
+                            <input type="number" id="latitude" step="any" placeholder="41.383" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="longitude">Longitud:</label>
+                            <input type="number" id="longitude" step="any" placeholder="2.178" required>
+                        </div>
+                        <button type="submit">Marcar Ubicación</button>
+                        <button type="button" id="clear-markers">Limpiar Marcadores</button>
+                        <button type="button" id="save-markers">Guardar Marcadores</button>
+                    </div>
+                </form>
+                <div class="marker-info">
+                    <p><strong>Instrucciones:</strong></p>
+                    <ul>
+                        <li>Haz clic en el mapa para colocar un marcador con información</li>
+                        <li>Ingresa coordenadas específicas y presiona "Marcar Ubicación"</li>
+                        <li>Usa "Limpiar Marcadores" para remover todos los marcadores</li>
+                        <li>Usa "Guardar Marcadores" para persistir tus marcadores</li>
+                    </ul>
+                    <div class="markers-count">
+                        <strong>Marcadores activos: <span id="markers-count">0</span></strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Mapa Interactivo</h3>
+                <div class="map-status" id="map-status">
+                    <p><strong>Estado del mapa:</strong> <span id="map-status-text">Cargando...</span></p>
+                    <div class="map-debug" id="map-debug" style="display: none;">
+                        <small>
+                            <strong>Debug:</strong> <span id="debug-info">Iniciando diagnóstico...</span>
+                        </small>
+                    </div>
+                </div>
+                <div class="map-controls">
+                    <button id="toggle-marker-mode" class="map-btn">🎯 Modo Marcador: ON</button>
+                    <button id="debug-toggle" class="map-btn" onclick="toggleDebug()">🔍 Debug</button>
+                    <button id="create-map" class="map-btn" onclick="forceCreateMap()">🗺️ Crear Mapa</button>
+                    <span id="coordinates-display">Haz clic en el mapa para ver coordenadas</span>
+                </div>
+                <div class="map-container">
+                    <div id="map">
+                        {% if mapa_html %}
+                            {{ mapa_html|safe }}
+                        {% else %}
+                            <div id="map-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f8f9fa; color: #666;">
+                                <div style="text-align: center;">
+                                    <p>🗺️ Preparando mapa...</p>
+                                    <small>Haz clic en "Crear Mapa" si no se carga automáticamente</small>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <!-- Custom attribution overlay -->
+                        <div class="map-attribution" id="custom-attribution" style="display: none;">
+                            &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors | 
+                            Powered by <a href="https://leafletjs.com" target="_blank">Leaflet</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-help">
+                    <p><small><strong>💡 Ayuda:</strong> Si el mapa no responde, haz clic en "Debug" para más información o en "Crear Mapa" para forzar la creación.</small></p>
+                    <p><small><strong>📍 Datos del mapa:</strong> © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors | Powered by <a href="https://leafletjs.com" target="_blank">Leaflet</a></small></p>
+                </div>
+            </div>
+        </main>
+        
+        <script>
+            // Solo funciones de respaldo mínimas
+            if (!window.showNotification) {
+                window.showNotification = function(message) {
+                    console.log('Notification:', message);
+                    const notification = document.createElement('div');
+                    notification.className = 'notification';
+                    notification.textContent = message;
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 3000);
+                };
+            }
+            
+            // Función de respaldo para crear mapa si map.js no está cargado
+            if (!window.forceCreateMap) {
+                window.forceCreateMap = function() {
+                    console.log('Fallback forceCreateMap called');
+                    window.showNotification('Intentando cargar el mapa...');
+                    
+                    if (!window.L) {
+                        console.error('Leaflet not available');
+                        window.showNotification('Error: Leaflet no está disponible');
+                        return;
+                    }
+                    
+                    const mapContainer = document.getElementById('map');
+                    if (!mapContainer) {
+                        console.error('Map container not found');
+                        window.showNotification('Error: Contenedor del mapa no encontrado');
+                        return;
+                    }
+                    
+                    // Clear existing content
+                    mapContainer.innerHTML = '<div id="emergency-map" style="width: 100%; height: 100%; min-height: 400px;"></div>';
+                    
+                    try {
+                        // Create emergency map
+                        const emergencyMap = L.map('emergency-map').setView([41.383, 2.178], 10);
+                        
+                        // Add tiles
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19,
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Powered by <a href="https://leafletjs.com">Leaflet</a>'
+                        }).addTo(emergencyMap);
+                        
+                        window.map = emergencyMap;
+                        window.mapInitialized = true;
+                        
+                        window.showNotification('Mapa de emergencia creado exitosamente!');
+                        
+                        // Add click handler
+                        emergencyMap.on('click', function(e) {
+                            const lat = e.latlng.lat;
+                            const lng = e.latlng.lng;
+                            console.log('Emergency map clicked at:', lat, lng);
+                            
+                            // Update coordinate display
+                            const display = document.getElementById('coordinates-display');
+                            if (display) {
+                                display.textContent = `Coordenadas: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+                            }
+                            
+                            // Update coordinate inputs
+                            const latInput = document.getElementById('latitude');
+                            const lngInput = document.getElementById('longitude');
+                            if (latInput) latInput.value = lat.toFixed(6);
+                            if (lngInput) lngInput.value = lng.toFixed(6);
+                        });
+                        
+                    } catch (error) {
+                        console.error('Error creating emergency map:', error);
+                        window.showNotification('Error al crear el mapa: ' + error.message);
+                    }
+                };
+            }
+            
+            // Debug para toggleDebug
+            if (!window.toggleDebug) {
+                window.toggleDebug = function() {
+                    console.log('Fallback toggleDebug called');
+                    const debugDiv = document.getElementById('map-debug');
+                    if (debugDiv) {
+                        if (debugDiv.style.display === 'none') {
+                            debugDiv.style.display = 'block';
+                            window.showNotification('Debug activado');
+                        } else {
+                            debugDiv.style.display = 'none';
+                            window.showNotification('Debug desactivado');
+                        }
+                    }
+                };
+            }
+            
+            // Asegurar que las funciones estén disponibles después de que se cargue map.js
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('Template DOM loaded');
+                
+                // Verificar inmediatamente si los botones están funcionando
+                const createMapBtn = document.getElementById('create-map');
+                const debugBtn = document.getElementById('debug-toggle');
+                
+                if (createMapBtn) {
+                    console.log('Create map button found');
+                    createMapBtn.addEventListener('click', function() {
+                        console.log('Create map button clicked');
+                        if (typeof window.forceCreateMap === 'function') {
+                            window.forceCreateMap();
+                        } else {
+                            console.error('forceCreateMap function not available');
+                            window.showNotification('Error: Función del mapa no disponible');
+                        }
+                    });
+                } else {
+                    console.error('Create map button not found');
+                }
+                
+                if (debugBtn) {
+                    console.log('Debug button found');
+                } else {
+                    console.error('Debug button not found');
+                }
+                
+                // Esperar a que map.js se cargue completamente
+                setTimeout(function() {
+                    // Verificar que las funciones críticas estén disponibles
+                    if (typeof window.forceCreateMap !== 'function') {
+                        console.error('map.js not loaded properly - using fallback');
+                        window.showNotification('Usando funciones de respaldo del mapa');
+                    } else {
+                        console.log('map.js loaded successfully');
+                    }
+                }, 2000);
+            });
+        </script>
+        
+        <script src="{% static 'js/map.js' %}"></script>
     </body>
 </html>
 {% endblock %}
