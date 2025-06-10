@@ -470,7 +470,15 @@ function setupMapEvents() {
             
             if (markerMode) {
                 currentClickCoords = { lat, lng };
-                openPopup(lat, lng);
+                
+                // Check if we have database integration available
+                if (window.showLocationPopup && typeof window.showLocationPopup === 'function') {
+                    // Use database integration popup
+                    window.showLocationPopup(lat, lng);
+                } else {
+                    // Use local storage popup
+                    openPopup(lat, lng);
+                }
             }
         });
 
@@ -479,6 +487,11 @@ function setupMapEvents() {
             console.log('Map is ready for interaction');
             updateMapStatus('Mapa listo para usar');
             showNotification('Mapa cargado - Haz clic para añadir marcadores');
+            
+            // Load markers from database if available
+            if (window.loadLocationsFromDB && typeof window.loadLocationsFromDB === 'function') {
+                window.loadLocationsFromDB();
+            }
         });
 
         // Update global variables
@@ -513,14 +526,18 @@ function openPopup(lat, lng) {
 
     popupLatElement.textContent = lat.toFixed(6);
     popupLngElement.textContent = lng.toFixed(6);
-    popupOverlay.classList.add('active');
+    
+    // Use flex display instead of classList for compatibility
+    popupOverlay.style.display = 'flex';
     
     // Clear previous form data
     const locationName = document.getElementById('location-name');
+    const locationAddress = document.getElementById('location-address');
     const locationDescription = document.getElementById('location-description');
     const markerColor = document.getElementById('marker-color');
     
     if (locationName) locationName.value = '';
+    if (locationAddress) locationAddress.value = '';
     if (locationDescription) locationDescription.value = '';
     if (markerColor) markerColor.value = 'red';
 }
@@ -528,7 +545,7 @@ function openPopup(lat, lng) {
 function closePopup() {
     const popupOverlay = document.getElementById('popup-overlay');
     if (popupOverlay) {
-        popupOverlay.classList.remove('active');
+        popupOverlay.style.display = 'none';
     }
     currentClickCoords = null;
 }
@@ -700,126 +717,80 @@ function clearAllMarkers() {
     }
 }
 
-function saveMarkers() {
+// Updated saveMarkers function to save to database if available
+async function saveMarkers() {
     if (markers.length === 0) {
         alert('No hay marcadores para guardar');
         return;
     }
 
+    // Check if database saving is available
+    if (window.saveLocationToDB && typeof window.saveLocationToDB === 'function') {
+        let successCount = 0;
+        let errorCount = 0;
+        
+        showNotification('Guardando marcadores en la base de datos...');
+
+        try {
+            for (let markerData of markers) {
+                const locationData = {
+                    name: markerData.data.name,
+                    address: markerData.data.name, // Use name as address if no address provided
+                    description: markerData.data.description || '',
+                    municipality_id: 1, // Default municipality ID
+                    latitude: markerData.data.lat,
+                    longitude: markerData.data.lng
+                };
+
+                try {
+                    const savedId = await window.saveLocationToDB(locationData);
+                    if (savedId) {
+                        successCount++;
+                    } else {
+                        errorCount++;
+                    }
+                } catch (error) {
+                    errorCount++;
+                    console.error('Error saving marker to database:', error);
+                }
+            }
+
+            if (successCount > 0) {
+                showNotification(`${successCount} marcadores guardados en la base de datos`);
+                
+                // Clear local markers since they're now in the database
+                clearAllMarkers();
+                
+                // Reload markers from database
+                if (window.loadLocationsFromDB) {
+                    await window.loadLocationsFromDB();
+                }
+            }
+            
+            if (errorCount > 0) {
+                showNotification(`Error: ${errorCount} marcadores no se pudieron guardar`);
+            }
+
+        } catch (error) {
+            console.error('Error saving markers to database:', error);
+            // Fallback to localStorage
+            saveMarkersToLocalStorage();
+        }
+    } else {
+        // Fallback to localStorage
+        saveMarkersToLocalStorage();
+    }
+}
+
+function saveMarkersToLocalStorage() {
     try {
         const markersData = markers.map(markerData => markerData.data);
         localStorage.setItem('mapMarkers', JSON.stringify(markersData));
-        showNotification(`${markers.length} marcadores guardados exitosamente`);
+        showNotification(`${markers.length} marcadores guardados localmente`);
     } catch (error) {
-        console.error('Error saving markers:', error);
+        console.error('Error saving markers to localStorage:', error);
         alert('Error al guardar los marcadores');
     }
-}
-
-function loadMarkers() {
-    const savedMarkers = localStorage.getItem('mapMarkers');
-    if (savedMarkers) {
-        try {
-            const markersData = JSON.parse(savedMarkers);
-            let loadedCount = 0;
-            
-            markersData.forEach(data => {
-                if (addMarkerWithInfo(data.lat, data.lng, data.name, data.description, data.color)) {
-                    loadedCount++;
-                }
-            });
-            
-            if (loadedCount > 0) {
-                showNotification(`${loadedCount} marcadores cargados`);
-            }
-        } catch (error) {
-            console.error('Error loading markers:', error);
-        }
-    }
-}
-
-function updateMarkersCount() {
-    const countElement = document.getElementById('markers-count');
-    if (countElement) {
-        countElement.textContent = markers.length;
-    }
-}
-
-function updateMapView(lat, lng) {
-    if (map && isValidCoordinate(lat, lng)) {
-        try {
-            map.setView([lat, lng], 15);
-        } catch (error) {
-            console.error('Error updating map view:', error);
-        }
-    }
-}
-
-function updateCoordinateInputs(lat, lng) {
-    const latInput = document.getElementById('latitude');
-    const lngInput = document.getElementById('longitude');
-    
-    if (latInput && isValidCoordinate(lat, lng)) {
-        latInput.value = lat.toFixed(6);
-    }
-    if (lngInput && isValidCoordinate(lat, lng)) {
-        lngInput.value = lng.toFixed(6);
-    }
-}
-
-function updateCoordinateDisplay(lat, lng) {
-    const display = document.getElementById('coordinates-display');
-    if (display && isValidCoordinate(lat, lng)) {
-        display.textContent = `Coordenadas: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-    }
-}
-
-function toggleMarkerMode() {
-    markerMode = !markerMode;
-    const button = document.getElementById('toggle-marker-mode');
-    if (button) {
-        button.textContent = markerMode ? '🎯 Modo Marcador: ON' : '🎯 Modo Marcador: OFF';
-        button.classList.toggle('active', markerMode);
-    }
-    
-    if (markerMode) {
-        showNotification('Modo marcador activado - Haz clic en el mapa para añadir marcadores');
-    } else {
-        showNotification('Modo marcador desactivado');
-    }
-}
-
-function isValidCoordinate(lat, lng) {
-    return !isNaN(lat) && !isNaN(lng) && 
-           lat >= -90 && lat <= 90 && 
-           lng >= -180 && lng <= 180 &&
-           lat !== null && lng !== null &&
-           lat !== undefined && lng !== undefined;
-}
-
-function showNotification(message) {
-    // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notification => {
-        if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-        }
-    });
-
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.textContent = message;
-    
-    // Add to page
-    document.body.appendChild(notification);
-    
-    // Auto remove after 3 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-        }
-    }, 3000);
 }
 
 // Load saved markers when map is ready
