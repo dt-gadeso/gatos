@@ -9,16 +9,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Mishilovers Home</title>
         <link rel="stylesheet" href="{% static 'css/map.css' %}">
-        <!-- Add Leaflet CSS -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     </head>
     <body>
-        <!-- Add Leaflet JavaScript -->
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
         
         <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
         
-        <!-- Location Info Popup -->
         <div class="popup-overlay" id="popup-overlay">
             <div class="popup-modal">
                 <div class="popup-header">
@@ -98,7 +95,6 @@
                     </div>
                 </div>
 
-                <!-- Information Sections -->
                 <div class="info-section">
                     <h3>🏛️ Historia</h3>
                     <p>Sant Pere de Ribes es un municipio de la provincia de Barcelona, en Cataluña, España. Su historia se remonta a tiempos medievales, con una rica herencia cultural y arquitectónica.</p>
@@ -183,7 +179,6 @@
                 <div class="map-controls">
                     <button id="toggle-marker-mode" class="map-btn">🎯 Modo Marcador: ON</button>
                     <button id="debug-toggle" class="map-btn" onclick="toggleDebug()">🔍 Debug</button>
-                    <button id="create-map" class="map-btn" onclick="forceCreateMap()">🗺️ Crear Mapa</button>
                     <span id="coordinates-display">Haz clic en el mapa para ver coordenadas</span>
                 </div>
                 <div class="map-container">
@@ -194,11 +189,10 @@
                             <div id="map-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f8f9fa; color: #666;">
                                 <div style="text-align: center;">
                                     <p>🗺️ Preparando mapa...</p>
-                                    <small>Haz clic en "Crear Mapa" si no se carga automáticamente</small>
+                                    <small>Si el mapa no se carga automáticamente, revisa tu conexión.</small>
                                 </div>
                             </div>
                         {% endif %}
-                        <!-- Custom attribution overlay -->
                         <div class="map-attribution" id="custom-attribution" style="display: none;">
                             &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors | 
                             Powered by <a href="https://leafletjs.com" target="_blank">Leaflet</a>
@@ -206,17 +200,15 @@
                     </div>
                 </div>
                 <div class="map-help">
-                    <p><small><strong>💡 Ayuda:</strong> Si el mapa no responde, haz clic en "Debug" para más información o en "Crear Mapa" para forzar la creación.</small></p>
+                    <p><small><strong>💡 Ayuda:</strong> Si el mapa no responde, haz clic en "Debug" para más información.</small></p>
                     <p><small><strong>📍 Datos del mapa:</strong> © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors | Powered by <a href="https://leafletjs.com" target="_blank">Leaflet</a></small></p>
                 </div>
             </div>
         </main>
         
         <script>
-            // Solo funciones de respaldo mínimas
             if (!window.showNotification) {
                 window.showNotification = function(message) {
-                    console.log('Notification:', message);
                     const notification = document.createElement('div');
                     notification.className = 'notification';
                     notification.textContent = message;
@@ -230,73 +222,8 @@
                 };
             }
             
-            // Función de respaldo para crear mapa si map.js no está cargado
-            if (!window.forceCreateMap) {
-                window.forceCreateMap = function() {
-                    console.log('Fallback forceCreateMap called');
-                    window.showNotification('Intentando cargar el mapa...');
-                    
-                    if (!window.L) {
-                        console.error('Leaflet not available');
-                        window.showNotification('Error: Leaflet no está disponible');
-                        return;
-                    }
-                    
-                    const mapContainer = document.getElementById('map');
-                    if (!mapContainer) {
-                        console.error('Map container not found');
-                        window.showNotification('Error: Contenedor del mapa no encontrado');
-                        return;
-                    }
-                    
-                    // Clear existing content
-                    mapContainer.innerHTML = '<div id="emergency-map" style="width: 100%; height: 100%; min-height: 400px;"></div>';
-                    
-                    try {
-                        // Create emergency map
-                        const emergencyMap = L.map('emergency-map').setView([41.383, 2.178], 10);
-                        
-                        // Add tiles
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            maxZoom: 19,
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Powered by <a href="https://leafletjs.com">Leaflet</a>'
-                        }).addTo(emergencyMap);
-                        
-                        window.map = emergencyMap;
-                        window.mapInitialized = true;
-                        
-                        window.showNotification('Mapa de emergencia creado exitosamente!');
-                        
-                        // Add click handler
-                        emergencyMap.on('click', function(e) {
-                            const lat = e.latlng.lat;
-                            const lng = e.latlng.lng;
-                            console.log('Emergency map clicked at:', lat, lng);
-                            
-                            // Update coordinate display
-                            const display = document.getElementById('coordinates-display');
-                            if (display) {
-                                display.textContent = `Coordenadas: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-                            }
-                            
-                            // Update coordinate inputs
-                            const latInput = document.getElementById('latitude');
-                            const lngInput = document.getElementById('longitude');
-                            if (latInput) latInput.value = lat.toFixed(6);
-                            if (lngInput) lngInput.value = lng.toFixed(6);
-                        });
-                        
-                    } catch (error) {
-                        console.error('Error creating emergency map:', error);
-                        window.showNotification('Error al crear el mapa: ' + error.message);
-                    }
-                };
-            }
-            
-            // Debug para toggleDebug
             if (!window.toggleDebug) {
                 window.toggleDebug = function() {
-                    console.log('Fallback toggleDebug called');
                     const debugDiv = document.getElementById('map-debug');
                     if (debugDiv) {
                         if (debugDiv.style.display === 'none') {
@@ -310,59 +237,25 @@
                 };
             }
             
-            // Asegurar que las funciones estén disponibles después de que se cargue map.js
             document.addEventListener('DOMContentLoaded', function() {
-                console.log('Template DOM loaded');
-                
-                // Verificar inmediatamente si los botones están funcionando
-                const createMapBtn = document.getElementById('create-map');
                 const debugBtn = document.getElementById('debug-toggle');
-                
-                if (createMapBtn) {
-                    console.log('Create map button found');
-                    createMapBtn.addEventListener('click', function() {
-                        console.log('Create map button clicked');
-                        if (typeof window.forceCreateMap === 'function') {
-                            window.forceCreateMap();
-                        } else {
-                            console.error('forceCreateMap function not available');
-                            window.showNotification('Error: Función del mapa no disponible');
-                        }
-                    });
-                } else {
-                    console.error('Create map button not found');
-                }
-                
                 if (debugBtn) {
-                    console.log('Debug button found');
                 } else {
-                    console.error('Debug button not found');
                 }
-                
-                // Esperar a que map.js se cargue completamente
                 setTimeout(function() {
-                    // Verificar que las funciones críticas estén disponibles
                     if (typeof window.forceCreateMap !== 'function') {
-                        console.error('map.js not loaded properly - using fallback');
                         window.showNotification('Usando funciones de respaldo del mapa');
-                    } else {
-                        console.log('map.js loaded successfully');
                     }
                 }, 2000);
             });
             
-            // Ensure database functions are available
             document.addEventListener('DOMContentLoaded', function() {
-                console.log('Template DOM loaded');
-                
-                // Add CSRF token to page for AJAX requests
                 const csrfToken = '{{ csrf_token }}';
                 const meta = document.createElement('meta');
                 meta.name = 'csrf-token';
                 meta.content = csrfToken;
                 document.head.appendChild(meta);
                 
-                // Also add as hidden input for fallback
                 if (!document.querySelector('[name=csrfmiddlewaretoken]')) {
                     const input = document.createElement('input');
                     input.type = 'hidden';
@@ -370,13 +263,9 @@
                     input.value = csrfToken;
                     document.body.appendChild(input);
                 }
-                
-                // ...existing code...
             });
 
-
             document.addEventListener('DOMContentLoaded', function() {
-                // Esperar a que el mapa esté listo
                 function tryFetchLocations() {
                     if (window.mapInitialized) {
                         fetchAndDisplayDatabaseLocations();
@@ -384,10 +273,7 @@
                         setTimeout(tryFetchLocations, 1000);
                     }
                 }
-
                 tryFetchLocations();
-
-                // Opcional: actualizar cada 60s
                 setInterval(() => {
                         if (window.mapInitialized) {
                             fetchAndDisplayDatabaseLocations();
