@@ -45,14 +45,12 @@ def save_location(request):
     else:
         if request.method == 'POST':
             try:
-                # Handle both JSON and form data
                 if request.content_type == 'application/json':
                     if not request.body:
                         return JsonResponse({'success': False, 'error': 'Request body is empty'}, status=400)
                     data = json.loads(request.body)
                     is_ajax = True
                 else:
-                    # Handle form data
                     data = request.POST
                     is_ajax = False
                 
@@ -111,14 +109,12 @@ def save_municipality(request):
         })
     elif request.method == 'POST':
         try:
-            # Handle both JSON and form data
             if request.content_type == 'application/json':
                 if not request.body:
                     return JsonResponse({'success': False, 'error': 'Request body is empty'}, status=400)
                 data = json.loads(request.body)
                 is_ajax = True
             else:
-                # Handle form data
                 data = request.POST
                 is_ajax = False
             
@@ -177,14 +173,12 @@ def save_zone(request):
         })
     elif request.method == 'POST':
         try:
-            # Handle both JSON and form data
             if request.content_type == 'application/json':
                 if not request.body:
                     return JsonResponse({'success': False, 'error': 'Request body is empty'}, status=400)
                 data = json.loads(request.body)
                 is_ajax = True
             else:
-                # Handle form data
                 data = request.POST
                 is_ajax = False
             

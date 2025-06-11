@@ -150,6 +150,7 @@
                         <button type="submit">Marcar Ubicación</button>
                         <button type="button" id="clear-markers">Limpiar Marcadores</button>
                         <button type="button" id="save-markers">Guardar Marcadores</button>
+                        <button type="button" id="load-markers">Cargar Marcadores</button>
                     </div>
                 </form>
                 <div class="marker-info">
@@ -349,6 +350,50 @@
                     }
                 }, 2000);
             });
+            
+            // Ensure database functions are available
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('Template DOM loaded');
+                
+                // Add CSRF token to page for AJAX requests
+                const csrfToken = '{{ csrf_token }}';
+                const meta = document.createElement('meta');
+                meta.name = 'csrf-token';
+                meta.content = csrfToken;
+                document.head.appendChild(meta);
+                
+                // Also add as hidden input for fallback
+                if (!document.querySelector('[name=csrfmiddlewaretoken]')) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'csrfmiddlewaretoken';
+                    input.value = csrfToken;
+                    document.body.appendChild(input);
+                }
+                
+                // ...existing code...
+            });
+
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Esperar a que el mapa esté listo
+                function tryFetchLocations() {
+                    if (window.mapInitialized) {
+                        fetchAndDisplayDatabaseLocations();
+                    } else {
+                        setTimeout(tryFetchLocations, 1000);
+                    }
+                }
+
+                tryFetchLocations();
+
+                // Opcional: actualizar cada 60s
+                setInterval(() => {
+                        if (window.mapInitialized) {
+                            fetchAndDisplayDatabaseLocations();
+                        }
+                    }, 10000);
+                });
         </script>
         
         <script src="{% static 'js/map.js' %}"></script>

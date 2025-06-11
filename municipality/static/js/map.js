@@ -8,6 +8,13 @@ let mapInitialized = false;
 window.mapLibraryLoaded = false;
 window.mapElementExists = false;
 
+function isValidCoordinate(lat, lng) {
+    return typeof lat === 'number' && typeof lng === 'number' &&
+           !isNaN(lat) && !isNaN(lng) &&
+           lat >= -90 && lat <= 90 &&
+           lng >= -180 && lng <= 180;
+}
+
 // Initialize map functionality
 document.addEventListener('DOMContentLoaded', function() {
     console.log('map.js DOM loaded, starting map initialization...');
@@ -78,6 +85,27 @@ function setupMapMonitoring() {
         }
     }, 30000);
 }
+function loadMarkers() {
+    const saved = localStorage.getItem('mapMarkers');
+    if (!saved) {
+        console.warn('No se encontraron marcadores en localStorage');
+        return;
+    }
+
+    try {
+        const markersData = JSON.parse(saved);
+        markersData.forEach(data => {
+            if (isValidCoordinate(data.lat, data.lng)) {
+                addMarkerWithInfo(data.lat, data.lng, data.name, data.description, data.color);
+            }
+        });
+        showNotification(`${markersData.length} marcadores locales cargados`);
+    } catch (error) {
+        console.error('Error al cargar marcadores locales:', error);
+        showNotification('Error al cargar marcadores locales');
+    }
+}
+
 
 // Force create map function
 function forceCreateMap() {
@@ -432,6 +460,27 @@ function setupEventListeners() {
         saveButton.addEventListener('click', saveMarkers);
     }
 
+    // Load markers button
+    const loadButton = document.getElementById('load-markers');
+    if (loadButton) {
+        loadButton.addEventListener('click', async function() {
+            if (window.loadLocationsFromDB && typeof window.loadLocationsFromDB === 'function') {
+                showNotification('Cargando marcadores desde la base de datos...');
+                try {
+                    await window.loadLocationsFromDB();
+                    showNotification('Marcadores cargados desde la base de datos');
+                } catch (error) {
+                    console.error('Error al cargar marcadores de la base de datos:', error);
+                    showNotification('Error al cargar marcadores de la base de datos');
+                }
+            } else {
+                // Fallback: cargar desde localStorage
+                showNotification('Cargando marcadores locales...');
+                loadMarkers();
+            }
+        });
+    }
+
     // Toggle marker mode
     const toggleButton = document.getElementById('toggle-marker-mode');
     if (toggleButton) {
@@ -487,11 +536,8 @@ function setupMapEvents() {
             console.log('Map is ready for interaction');
             updateMapStatus('Mapa listo para usar');
             showNotification('Mapa cargado - Haz clic para añadir marcadores');
-            
-            // Load markers from database if available
-            if (window.loadLocationsFromDB && typeof window.loadLocationsFromDB === 'function') {
-                window.loadLocationsFromDB();
-            }
+            // No cargar automáticamente los marcadores de la base de datos aquí
+            // El usuario debe usar el botón "Cargar Marcadores"
         });
 
         // Update global variables
@@ -589,26 +635,82 @@ function saveLocationMarker() {
     }
 }
 
+// function addMarkerWithInfo(lat, lng, name, description, color = 'red') {
+//     if (!mapInitialized || !map) {
+//         console.error('Map not initialized');
+//         alert('Error: El mapa no está disponible');
+//         return null;
+//     }
+
+//     if (!isValidCoordinate(lat, lng)) {
+//         console.error('Invalid coordinates:', lat, lng);
+//         alert('Error: Coordenadas inválidas');
+//         return null;
+//     }
+
+//     try {
+//         // Ensure Leaflet is available
+//         if (!window.L) {
+//             throw new Error('Leaflet library not available');
+//         }
+
+//         // Create custom icon
+//         const icon = L.divIcon({
+//             className: 'custom-marker',
+//             html: `<div class="marker-pin marker-${color}">📍</div>`,
+//             iconSize: [30, 30],
+//             iconAnchor: [15, 30]
+//         });
+
+//         // Create marker
+//         const marker = L.marker([lat, lng], { icon: icon }).addTo(map);
+        
+//         // Create popup content
+//         const popupContent = `
+//             <div class="marker-popup">
+//                 <h4>${escapeHtml(name)}</h4>
+//                 ${description ? `<p>${escapeHtml(description)}</p>` : ''}
+//                 <div class="popup-coords">
+//                     <small>Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}</small>
+//                 </div>
+//                 <div class="popup-actions">
+//                     <button onclick="editMarker(${markers.length})" class="edit-btn">✏️ Editar</button>
+//                     <button onclick="removeMarker(${markers.length})" class="delete-btn">🗑️ Eliminar</button>
+//                 </div>
+//             </div>
+//         `;
+        
+//         marker.bindPopup(popupContent);
+        
+//         // Store marker data
+//         const markerData = {
+//             marker: marker,
+//             data: { name, description, color, lat, lng }
+//         };
+        
+//         markers.push(markerData);
+//         updateMarkersCount();
+        
+//         console.log('Marker created successfully:', name);
+//         return marker;
+//     } catch (error) {
+//         console.error('Error creating marker:', error);
+//         alert('Error al crear el marcador: ' + error.message);
+//         return null;
+//     }
+// }
 function addMarkerWithInfo(lat, lng, name, description, color = 'red') {
     if (!mapInitialized || !map) {
-        console.error('Map not initialized');
-        alert('Error: El mapa no está disponible');
+        console.error('Mapa no inicializado');
         return null;
     }
 
     if (!isValidCoordinate(lat, lng)) {
-        console.error('Invalid coordinates:', lat, lng);
-        alert('Error: Coordenadas inválidas');
+        console.error('Coordenadas inválidas:', lat, lng);
         return null;
     }
 
     try {
-        // Ensure Leaflet is available
-        if (!window.L) {
-            throw new Error('Leaflet library not available');
-        }
-
-        // Create custom icon
         const icon = L.divIcon({
             className: 'custom-marker',
             html: `<div class="marker-pin marker-${color}">📍</div>`,
@@ -616,40 +718,22 @@ function addMarkerWithInfo(lat, lng, name, description, color = 'red') {
             iconAnchor: [15, 30]
         });
 
-        // Create marker
-        const marker = L.marker([lat, lng], { icon: icon }).addTo(map);
-        
-        // Create popup content
-        const popupContent = `
+        const marker = L.marker([lat, lng], { icon }).addTo(map);
+
+        marker.bindPopup(`
             <div class="marker-popup">
                 <h4>${escapeHtml(name)}</h4>
                 ${description ? `<p>${escapeHtml(description)}</p>` : ''}
-                <div class="popup-coords">
-                    <small>Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}</small>
-                </div>
-                <div class="popup-actions">
-                    <button onclick="editMarker(${markers.length})" class="edit-btn">✏️ Editar</button>
-                    <button onclick="removeMarker(${markers.length})" class="delete-btn">🗑️ Eliminar</button>
-                </div>
+                <small>Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}</small>
             </div>
-        `;
-        
-        marker.bindPopup(popupContent);
-        
-        // Store marker data
-        const markerData = {
-            marker: marker,
-            data: { name, description, color, lat, lng }
-        };
-        
-        markers.push(markerData);
+        `);
+
+        markers.push({ marker, data: { lat, lng, name, description, color } });
         updateMarkersCount();
-        
-        console.log('Marker created successfully:', name);
+
         return marker;
-    } catch (error) {
-        console.error('Error creating marker:', error);
-        alert('Error al crear el marcador: ' + error.message);
+    } catch (e) {
+        console.error('Error creando marcador:', e);
         return null;
     }
 }
@@ -836,26 +920,39 @@ document.addEventListener('keydown', function(e) {
 window.forceCreateMap = forceCreateMap;
 window.toggleDebug = toggleDebug;
 
-// Initialize map functionality
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('map.js DOM loaded, starting map initialization...');
-    updateMapStatus('Inicializando sistema de mapas...');
-    
-    // Make sure functions are available
-    window.forceCreateMap = forceCreateMap;
-    window.toggleDebug = toggleDebug;
-    window.updateMapStatus = updateMapStatus;
-    window.updateDebugInfo = updateDebugInfo;
-    window.openSidebar = openSidebar;
-    window.closeSidebar = closeSidebar;
-    window.openPopup = openPopup;
-    window.closePopup = closePopup;
-    
-    console.log('Global functions assigned');
-    
-    // Start waiting for Leaflet and initialize everything
-    waitForLeaflet();
-    setupEventListeners();
-    updateMarkersCount();
-    setupMapMonitoring();
-});
+function fetchAndDisplayDatabaseLocations() {
+    if (!window.mapInitialized || !window.map) {
+        console.warn('Mapa no está listo. Esperando...');
+        return;
+    }
+
+    fetch('/municipality/get_locations_json/')
+        .then(response => response.json())
+        .then(data => {
+            if (!Array.isArray(data.locations)) {
+                console.warn('Respuesta no contiene lista de ubicaciones');
+                return;
+            }
+
+            console.log('Ubicaciones cargadas desde la BD:', data.locations.length);
+
+            data.locations.forEach(loc => {
+                if (isValidCoordinate(loc.latitude, loc.longitude)) {
+                    addMarkerWithInfo(
+                        loc.latitude,
+                        loc.longitude,
+                        loc.name || 'Sin nombre',
+                        loc.description || '',
+                        'blue'
+                    );
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener ubicaciones de la base de datos:', error);
+        });
+}
+
+window.fetchAndDisplayDatabaseLocations = fetchAndDisplayDatabaseLocations;
+window.loadMarkers = loadMarkers;
+
