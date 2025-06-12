@@ -3,8 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.municipality_view, name='municipality'),
-    path('get_locations_json/', views.get_locations_json, name='get_locations_json'),  # <-- Asegura esta ruta
-    # path('api/locations/', views.get_locations_json, name='get_locations'),
+    path('get_locations_json/', views.get_locations_json, name='get_locations_json'),
     path('save-location/', views.save_location, name='save_location'),
     path('location/', views.save_location, name='save_location'),
     path('create-quick-location/', views.create_quick_location, name='create_quick_location'),
@@ -14,5 +13,5 @@ urlpatterns = [
     path('delete-popup/<int:location_id>/', views.delete_popup, name='delete_popup'),
     path('formNewMunicipality/', views.save_municipality, name='save_municipality'),
     path('formNewZone/', views.save_zone, name='save_zone'),
-    path('get_locations_json/', views.get_locations_json, name='get_locations_json')
+    path('formNewCouncil/', views.save_council, name='save_council'),
 ]

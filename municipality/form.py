@@ -107,3 +107,45 @@ class ZoneForm(forms.Form):
         max_length=50,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el nombre de la zona'})
     )
+
+class CouncilForm(forms.Form):
+    name = forms.CharField(
+        label='Nombre',
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el nombre del consejo'})
+    )
+    
+    email = forms.EmailField(
+        label='Correo electrónico',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el correo'})
+    )
+    
+    phone = forms.CharField(
+        label='Teléfono',
+        max_length=15,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el teléfono'})
+    )
+
+    emergency_email = forms.EmailField(
+        label='Correo de emergencia',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el correo de emergencia'})
+    )
+
+    emergency_phone = forms.CharField(
+        label='Teléfono de emergencia',
+        max_length=15,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el teléfono de emergencia'})
+    )
+
+    logo_file = forms.ImageField(
+        label='Logo',
+        required=False,
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
+    )
+
+    location = forms.ModelChoiceField(
+        label='Ubicación',
+        queryset=Location.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+

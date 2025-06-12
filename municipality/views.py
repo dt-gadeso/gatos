@@ -3,7 +3,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import Municipality, Location, Zone
-from .form import LocationForm, MunicipalityForm, ZoneForm
+from .models import Council
+from .form import LocationForm, MunicipalityForm, ZoneForm, CouncilForm
 
 def municipality_view(request):
     locations = Location.objects.filter(latitude__isnull=False, longitude__isnull=False)
@@ -39,75 +40,69 @@ def get_locations_json(request):
 @csrf_exempt
 def save_location(request):
     if request.method == 'GET':
-        return render(request, 'location.html', {
-            'form': LocationForm()
-        })
-    else:
-        if request.method == 'POST':
-            try:
-                if request.content_type == 'application/json':
-                    if not request.body:
-                        return JsonResponse({'success': False, 'error': 'Request body is empty'}, status=400)
-                    data = json.loads(request.body)
-                    is_ajax = True
-                else:
-                    data = request.POST
-                    is_ajax = False
-                
-                print(f"Datos recibidos en save_location: {data}")
-                
-                # Obtener o crear municipio por defecto
-                municipality_id = data.get('municipality_id')
-                if municipality_id:
+        return render(request, 'location.html', {'form': LocationForm()})
+
+    elif request.method == 'POST':
+        is_ajax = False
+        try:
+            if request.content_type == 'application/json':
+                if not request.body:
+                    return JsonResponse({'success': False, 'error': 'Request body is empty'}, status=400)
+                data = json.loads(request.body)
+                is_ajax = True
+            else:
+                data = request.POST
+            
+            print(f"Datos recibidos en save_location: {data}")
+
+            municipality_id = data.get('municipality_id')
+            municipality = None
+            if municipality_id:
+                try:
                     municipality = Municipality.objects.get(id=municipality_id)
-                else:
-                    # Usar el primer municipio o crear uno por defecto
-                    municipality = Municipality.objects.first()
-                    if not municipality:
-                        municipality = Municipality.objects.create(name="Default Municipality")
-                
-                location = Location.objects.create(
-                    nombre=data.get('name', 'Ubicación sin nombre'),
-                    description=data.get('description', ''),
-                    address=data.get('address', data.get('name', 'Dirección no especificada')),
-                    latitude=data.get('latitude'),
-                    longitude=data.get('longitude'),
-                    municipality=municipality
-                )
-                
-                if is_ajax:
-                    return JsonResponse({
-                        'success': True,
-                        'id': location.id,
-                        'message': 'Ubicación guardada exitosamente'
-                    })
-                else:
-                    return redirect('municipality')
-                
-            except json.JSONDecodeError:
-                return JsonResponse({'success': False, 'error': 'Invalid JSON format'}, status=400)
-            except Exception as e:
-                print(f"Error en save_location: {str(e)}")
-                if 'is_ajax' in locals() and is_ajax:
-                    return JsonResponse({
-                        'success': False,
-                        'error': str(e)
-                    }, status=400)
-                else:
-                    return render(request, 'location.html', {
-                        'form': LocationForm(),
-                        'error': str(e)
-                    })
-        
-        return JsonResponse({'error': 'Método no permitido'}, status=405)
+                except Municipality.DoesNotExist:
+                    return JsonResponse({'success': False, 'error': 'Municipio no encontrado'}, status=404)
+            else:
+                municipality = Municipality.objects.first()
+                if not municipality:
+                    municipality = Municipality.objects.create(name="Default Municipality")
+
+            location = Location.objects.create(
+                nombre=data.get('name', 'Ubicación sin nombre'),
+                description=data.get('description', ''),
+                address=data.get('address', data.get('name', 'Dirección no especificada')),
+                latitude=data.get('latitude'),
+                longitude=data.get('longitude'),
+                municipality=municipality
+            )
+
+            if is_ajax:
+                return JsonResponse({'success': True, 'id': location.id, 'message': 'Ubicación guardada exitosamente'})
+            else:
+                return redirect('municipality')
+
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Formato JSON inválido'}, status=400)
+        except Exception as e:
+            print(f"Error en save_location: {str(e)}")
+            if is_ajax:
+                return JsonResponse({'success': False, 'error': str(e)}, status=400)
+            else:
+                return render(request, 'location.html', {
+                    'form': LocationForm(),
+                    'error': str(e)
+                })
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
 
 @csrf_exempt
 def save_municipality(request):
     if request.method == 'GET':
-        return render(request, 'formNewMunicipality.html', {
-            'form': MunicipalityForm()
-        })
+        return render(request, 'formNewMunicipality.html', {'form': MunicipalityForm()})
+
     elif request.method == 'POST':
+        is_ajax = False
         try:
             if request.content_type == 'application/json':
                 if not request.body:
@@ -116,62 +111,49 @@ def save_municipality(request):
                 is_ajax = True
             else:
                 data = request.POST
-                is_ajax = False
-            
+
             name = data.get('name')
             zone_id = data.get('zone_id')
-            
+
+            if not name:
+                msg = 'El nombre es requerido.'
+                if is_ajax:
+                    return JsonResponse({'success': False, 'error': msg}, status=400)
+                return render(request, 'formNewMunicipality.html', {'form': MunicipalityForm(), 'error': msg})
+
             if zone_id:
-                zone = Zone.objects.get(id=zone_id)
+                try:
+                    zone = Zone.objects.get(id=zone_id)
+                except Zone.DoesNotExist:
+                    return JsonResponse({'success': False, 'error': 'Zona no encontrada'}, status=404)
             else:
-                # Usar la primera zona o crear una por defecto
                 zone = Zone.objects.first()
                 if not zone:
                     zone = Zone.objects.create(name="Default Zone")
 
-            if not name:
-                if is_ajax:
-                    return JsonResponse({'success': False, 'error': 'El nombre es requerido.'}, status=400)
-                else:
-                    return render(request, 'formNewMunicipality.html', {
-                        'form': MunicipalityForm(),
-                        'error': 'El nombre es requerido.'
-                    })
-
-            municipality = Municipality.objects.create(
-                name=name,
-                zone=zone
-            )
+            municipality = Municipality.objects.create(name=name, zone=zone)
 
             if is_ajax:
-                return JsonResponse({
-                    'success': True,
-                    'id': municipality.id,
-                    'message': 'Municipio guardado exitosamente'
-                })
-            else:
-                return redirect('municipality')
-                
+                return JsonResponse({'success': True, 'id': municipality.id, 'message': 'Municipio guardado exitosamente'})
+            return redirect('municipality')
+
         except json.JSONDecodeError:
-            return JsonResponse({'success': False, 'error': 'Invalid JSON format'}, status=400)
+            return JsonResponse({'success': False, 'error': 'Formato JSON inválido'}, status=400)
         except Exception as e:
-            if 'is_ajax' in locals() and is_ajax:
+            if is_ajax:
                 return JsonResponse({'success': False, 'error': str(e)}, status=400)
-            else:
-                return render(request, 'formNewMunicipality.html', {
-                    'form': MunicipalityForm(),
-                    'error': str(e)
-                })
-    else:
-        return JsonResponse({'error': 'Método no permitido'}, status=405)
+            return render(request, 'formNewMunicipality.html', {'form': MunicipalityForm(), 'error': str(e)})
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
 
 @csrf_exempt
 def save_zone(request):
     if request.method == 'GET':
-        return render(request, 'formNewZone.html', {
-            'form': ZoneForm()
-        })
+        return render(request, 'formNewZone.html', {'form': ZoneForm()})
+
     elif request.method == 'POST':
+        is_ajax = False
         try:
             if request.content_type == 'application/json':
                 if not request.body:
@@ -180,44 +162,29 @@ def save_zone(request):
                 is_ajax = True
             else:
                 data = request.POST
-                is_ajax = False
-            
+
             name = data.get('name')
-
             if not name:
+                msg = 'Nombre es requerido.'
                 if is_ajax:
-                    return JsonResponse({'success': False, 'error': 'Nombre es requerido.'}, status=400)
-                else:
-                    return render(request, 'formNewZone.html', {
-                        'form': ZoneForm(),
-                        'error': 'Nombre es requerido.'
-                    })
+                    return JsonResponse({'success': False, 'error': msg}, status=400)
+                return render(request, 'formNewZone.html', {'form': ZoneForm(), 'error': msg})
 
-            zone = Zone.objects.create(
-                name=name,
-            )
+            zone = Zone.objects.create(name=name)
 
             if is_ajax:
-                return JsonResponse({
-                    'success': True,
-                    'id': zone.id,
-                    'message': 'Zona guardada exitosamente'
-                })
-            else:
-                return redirect('municipality')
-                
+                return JsonResponse({'success': True, 'id': zone.id, 'message': 'Zona guardada exitosamente'})
+            return redirect('municipality')
+
         except json.JSONDecodeError:
-            return JsonResponse({'success': False, 'error': 'Invalid JSON format'}, status=400)
+            return JsonResponse({'success': False, 'error': 'Formato JSON inválido'}, status=400)
         except Exception as e:
-            if 'is_ajax' in locals() and is_ajax:
+            if is_ajax:
                 return JsonResponse({'success': False, 'error': str(e)}, status=400)
-            else:
-                return render(request, 'formNewZone.html', {
-                    'form': ZoneForm(),
-                    'error': str(e)
-                })
-    else:
-        return JsonResponse({'error': 'Método no permitido'}, status=405)
+            return render(request, 'formNewZone.html', {'form': ZoneForm(), 'error': str(e)})
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
 
 @csrf_exempt
 def create_quick_location(request):
@@ -305,4 +272,50 @@ def delete_popup(request, location_id):
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
     
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+@csrf_exempt
+def save_council(request):
+    if request.method == 'GET':
+        return render(request, 'formNewCouncil.html', {'form': CouncilForm()})
+
+    elif request.method == 'POST':
+        is_ajax = False
+        try:
+            if request.content_type == 'application/json':
+                if not request.body:
+                    return JsonResponse({'success': False, 'error': 'Request body is empty'}, status=400)
+                data = json.loads(request.body)
+                is_ajax = True
+                files = None
+            else:
+                data = request.POST
+                files = request.FILES
+
+            form = CouncilForm(data, files)
+            if form.is_valid():
+                council = Council.objects.create(
+                    name=form.cleaned_data['name'],
+                    email=form.cleaned_data['email'],
+                    phone=form.cleaned_data['phone'],
+                    emergency_email=form.cleaned_data['emergency_email'],
+                    emergency_phone=form.cleaned_data['emergency_phone'],
+                    logo_file=form.cleaned_data['logo_file'],
+                    location=form.cleaned_data['location'],
+                )
+                if is_ajax:
+                    return JsonResponse({'success': True, 'message': 'Guardado exitosamente'})
+                return redirect('municipality')
+            else:
+                if is_ajax:
+                    return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+                return render(request, 'formNewCouncil.html', {'form': form})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Formato JSON inválido'}, status=400)
+        except Exception as e:
+            if is_ajax:
+                return JsonResponse({'success': False, 'error': str(e)}, status=400)
+            return render(request, 'formNewCouncil.html', {'form': CouncilForm(), 'error': str(e)})
+
     return JsonResponse({'error': 'Método no permitido'}, status=405)

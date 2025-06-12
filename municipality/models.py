@@ -51,7 +51,7 @@ class Council(models.Model):
     phone = models.CharField(max_length=15)
     emergency_email = models.EmailField()
     emergency_phone = models.CharField(max_length=15)
-    logo_file = models.CharField(max_length=255, null=True, blank=True)
+    logo_file = models.ImageField(upload_to='municipality/img/') 
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
