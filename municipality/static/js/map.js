@@ -7,6 +7,7 @@ let mapInitialized = false;
 window.mapLibraryLoaded = false;
 window.mapElementExists = false;
 
+// Verifica si las coordenadas son válidas
 function isValidCoordinate(lat, lng) {
     return typeof lat === 'number' && typeof lng === 'number' &&
            !isNaN(lat) && !isNaN(lng) &&
@@ -15,6 +16,7 @@ function isValidCoordinate(lat, lng) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Evento principal: inicializa el sistema de mapas al cargar el DOM
     console.log('map.js DOM loaded, starting map initialization...');
     updateMapStatus('Inicializando sistema de mapas...');
     
@@ -34,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupMapMonitoring();
 });
 
+// Verifica si la librería Leaflet está cargada
 function checkLeafletLoaded() {
     if (window.L) {
         window.mapLibraryLoaded = true;
@@ -43,6 +46,7 @@ function checkLeafletLoaded() {
     return false;
 }
 
+// Espera hasta que Leaflet esté disponible antes de inicializar el mapa
 function waitForLeaflet() {
     if (checkLeafletLoaded()) {
         console.log('Leaflet is ready, starting map initialization');
@@ -50,14 +54,15 @@ function waitForLeaflet() {
         
         setTimeout(() => {
             initializeMap();
-        }, 1000);
+        }, 200); // antes: 1000
     } else {
         console.log('Waiting for Leaflet to load...');
         updateMapStatus('Esperando que se cargue Leaflet...');
-        setTimeout(waitForLeaflet, 500);
+        setTimeout(waitForLeaflet, 100); // antes: 500
     }
 }
 
+// Monitorea el estado de carga del mapa y actualiza el estado visual
 function setupMapMonitoring() {
     let mapCheckInterval = setInterval(function() {
         if (window.mapInitialized) {
@@ -66,15 +71,17 @@ function setupMapMonitoring() {
         } else if (window.map) {
             updateMapStatus('Mapa detectado, configurando eventos...');
         }
-    }, 1000);
+    }, 300); // antes: 1000
     
     setTimeout(function() {
         if (!window.mapInitialized) {
             updateMapStatus('Mapa no se cargó automáticamente - Usa "Crear Mapa"', true);
             clearInterval(mapCheckInterval);
         }
-    }, 30000);
+    }, 5000); // antes: 30000
 }
+
+// Carga los marcadores almacenados en localStorage
 function loadMarkers() {
     const saved = localStorage.getItem('mapMarkers');
     if (!saved) {
@@ -96,7 +103,7 @@ function loadMarkers() {
     }
 }
 
-
+// Muestra u oculta el panel de depuración y actualiza la información periódicamente
 function toggleDebug() {
     const debugDiv = document.getElementById('map-debug');
     const debugInfo = document.getElementById('debug-info');
@@ -108,7 +115,7 @@ function toggleDebug() {
         if (window.debugInterval) {
             clearInterval(window.debugInterval);
         }
-        window.debugInterval = setInterval(updateDebugInfo, 2000);
+        window.debugInterval = setInterval(updateDebugInfo, 500); // antes: 2000
     } else {
         debugDiv.style.display = 'none';
         if (window.debugInterval) {
@@ -117,6 +124,7 @@ function toggleDebug() {
     }
 }
 
+// Actualiza la información de depuración en pantalla
 function updateDebugInfo() {
     const debugInfo = document.getElementById('debug-info');
     if (!debugInfo) return;
@@ -160,6 +168,7 @@ function updateDebugInfo() {
     debugInfo.textContent = info.join(' | ');
 }
 
+// Actualiza el estado visual del mapa en la interfaz
 function updateMapStatus(status, isError = false) {
     const statusElement = document.getElementById('map-status-text');
     if (statusElement) {
@@ -169,11 +178,12 @@ function updateMapStatus(status, isError = false) {
     console.log('Map Status:', status);
 }
 
+// Inicializa el mapa buscando instancias existentes o creando una nueva si es necesario
 function initializeMap() {
     if (!window.L) {
         console.log('Leaflet not available yet, waiting...');
         updateMapStatus('Esperando biblioteca Leaflet...');
-        setTimeout(initializeMap, 1000);
+        setTimeout(initializeMap, 200); // antes: 1000
         return;
     }
     
@@ -265,7 +275,7 @@ function initializeMap() {
         }
         
         if (attempts < maxAttempts) {
-            const delay = Math.min(500 + (attempts * 200), 3000);
+            const delay = Math.min(100 + (attempts * 50), 500); // antes: Math.min(500 + (attempts * 200), 3000)
             updateMapStatus(`Reintentando en ${delay}ms...`);
             setTimeout(tryInitialize, delay);
         } else {
@@ -278,6 +288,7 @@ function initializeMap() {
     tryInitialize();
 }
 
+// Crea un mapa de respaldo si no se pudo inicializar automáticamente
 function createFallbackMap() {
     console.log('Creating fallback map...');
     updateMapStatus('Creando mapa de respaldo...');
@@ -322,6 +333,7 @@ function createFallbackMap() {
     }
 }
 
+// Configura los listeners de eventos para los formularios y botones de la interfaz
 function setupEventListeners() {
     const coordinatesForm = document.getElementById('coordinates-form');
     if (coordinatesForm) {
@@ -383,6 +395,7 @@ function setupEventListeners() {
     }
 }
 
+// Configura los eventos del mapa, como el click para añadir marcadores
 function setupMapEvents() {
     if (!map) {
         console.error('Cannot setup events: map is null');
@@ -430,6 +443,7 @@ function setupMapEvents() {
     }
 }
 
+// Abre el popup para añadir información de un marcador en las coordenadas dadas
 function openPopup(lat, lng) {
     if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
         console.error('Invalid coordinates for popup:', lat, lng);
@@ -463,6 +477,7 @@ function openPopup(lat, lng) {
     if (markerColor) markerColor.value = 'red';
 }
 
+// Cierra el popup de añadir marcador
 function closePopup() {
     const popupOverlay = document.getElementById('popup-overlay');
     if (popupOverlay) {
@@ -471,6 +486,7 @@ function closePopup() {
     currentClickCoords = null;
 }
 
+// Guarda un marcador usando los datos del popup y lo añade al mapa
 function saveLocationMarker() {
     if (!currentClickCoords) {
         alert('Error: No se ha seleccionado una ubicación. Haz clic en el mapa primero.');
@@ -510,6 +526,7 @@ function saveLocationMarker() {
     }
 }
 
+// Añade un marcador al mapa con información personalizada
 function addMarkerWithInfo(lat, lng, name, description, color = 'red') {
     if (!mapInitialized || !map) {
         console.error('Mapa no inicializado');
@@ -549,12 +566,14 @@ function addMarkerWithInfo(lat, lng, name, description, color = 'red') {
     }
 }
 
+// Escapa caracteres peligrosos para evitar XSS en los popups
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
 }
 
+// Permite editar un marcador existente (eliminándolo y abriendo el popup con sus datos)
 function editMarker(index) {
     if (markers[index]) {
         const markerData = markers[index].data;
@@ -574,6 +593,7 @@ function editMarker(index) {
     }
 }
 
+// Elimina un marcador específico del mapa y del arreglo
 function removeMarker(index) {
     if (markers[index] && map) {
         try {
@@ -587,6 +607,7 @@ function removeMarker(index) {
     }
 }
 
+// Elimina todos los marcadores del mapa y del arreglo
 function clearAllMarkers() {
     if (markers.length === 0) {
         alert('No hay marcadores para eliminar');
@@ -609,6 +630,7 @@ function clearAllMarkers() {
     }
 }
 
+// Guarda los marcadores en la base de datos o en localStorage si no hay backend
 async function saveMarkers() {
     if (markers.length === 0) {
         alert('No hay marcadores para guardar');
@@ -668,6 +690,7 @@ async function saveMarkers() {
     }
 }
 
+// Guarda los marcadores en localStorage
 function saveMarkersToLocalStorage() {
     try {
         const markersData = markers.map(markerData => markerData.data);
@@ -679,20 +702,22 @@ function saveMarkersToLocalStorage() {
     }
 }
 
+// Espera a que el mapa esté listo para cargar los marcadores locales
 function onMapReady() {
     if (mapInitialized) {
         setTimeout(() => {
             loadMarkers();
-        }, 1000);
+        }, 200); // antes: 1000
     } else {
-        setTimeout(onMapReady, 500);
+        setTimeout(onMapReady, 100); // antes: 500
     }
 }
 
 setTimeout(() => {
-    setTimeout(onMapReady, 8000);
-}, 100);
+    setTimeout(onMapReady, 1000); // antes: 8000
+}, 20); // antes: 100
 
+// Abre la barra lateral de la interfaz
 function openSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
@@ -700,6 +725,7 @@ function openSidebar() {
     if (overlay) overlay.classList.add('active');
 }
 
+// Cierra la barra lateral de la interfaz
 function closeSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
@@ -708,6 +734,7 @@ function closeSidebar() {
 }
 
 document.addEventListener('keydown', function(e) {
+    // Permite cerrar la barra lateral y el popup con la tecla Escape
     if (e.key === 'Escape') {
         closeSidebar();
         closePopup();
@@ -716,6 +743,7 @@ document.addEventListener('keydown', function(e) {
 
 window.toggleDebug = toggleDebug;
 
+// Obtiene ubicaciones desde la base de datos y las muestra en el mapa
 function fetchAndDisplayDatabaseLocations() {
     if (!window.mapInitialized || !window.map) {
         console.warn('Mapa no está listo. Esperando...');

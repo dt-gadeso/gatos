@@ -6,6 +6,7 @@ from .models import Municipality, Location, Zone
 from .models import Council
 from .form import LocationForm, MunicipalityForm, ZoneForm, CouncilForm
 
+# Vista principal que muestra las ubicaciones, municipios y zonas
 def municipality_view(request):
     locations = Location.objects.filter(latitude__isnull=False, longitude__isnull=False)
     municipalities = Municipality.objects.all()
@@ -18,6 +19,7 @@ def municipality_view(request):
     }
     return render(request, 'municipality.html', context)
 
+# Devuelve las ubicaciones en formato JSON para uso en el frontend
 def get_locations_json(request):
     locations = Location.objects.filter(latitude__isnull=False, longitude__isnull=False)
     
@@ -38,6 +40,7 @@ def get_locations_json(request):
 
 
 @csrf_exempt
+# Guarda una nueva ubicación, acepta datos por POST o JSON
 def save_location(request):
     if request.method == 'GET':
         return render(request, 'location.html', {'form': LocationForm()})
@@ -97,6 +100,7 @@ def save_location(request):
 
 
 @csrf_exempt
+# Guarda un nuevo municipio, acepta datos por POST o JSON
 def save_municipality(request):
     if request.method == 'GET':
         return render(request, 'formNewMunicipality.html', {'form': MunicipalityForm()})
@@ -148,6 +152,7 @@ def save_municipality(request):
 
 
 @csrf_exempt
+# Guarda una nueva zona, acepta datos por POST o JSON
 def save_zone(request):
     if request.method == 'GET':
         return render(request, 'formNewZone.html', {'form': ZoneForm()})
@@ -187,6 +192,7 @@ def save_zone(request):
 
 
 @csrf_exempt
+# Crea rápidamente una ubicación desde una petición AJAX/JSON
 def create_quick_location(request):
     if request.method == 'POST':
         try:
@@ -216,6 +222,7 @@ def create_quick_location(request):
     
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
+# Muestra el detalle de una ubicación específica
 def location_detail(request, location_id):
     location = get_object_or_404(Location, id=location_id)
     
@@ -224,6 +231,7 @@ def location_detail(request, location_id):
     }
     return render(request, 'location.html', context)
 
+# Muestra un formulario emergente para agregar una ubicación
 def add_popup(request):
     municipalities = Municipality.objects.all()
     
@@ -242,6 +250,7 @@ def add_popup(request):
     }
     return render(request, 'add_popup.html', context)
 
+# Muestra un formulario emergente para editar una ubicación existente
 def edit_popup(request, location_id):
     location = get_object_or_404(Location, id=location_id)
     municipalities = Municipality.objects.all()
@@ -263,6 +272,7 @@ def edit_popup(request, location_id):
     return render(request, 'add_popup.html', context)
 
 @csrf_exempt
+# Elimina una ubicación mediante una petición POST
 def delete_popup(request, location_id):
     if request.method == 'POST':
         try:
@@ -275,6 +285,7 @@ def delete_popup(request, location_id):
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 @csrf_exempt
+# Guarda un nuevo consejo (council), acepta datos por POST o JSON
 def save_council(request):
     if request.method == 'GET':
         return render(request, 'formNewCouncil.html', {'form': CouncilForm()})

@@ -57,69 +57,6 @@
                 </div>
             </div>
         </div>
-        
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <button class="close-btn" onclick="closeSidebar()">&times;</button>
-                <h2>Información del Lugar</h2>
-            </div>
-            
-            <div class="sidebar-content">
-                <h2 class="location-title" id="location-title">Sant Pere de Ribes</h2>
-                
-                <nav>
-                    <ul class="nav-menu">
-                        <li><a href="#historia">📚 Historia</a></li>
-                        <li><a href="#turismo">🏛️ Turismo</a></li>
-                        <li><a href="#cultura">🎭 Cultura</a></li>
-                        <li><a href="#gastronomia">🍽️ Gastronomía</a></li>
-                        <li><a href="#contacto">📞 Contacto</a></li>
-                    </ul>
-                </nav>
-
-                <div class="image-gallery">
-                    <h3>Galería de Imágenes</h3>
-                    <div class="gallery-grid">
-                        <div class="gallery-item">
-                            <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=300&h=200&fit=crop" alt="Paisaje mediterráneo">
-                        </div>
-                        <div class="gallery-item">
-                            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=200&fit=crop" alt="Arquitectura catalana">
-                        </div>
-                        <div class="gallery-item">
-                            <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop" alt="Costa mediterránea">
-                        </div>
-                        <div class="gallery-item">
-                            <img src="https://images.unsplash.com/photo-1520637836862-4d197d17c91a?w=300&h=200&fit=crop" alt="Pueblo catalán">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="info-section">
-                    <h3>🏛️ Historia</h3>
-                    <p>Sant Pere de Ribes es un municipio de la provincia de Barcelona, en Cataluña, España. Su historia se remonta a tiempos medievales, con una rica herencia cultural y arquitectónica.</p>
-                </div>
-
-                <div class="info-section">
-                    <h3>🌟 Puntos de Interés</h3>
-                    <p>Destaca por sus paisajes mediterráneos, arquitectura tradicional catalana y proximidad a la costa. Es un lugar perfecto para disfrutar de la tranquilidad y la belleza natural.</p>
-                </div>
-
-                <div class="info-section">
-                    <h3>🎭 Cultura Local</h3>
-                    <p>La localidad mantiene vivas sus tradiciones catalanas, con festivales locales, mercados tradicionales y una gastronomía típica de la región mediterránea.</p>
-                </div>
-
-                <div class="info-section">
-                    <h3>📍 Ubicación</h3>
-                    <p>Coordenadas: 41.383°N, 2.178°E<br>
-                    Provincia: Barcelona<br>
-                    Comunidad: Cataluña<br>
-                    País: España</p>
-                </div>
-            </div>
-        </div>
-        
         <main>
             <div class="card">
                 <h2>¡Hola!</h2>
@@ -135,18 +72,11 @@
                 <h3>Coordenadas</h3>
                 <form id="coordinates-form">
                     <div class="coordinates-input">
-                        <div class="input-group">
-                            <label for="latitude">Latitud:</label>
-                            <input type="number" id="latitude" step="any" placeholder="41.383" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="longitude">Longitud:</label>
-                            <input type="number" id="longitude" step="any" placeholder="2.178" required>
-                        </div>
-                        <button type="submit">Marcar Ubicación</button>
-                        <button type="button" id="clear-markers">Limpiar Marcadores</button>
-                        <button type="button" id="save-markers">Guardar Marcadores</button>
-                        <button type="button" id="load-markers">Cargar Marcadores</button>
+                        <button type="button" id="load-markers" class="map-btn btn-info">Cargar Marcadores</button>
+                        <button type="button" class="map-btn btn-orange" onclick="window.location.href='/municipality/location'">Crear localizaciones</button>
+                        <button type="button" class="map-btn btn-success" onclick="window.location.href='/municipality/formNewMunicipality'">Guardar municipio</button>
+                        <button type="button" class="map-btn btn-purple" onclick="window.location.href='/municipality/formNewZone'">Guardar zona</button>
+                        <button type="button" class="map-btn btn-danger" onclick="window.location.href='/municipality/formNewCouncil'">Guardar ayuntamiento</button>
                     </div>
                 </form>
                 <div class="marker-info">
@@ -157,10 +87,7 @@
                         <li>Usa "Limpiar Marcadores" para remover todos los marcadores</li>
                         <li>Usa "Guardar Marcadores" para persistir tus marcadores</li>
                     </ul>
-                    <a href="/municipality/location">Crear localizaciones</a>
-                    <a href="/municipality/formNewMunicipality">Guardar municipio</a>
-                    <a href="/municipality/formNewZone">Guardar zona</a>
-                    <a href="/municipality/formNewCouncil">Guardar ayuntamiento</a>
+                </div>
                     <div class="markers-count">
                         <strong>Marcadores activos: <span id="markers-count">0</span></strong>
                     </div>
@@ -219,7 +146,7 @@
                         if (notification.parentNode) {
                             notification.parentNode.removeChild(notification);
                         }
-                    }, 3000);
+                    }, 1500);
                 };
             }
             
@@ -247,7 +174,7 @@
                     if (typeof window.forceCreateMap !== 'function') {
                         window.showNotification('Usando funciones de respaldo del mapa');
                     }
-                }, 2000);
+                }, 500); 
             });
             
             document.addEventListener('DOMContentLoaded', function() {
@@ -271,7 +198,7 @@
                     if (window.mapInitialized) {
                         fetchAndDisplayDatabaseLocations();
                     } else {
-                        setTimeout(tryFetchLocations, 1000);
+                        setTimeout(tryFetchLocations, 200); 
                     }
                 }
                 tryFetchLocations();
@@ -279,7 +206,7 @@
                         if (window.mapInitialized) {
                             fetchAndDisplayDatabaseLocations();
                         }
-                    }, 10000);
+                    }, 2000); 
                 });
         </script>
         
