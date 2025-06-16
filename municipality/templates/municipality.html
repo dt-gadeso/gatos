@@ -15,48 +15,6 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
         
         <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-        
-        <div class="popup-overlay" id="popup-overlay">
-            <div class="popup-modal">
-                <div class="popup-header">
-                    <h3>Información del Lugar</h3>
-                    <button class="close-popup" onclick="closePopup()">&times;</button>
-                </div>
-                <div class="popup-content">
-                    <form id="location-form">
-                        <div class="form-group">
-                            <label for="location-name">Nombre del lugar:</label>
-                            <input type="text" id="location-name" placeholder="Ingresa el nombre del lugar" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="location-description">Descripción:</label>
-                            <textarea id="location-description" placeholder="Describe el lugar..." rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Coordenadas:</label>
-                            <div class="coordinates-display">
-                                <span>Lat: <span id="popup-lat">0.000000</span></span>
-                                <span>Lng: <span id="popup-lng">0.000000</span></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="marker-color">Color del marcador:</label>
-                            <select id="marker-color">
-                                <option value="red">🔴 Rojo</option>
-                                <option value="blue">🔵 Azul</option>
-                                <option value="green">🟢 Verde</option>
-                                <option value="orange">🟠 Naranja</option>
-                                <option value="purple">🟣 Morado</option>
-                            </select>
-                        </div>
-                        <div class="form-buttons">
-                            <button type="submit">Guardar Marcador</button>
-                            <button type="button" onclick="closePopup()">Cancelar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
         <main>
             <div class="card">
                 <h2>¡Hola!</h2>
@@ -91,6 +49,8 @@
                     <div class="markers-count">
                         <strong>Marcadores activos: <span id="markers-count">0</span></strong>
                     </div>
+                <!-- Lista de marcadores para borrar individualmente -->
+                <div id="markers-list"></div>
                 </div>
             </div>
             

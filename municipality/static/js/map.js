@@ -499,6 +499,7 @@ function saveLocationMarker() {
     }
 
     const nameElement = document.getElementById('location-name');
+    const addressElement = document.getElementById('location-address');
     const descriptionElement = document.getElementById('location-description');
     const colorElement = document.getElementById('marker-color');
 
@@ -508,6 +509,7 @@ function saveLocationMarker() {
     }
 
     const name = nameElement.value.trim();
+    const address = addressElement ? addressElement.value.trim() : '';
     const description = descriptionElement ? descriptionElement.value.trim() : '';
     const color = colorElement ? colorElement.value : 'red';
 
@@ -517,7 +519,7 @@ function saveLocationMarker() {
     }
 
     try {
-        addMarkerWithInfo(currentClickCoords.lat, currentClickCoords.lng, name, description, color);
+        addMarkerWithInfo(currentClickCoords.lat, currentClickCoords.lng, name, description, color, address);
         closePopup();
         showNotification(`Marcador "${name}" añadido exitosamente`);
     } catch (error) {
@@ -526,8 +528,8 @@ function saveLocationMarker() {
     }
 }
 
-// Añade un marcador al mapa con información personalizada
-function addMarkerWithInfo(lat, lng, name, description, color = 'red') {
+// Modifica addMarkerWithInfo para aceptar address y guardarlo en el objeto data
+function addMarkerWithInfo(lat, lng, name, description, color = 'red', address = '') {
     if (!mapInitialized || !map) {
         console.error('Mapa no inicializado');
         return null;
@@ -551,12 +553,13 @@ function addMarkerWithInfo(lat, lng, name, description, color = 'red') {
         marker.bindPopup(`
             <div class="marker-popup">
                 <h4>${escapeHtml(name)}</h4>
+                ${address ? `<div><b>Dirección:</b> ${escapeHtml(address)}</div>` : ''}
                 ${description ? `<p>${escapeHtml(description)}</p>` : ''}
                 <small>Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}</small>
             </div>
         `);
 
-        markers.push({ marker, data: { lat, lng, name, description, color } });
+        markers.push({ marker, data: { lat, lng, name, address, description, color } });
         updateMarkersCount();
 
         return marker;
@@ -647,7 +650,7 @@ async function saveMarkers() {
             for (let markerData of markers) {
                 const locationData = {
                     name: markerData.data.name,
-                    address: markerData.data.name,
+                    address: markerData.data.address || '',
                     description: markerData.data.description || '',
                     municipality_id: 1,
                     latitude: markerData.data.lat,
@@ -758,6 +761,19 @@ function fetchAndDisplayDatabaseLocations() {
                 return;
             }
 
+            // Limpiar marcadores existentes antes de agregar los nuevos
+            if (map) {
+                markers.forEach(markerData => {
+                    try {
+                        map.removeLayer(markerData.marker);
+                    } catch (error) {
+                        console.error('Error removing marker:', error);
+                    }
+                });
+            }
+            markers = [];
+            updateMarkersCount();
+
             console.log('Ubicaciones cargadas desde la BD:', data.locations.length);
 
             data.locations.forEach(loc => {
@@ -779,4 +795,32 @@ function fetchAndDisplayDatabaseLocations() {
 
 window.fetchAndDisplayDatabaseLocations = fetchAndDisplayDatabaseLocations;
 window.loadMarkers = loadMarkers;
+
+// Muestra la lista de marcadores con botón para borrar individualmente
+function updateMarkersList() {
+    const listDiv = document.getElementById('markers-list');
+    if (!listDiv) return;
+    if (markers.length === 0) {
+        listDiv.innerHTML = '<small>No hay marcadores.</small>';
+        return;
+    }
+    let html = '<ul style="list-style:none;padding:0;">';
+    markers.forEach((m, idx) => {
+        html += `<li style="margin-bottom:4px;">
+            <span title="Lat: ${m.data.lat}, Lng: ${m.data.lng}">${escapeHtml(m.data.name)}</span>
+            <button type="button" class="map-btn btn-danger" style="margin-left:8px;padding:2px 8px;font-size:0.9em;" onclick="removeMarker(${idx})">Borrar</button>
+        </li>`;
+    });
+    html += '</ul>';
+    listDiv.innerHTML = html;
+}
+
+// Actualiza el contador y la lista de marcadores
+function updateMarkersCount() {
+    const countElement = document.getElementById('markers-count');
+    if (countElement) {
+        countElement.textContent = markers.length;
+    }
+    updateMarkersList();
+}
 

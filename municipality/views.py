@@ -71,7 +71,7 @@ def save_location(request):
                     municipality = Municipality.objects.create(name="Default Municipality")
 
             location = Location.objects.create(
-                nombre=data.get('name', 'Ubicación sin nombre'),
+                nombre=data.get('name') or data.get('nombre') or 'Ubicación sin nombre',
                 description=data.get('description', ''),
                 address=data.get('address', data.get('name', 'Dirección no especificada')),
                 latitude=data.get('latitude'),
