@@ -272,19 +272,6 @@ def edit_popup(request, location_id):
     return render(request, 'add_popup.html', context)
 
 @csrf_exempt
-# Elimina una ubicación mediante una petición POST
-def delete_popup(request, location_id):
-    if request.method == 'POST':
-        try:
-            location = get_object_or_404(Location, id=location_id)
-            location.delete()
-            return JsonResponse({'success': True})
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-    
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
-
-@csrf_exempt
 # Guarda un nuevo consejo (council), acepta datos por POST o JSON
 def save_council(request):
     if request.method == 'GET':
