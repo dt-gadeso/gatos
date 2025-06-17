@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
-from municipality.models import Municipality, Location, Council
+from colonies.models import Municipality, Location, Council
 
 
 class VetCenter(models.Model):
@@ -9,7 +9,7 @@ class VetCenter(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=15)
     logo_file = models.CharField(max_length=255, null=True, blank=True)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    location = models.ForeignKey('colonies.Location', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -20,7 +20,7 @@ class VetCenter(models.Model):
         db_table = 'vet_centers'
 
 class Agreement(models.Model):
-    council = models.ForeignKey(Council, on_delete=models.CASCADE)
+    council = models.ForeignKey('colonies.Council', on_delete=models.CASCADE)
     vet_center = models.ForeignKey(VetCenter, on_delete=models.CASCADE)
     week_days = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(7)]

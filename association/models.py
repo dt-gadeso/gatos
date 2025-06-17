@@ -6,7 +6,7 @@ class Association(models.Model):
     email = models.EmailField(max_length=242,unique=True,  null=True, blank=True)  
     phone = models.CharField(max_length=20,  null=True, blank=True)   
     logo_file = models.ImageField(upload_to='association/img/', null=True, blank=True)
-    location = models.ForeignKey('municipality.Location', on_delete=models.CASCADE, null=True, blank=True) 
+    location = models.ForeignKey('colonies.Location', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

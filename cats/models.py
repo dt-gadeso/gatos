@@ -14,7 +14,7 @@ class Cat(models.Model):
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     sterilized = models.BooleanField(default=False)
     dead = models.BooleanField(default=False)
-    colony = models.ForeignKey('colonies.Colony', on_delete=models.SET_NULL, null=True, blank=True)
+    colony = models.ForeignKey('colonies.Colony', on_delete=models.CASCADE)
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

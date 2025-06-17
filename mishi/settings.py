@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'cats',
     'colonies',
     'association',
-    'municipality',
     'users',
 ]
 
