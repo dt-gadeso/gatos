@@ -2,9 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .models import Municipality, Location, Zone
-from .models import Council
-from .form import LocationForm, MunicipalityForm, ZoneForm, CouncilForm
+from .models import Municipality, Location, Zone, Council
+from .form import LocationForm, MunicipalityForm, ZoneForm, CouncilForm, ColonyForm
 
 # Vista principal que muestra las ubicaciones, municipios y zonas
 def municipality_view(request):
@@ -82,7 +81,7 @@ def save_location(request):
             if is_ajax:
                 return JsonResponse({'success': True, 'id': location.id, 'message': 'Ubicación guardada exitosamente'})
             else:
-                return redirect('municipality')
+                return redirect('colonies')
 
         except json.JSONDecodeError:
             return JsonResponse({'success': False, 'error': 'Formato JSON inválido'}, status=400)
@@ -139,7 +138,7 @@ def save_municipality(request):
 
             if is_ajax:
                 return JsonResponse({'success': True, 'id': municipality.id, 'message': 'Municipio guardado exitosamente'})
-            return redirect('municipality')
+            return redirect('colonies')
 
         except json.JSONDecodeError:
             return JsonResponse({'success': False, 'error': 'Formato JSON inválido'}, status=400)
@@ -179,7 +178,7 @@ def save_zone(request):
 
             if is_ajax:
                 return JsonResponse({'success': True, 'id': zone.id, 'message': 'Zona guardada exitosamente'})
-            return redirect('municipality')
+            return redirect('colonies')
 
         except json.JSONDecodeError:
             return JsonResponse({'success': False, 'error': 'Formato JSON inválido'}, status=400)
@@ -222,7 +221,7 @@ def create_quick_location(request):
     
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-# Muestra el detalle de una ubicación específica
+
 def location_detail(request, location_id):
     location = get_object_or_404(Location, id=location_id)
     
@@ -231,7 +230,7 @@ def location_detail(request, location_id):
     }
     return render(request, 'location.html', context)
 
-# Muestra un formulario emergente para agregar una ubicación
+
 def add_popup(request):
     municipalities = Municipality.objects.all()
     
@@ -239,7 +238,7 @@ def add_popup(request):
         form = LocationForm(request.POST)
         if form.is_valid():
             location = form.save()
-            return redirect('municipality')
+            return redirect('colonies')
     else:
         form = LocationForm()
     
@@ -250,7 +249,6 @@ def add_popup(request):
     }
     return render(request, 'add_popup.html', context)
 
-# Muestra un formulario emergente para editar una ubicación existente
 def edit_popup(request, location_id):
     location = get_object_or_404(Location, id=location_id)
     municipalities = Municipality.objects.all()
@@ -259,7 +257,7 @@ def edit_popup(request, location_id):
         form = LocationForm(request.POST, instance=location)
         if form.is_valid():
             form.save()
-            return redirect('municipality')
+            return redirect('colonies')
     else:
         form = LocationForm(instance=location)
     
@@ -272,7 +270,6 @@ def edit_popup(request, location_id):
     return render(request, 'add_popup.html', context)
 
 @csrf_exempt
-# Guarda un nuevo consejo (council), acepta datos por POST o JSON
 def save_council(request):
     if request.method == 'GET':
         return render(request, 'formNewCouncil.html', {'form': CouncilForm()})
@@ -303,7 +300,7 @@ def save_council(request):
                 )
                 if is_ajax:
                     return JsonResponse({'success': True, 'message': 'Guardado exitosamente'})
-                return redirect('municipality')
+                return redirect('colonies')
             else:
                 if is_ajax:
                     return JsonResponse({'success': False, 'errors': form.errors}, status=400)
@@ -317,3 +314,15 @@ def save_council(request):
             return render(request, 'formNewCouncil.html', {'form': CouncilForm(), 'error': str(e)})
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+def new_colony(request):
+    if request.method == 'GET':
+        form = ColonyForm()
+        return render(request, 'formNewColony.html', {'form': form})
+    elif request.method == 'POST':
+        form = ColonyForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('colonies')
+        return render(request, 'formNewColony.html', {'form': form})

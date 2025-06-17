@@ -13,4 +13,5 @@ urlpatterns = [
     path('formNewMunicipality/', views.save_municipality, name='save_municipality'),
     path('formNewZone/', views.save_zone, name='save_zone'),
     path('formNewCouncil/', views.save_council, name='save_council'),
+    path('formNewColony/', views.new_colony, name='new_colony'),
 ]

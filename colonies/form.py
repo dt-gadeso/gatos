@@ -1,5 +1,6 @@
 from django import forms
-from .models import Location, Municipality, Zone
+from .models import Location, Municipality, Zone, Manager
+from users.models import User
 
 class NewLocation(forms.ModelForm):
     class Meta:
@@ -146,6 +147,32 @@ class CouncilForm(forms.Form):
     location = forms.ModelChoiceField(
         label='Ubicación',
         queryset=Location.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+class ColonyForm(forms.Form):
+    name = forms.CharField(
+        label='Nombre de la colonia',
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el nombre de la colonia'})
+    )
+
+    location = forms.ModelChoiceField(
+        label='Ubicación',
+        queryset=Location.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    manager = forms.ModelChoiceField(
+        label='Encargado',
+        queryset=Manager.objects.all(),
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    user = forms.ModelChoiceField(
+        label='Usuario',
+        queryset=User.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
