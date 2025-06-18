@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
 from colonies.models import Municipality, Location, Council
+from users.models import Manager
 
 
 class VetCenter(models.Model):

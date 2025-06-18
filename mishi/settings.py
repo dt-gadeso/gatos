@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'veterinarian',
     'cats',
     'colonies',
-    'association',
     'users',
 ]
 

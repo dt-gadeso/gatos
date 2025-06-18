@@ -1,22 +1,20 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .form import CreateNewUser, LoginUser, CreateRole, EditUser, AssignedRole
-from .models import User, Role, Member
-from association.models import Manager
+from .form import CreateNewUser, LoginUser, CreateRole, EditUser, AssignedRole, AssociationForm
+from .models import User, Role, Member, Manager, Association
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from association.models import Association  
-
 from django.http import JsonResponse
 
 class Staff(View):
     def get(self, request):
-        # Controla el acceso de usuario autenticado y lista roles
+        # Controla el acceso de usuario autenticado y lista roles y asociaciones
         if request.user.is_authenticated:
             roles = Role.objects.all()
-            return render(request, 'areaStaff.html', {'roles': roles})
+            associations = Association.objects.all()
+            return render(request, 'areaStaff.html', {'roles': roles, 'associations': associations})
         else:
             return render(request, 'users.html')
 
@@ -88,7 +86,8 @@ def signout(request):
 def area_staff(request):
     roles = Role.objects.all()
     users = User.objects.all()
-    return render(request, 'areaStaff.html', {'roles': roles, 'users': users})
+    associations = Association.objects.all()
+    return render(request, 'areaStaff.html', {'roles': roles, 'users': users, 'associations': associations})
 
 @login_required
 def assign_role(request):
@@ -225,6 +224,24 @@ def areaEdit(request):
                 'error': f'Error al editar el usuario: {str(e)}'
             })
 
+# --- Asociación fusionada aquí ---
+@login_required
+def association_list(request):
+    associations = Association.objects.all()
+    return render(request, 'association.html', {'associations': associations})
+
+@login_required
+def association_create(request):
+    if not request.user.is_superuser:
+        return redirect('association_list')
+    if request.method == 'POST':
+        form = AssociationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('association_list')
+    else:
+        form = AssociationForm()
+    return render(request, 'asignar.html', {'form': form})
 
 
 @receiver(post_save, sender=User)

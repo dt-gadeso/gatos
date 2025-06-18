@@ -50,6 +50,57 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Asociación Section integrada -->
+            <div class="card staff-form mt-3">
+                <div class="card-body">
+                    <h3 class="card-title">Mis Asociaciones</h3>
+                    {% if user.is_superuser %}
+                    <div class="admin-actions mb-3">
+                        <a href="{% url 'association_create' %}" class="btn btn-primary">
+                            <i class="fas fa-user-cog"></i> Crear nueva Asociación
+                        </a>
+                    </div>
+                    {% endif %}
+                    <hr>
+                    {% if user.association %}
+                        <div class="association-badges">
+                            <span class="badge badge-primary association-badge">{{ user.association.name }}</span>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No tienes asociaciones asignadas.</p>
+                    {% endif %}
+                    <div class="all-associations mt-4">
+                        <h4>Todas las Asociaciones Existentes</h4>
+                        <p><strong>Asociaciones encontradas:</strong> {{ associations|length }}</p>
+                        {% if associations %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Nombre de la Asociación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for association in associations %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <strong>{{ association.name }}</strong>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            No hay asociaciones disponibles en el sistema.
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
         
         <!-- Roles Section -->

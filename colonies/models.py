@@ -1,5 +1,5 @@
 from django.db import models
-from association.models import Manager
+from users.models import Manager
 
 class Municipality(models.Model):
     name = models.CharField(max_length=100)
@@ -31,7 +31,7 @@ class Location(models.Model):
 class Colony(models.Model):
     name = models.CharField(max_length=100)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    manager = models.ForeignKey(Manager, on_delete=models.SET_NULL, null=True, blank=True)
+    manager = models.ForeignKey('users.Manager', on_delete=models.SET_NULL, null=True, blank=True)
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

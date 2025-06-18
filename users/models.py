@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
-from association.models import Association
 
 class Role(models.Model):
     name = models.CharField(max_length=50)
@@ -13,14 +12,29 @@ class Role(models.Model):
     class Meta:
         db_table = 'roles'
 
+class Association(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=242, unique=True, null=True, blank=True)
+    phone = models.CharField(max_length=20, null=True, blank=True)
+    logo_file = models.ImageField(upload_to='association/img/', null=True, blank=True)
+    location = models.ForeignKey('colonies.Location', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'associations'
+
 class User(AbstractUser):
     password = models.CharField(max_length=128, null=True, blank=True)
-    email = models.EmailField(max_length=242,unique=True)
+    email = models.EmailField(max_length=242, unique=True)
     email_verified_at = models.DateTimeField(null=True, blank=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
-    avatar_file = models.ImageField(upload_to='users/img/') # Carpeta donde se guardan las users/imágenes/
+    avatar_file = models.ImageField(upload_to='users/img/')
     volunteer_number = models.CharField(max_length=50, null=True, blank=True)
-    association = models.ForeignKey(Association, null=True, blank=True, on_delete=models.SET_NULL)  # <-- Añadido
+    association = models.ForeignKey(Association, null=True, blank=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -57,9 +71,21 @@ class Observation(models.Model):
     class Meta:
         db_table = 'observations'
 
+class Manager(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name='association_managers', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'managers'
+        unique_together = ['user', 'association']
+
+
 @receiver(post_migrate)
 def create_default_roles(sender, **kwargs):
     _ = kwargs  # Mark kwargs as used to avoid unused variable warning
     if sender.name == 'users':
         Role.objects.get_or_create(name='member')
+        Role.objects.get_or_create(name='manager')
+        Role.objects.get_or_create(name='manager')
         Role.objects.get_or_create(name='manager')
