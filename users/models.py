@@ -56,7 +56,7 @@ class Member(models.Model):
     
     class Meta:
         db_table = 'members'
-        unique_together = ['user', 'association']
+        unique_together = ['user']
 
 class Observation(models.Model):
     cat = models.ForeignKey('cats.Cat', on_delete=models.CASCADE)
@@ -78,7 +78,23 @@ class Manager(models.Model):
     
     class Meta:
         db_table = 'managers'
-        unique_together = ['user', 'association']
+        unique_together = ['user']
+
+class Capturador(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'capturadores'
+        unique_together = ['user']
+
+class Free(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'free'
+        unique_together = ['user']
 
 
 @receiver(post_migrate)
