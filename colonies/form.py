@@ -88,19 +88,37 @@ class LocationForm(forms.Form):
         widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la longitud'})
     )
 
-class MunicipalityForm(forms.Form):
+
+class MunicipalityForm(forms.ModelForm):
     name = forms.CharField(
-        label='Nombre del municipio',
+        label='Nombre del Municipio',
         max_length=100,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el nombre del municipio'})
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ingrese el nombre del municipio'
+        })
     )
-    
+
     zone = forms.ModelChoiceField(
         label='Zona',
         queryset=Zone.objects.all(),
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        })
     )
+
+    class Meta:
+        model = Municipality
+        fields = ['name', 'zone']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el nombre del municipio'}),
+            'zone': forms.Select(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'name': 'Nombre del municipio',
+            'zone': 'Zona',
+        }
 
 class ZoneForm(forms.Form):
     name = forms.CharField(
@@ -175,4 +193,3 @@ class ColonyForm(forms.Form):
         queryset=User.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-

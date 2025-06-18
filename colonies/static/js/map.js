@@ -753,7 +753,7 @@ function fetchAndDisplayDatabaseLocations() {
         return;
     }
 
-    fetch('/municipality/get_locations_json/')
+    fetch('/colonies/get_locations_json/')
         .then(response => response.json())
         .then(data => {
             if (!Array.isArray(data.locations)) {

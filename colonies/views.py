@@ -6,7 +6,7 @@ from .models import Municipality, Location, Zone, Council
 from .form import LocationForm, MunicipalityForm, ZoneForm, CouncilForm, ColonyForm
 
 # Vista principal que muestra las ubicaciones, municipios y zonas
-def municipality_view(request):
+def colonies_view(request):
     locations = Location.objects.filter(latitude__isnull=False, longitude__isnull=False)
     municipalities = Municipality.objects.all()
     zones = Zone.objects.all()
@@ -98,50 +98,29 @@ def save_location(request):
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 
-@csrf_exempt
-# Guarda un nuevo municipio, acepta datos por POST o JSON
 def save_municipality(request):
     if request.method == 'GET':
         return render(request, 'formNewMunicipality.html', {'form': MunicipalityForm()})
 
     elif request.method == 'POST':
-        is_ajax = False
+        is_ajax = request.content_type == 'application/json'
         try:
-            if request.content_type == 'application/json':
-                if not request.body:
-                    return JsonResponse({'success': False, 'error': 'Request body is empty'}, status=400)
-                data = json.loads(request.body)
-                is_ajax = True
-            else:
-                data = request.POST
-
-            name = data.get('name')
-            zone_id = data.get('zone_id')
-
-            if not name:
-                msg = 'El nombre es requerido.'
-                if is_ajax:
-                    return JsonResponse({'success': False, 'error': msg}, status=400)
-                return render(request, 'formNewMunicipality.html', {'form': MunicipalityForm(), 'error': msg})
-
-            if zone_id:
-                try:
-                    zone = Zone.objects.get(id=zone_id)
-                except Zone.DoesNotExist:
-                    return JsonResponse({'success': False, 'error': 'Zona no encontrada'}, status=404)
-            else:
-                zone = Zone.objects.first()
-                if not zone:
-                    zone = Zone.objects.create(name="Default Zone")
-
-            municipality = Municipality.objects.create(name=name, zone=zone)
-
             if is_ajax:
-                return JsonResponse({'success': True, 'id': municipality.id, 'message': 'Municipio guardado exitosamente'})
-            return redirect('colonies')
+                data = json.loads(request.body)
+                form = MunicipalityForm(data)
+            else:
+                form = MunicipalityForm(request.POST)
 
-        except json.JSONDecodeError:
-            return JsonResponse({'success': False, 'error': 'Formato JSON inválido'}, status=400)
+            if form.is_valid():
+                municipality = form.save()
+                if is_ajax:
+                    return JsonResponse({'success': True, 'id': municipality.id, 'message': 'Municipio guardado exitosamente'})
+                return redirect('colonies')
+            else:
+                if is_ajax:
+                    return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+                return render(request, 'formNewMunicipality.html', {'form': form})
+
         except Exception as e:
             if is_ajax:
                 return JsonResponse({'success': False, 'error': str(e)}, status=400)
@@ -229,45 +208,6 @@ def location_detail(request, location_id):
         'location': location,
     }
     return render(request, 'location.html', context)
-
-
-def add_popup(request):
-    municipalities = Municipality.objects.all()
-    
-    if request.method == 'POST':
-        form = LocationForm(request.POST)
-        if form.is_valid():
-            location = form.save()
-            return redirect('colonies')
-    else:
-        form = LocationForm()
-    
-    context = {
-        'form': form,
-        'municipalities': municipalities,
-        'is_edit': False
-    }
-    return render(request, 'add_popup.html', context)
-
-def edit_popup(request, location_id):
-    location = get_object_or_404(Location, id=location_id)
-    municipalities = Municipality.objects.all()
-    
-    if request.method == 'POST':
-        form = LocationForm(request.POST, instance=location)
-        if form.is_valid():
-            form.save()
-            return redirect('colonies')
-    else:
-        form = LocationForm(instance=location)
-    
-    context = {
-        'form': form,
-        'municipalities': municipalities,
-        'is_edit': True,
-        'location': location
-    }
-    return render(request, 'add_popup.html', context)
 
 @csrf_exempt
 def save_council(request):
