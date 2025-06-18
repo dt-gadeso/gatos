@@ -2,36 +2,47 @@
 {% load static %}
 {% block content %}
 <h2>Asignar Rol a Usuario</h2>
-<form method="POST">
-    {% csrf_token %}
-    <div>
-        <label for="user_id">Usuario:</label>
-        <select name="user_id" id="user_id" required>
-            <option value="" disabled selected>Selecciona un usuario</option>
-            {% for user in users %}
-                <option value="{{ user.id }}">{{ user.username }}</option>
-            {% endfor %}
-        </select>
-    </div> 
-    <div>
-        <label for="role_id">Rol:</label>
-        <select name="role_id" id="role_id" required onchange="toggleAssociationSelect()">
-            <option value="" disabled selected>Selecciona un rol</option>
-            {% for role in roles %}
-                <option value="{{ role.id }}">{{ role.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div id="association-div" style="display:none;">
-        <label for="association_id">Asociación:</label>
-        <select name="association_id" id="association_id">
-            <option value="" disabled selected>Selecciona una asociación</option>
-            {% for association in associations %}
-                <option value="{{ association.id }}">{{ association.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <button type="submit" name="assign_role">Asignar Rol</button>
+<form method="post">
+  {% csrf_token %}
+
+  <label for="user-search">Buscar usuario:</label>
+  <input type="text" id="user-search" placeholder="Buscar usuario...">
+  <select name="user_id" id="user-select" required>
+    <option value="">-- Selecciona un usuario --</option>
+    {% for user in users %}
+      <option value="{{ user.id }}">{{ user.username }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="role">Rol:</label>
+  <select name="role_id" id="role" onchange="this.form.submit()">
+    <option value="">-- Selecciona un rol --</option>
+    {% for role in roles %}
+      <option value="{{ role.id }}" {% if selected_role_id == role.id %}selected{% endif %}>{{ role.name }}</option>
+    {% endfor %}
+  </select>
+
+  {% if show_association %}
+    <label for="association-search">Buscar asociación:</label>
+    <input type="text" id="association-search" placeholder="Buscar asociación...">
+    <select name="association_id" id="association" required>
+      <option value="">-- Selecciona una asociación --</option>
+      {% for association in associations %}
+        <option value="{{ association.id }}" {% if selected_association_id == association.id %}selected{% endif %}>{{ association.name }}</option>
+      {% endfor %}
+    </select>
+  {% endif %}
+
+  {% if show_trampa %}
+    <label for="tiene_trampa">¿Tiene trampa?</label>
+    <select name="tiene_trampa" id="tiene_trampa" required>
+      <option value="">-- Selecciona --</option>
+      <option value="si">Sí</option>
+      <option value="no">No</option>
+    </select>
+  {% endif %}
+
+  <button type="submit" name="assign_role">Asignar rol</button>
 </form>
 
 <hr>
@@ -69,6 +80,43 @@
     </div>
     <button type="submit" name="delete_role_btn" onclick="return confirm('¿Estás seguro de que deseas borrar este rol?');">Borrar Rol</button>
 </form>
-<script src="{% static 'js/users.js' %}">
+<script src="{% static 'js/users.js' %}"></script>
+<script>
+// document.addEventListener('DOMContentLoaded', function () {
+//     // Filtrado de usuarios
+//     const userSearch = document.getElementById('user-search');
+//     const userSelect = document.getElementById('user-select');
+//     userSearch.addEventListener('input', function () {
+//         fetch(`/users/search_users/?q=${encodeURIComponent(this.value)}`)
+//             .then(r => r.json())
+//             .then(data => {
+//                 userSelect.innerHTML = '<option value="">-- Selecciona un usuario --</option>';
+//                 data.results.forEach(u => {
+//                     const opt = document.createElement('option');
+//                     opt.value = u.id;
+//                     opt.textContent = `${u.username} (${u.email})`;
+//                     userSelect.appendChild(opt);
+//                 });
+//             });
+//     });
+// });
+//     // Filtrado de asociaciones
+//     const associationSearch = document.getElementById('association-search');
+//     const associationSelect = document.getElementById('association');
+//     if (associationSearch && associationSelect) {
+//       associationSearch.addEventListener('input', function () {
+//         fetch(`/users/search_associations/?q=${encodeURIComponent(this.value)}`)
+//             .then(r => r.json())
+//             .then(data => {
+//                 associationSelect.innerHTML = '<option value="">-- Selecciona una asociación --</option>';
+//                 data.results.forEach(a => {
+//                     const opt = document.createElement('option');
+//                     opt.value = a.id;
+//                     opt.textContent = a.name;
+//                     associationSelect.appendChild(opt);
+//                 });
+//             });
+//       });
+//     };
 </script>
 {% endblock %}

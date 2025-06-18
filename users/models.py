@@ -46,6 +46,18 @@ class User(AbstractUser):
     class Meta:
         db_table = 'users'
 
+class User_Role(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.role.name}"
+    
+    class Meta:
+        db_table = 'user_roles'
+        unique_together = ['user', 'role']
+
 class Member(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     association = models.ForeignKey(Association, null=True, blank=True, on_delete=models.SET_NULL)
@@ -82,6 +94,7 @@ class Manager(models.Model):
 
 class Capturador(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    tiene_trampa = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:

@@ -7,6 +7,8 @@ from django.views import View
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+from django.db.models import Q
 
 class Staff(View):
     def get(self, request):
@@ -89,102 +91,187 @@ def area_staff(request):
     associations = Association.objects.all()
     return render(request, 'areaStaff.html', {'roles': roles, 'users': users, 'associations': associations})
 
+# @login_required
+# def assign_role(request):
+#     if not request.user.is_superuser:
+#         return redirect('areaStaff')
+#     roles = Role.objects.all()
+#     users = User.objects.all()
+#     associations = Association.objects.all()
+#     error = None
+
+#     if request.method == 'POST':
+#         if 'create_role' in request.POST:
+#             # Crear un nuevo rol
+#             role_name = request.POST.get('new_role_name')
+#             if role_name:
+#                 if not Role.objects.filter(name=role_name).exists():
+#                     Role.objects.create(name=role_name)
+#                 else:
+#                     error = 'Ese rol ya existe.'
+#             else:
+#                 error = 'Debes ingresar un nombre para el rol.'
+        
+#         elif 'delete_role' in request.POST:
+#             # Borrar rol
+#             delete_role_id = request.POST.get('delete_role_id')
+#             if delete_role_id:
+#                 try:
+#                     role = get_object_or_404(Role, id=delete_role_id)
+                    
+#                     # Verificar si hay usuarios con este rol
+#                     users_with_role = User.objects.filter(role=role).count()
+                    
+#                     if users_with_role > 0:
+#                         error = f'No se puede borrar el rol "{role.name}" porque hay {users_with_role} usuario(s) asignado(s) a este rol'
+#                     else:
+#                         role_name = role.name
+#                         role.delete()
+#                         # Recargar roles después de borrar
+#                         roles = Role.objects.all()
+#                         return render(request, 'role.html', {
+#                             'roles': roles,
+#                             'users': users,
+#                             'success': f'Rol "{role_name}" eliminado exitosamente'
+#                         })
+                        
+#                 except Exception as e:
+#                     error = f'Error al eliminar rol: {str(e)}'
+#             else:
+#                 error = 'Debes seleccionar un rol para borrar.'
+        
+#         else:
+#             user_id = request.POST.get('user_id')
+#             role_id = request.POST.get('role_id')
+#             association_id = request.POST.get('association_id')
+#             print("association_id recibido:", association_id)
+#             if user_id and role_id:
+#                 user = get_object_or_404(User, id=user_id)
+#                 role = get_object_or_404(Role, id=role_id)
+#                 association = None
+#                 if association_id and association_id != "":
+#                     try:
+#                         association = Association.objects.get(id=int(association_id))
+#                     except Association.DoesNotExist:
+#                         association = None
+
+#                 # Elimina al usuario de ambas tablas antes de asignar el nuevo rol
+#                 Manager.objects.filter(user=user).delete()
+#                 Member.objects.filter(user=user).delete()
+
+#                 # Asigna el usuario a la tabla correspondiente según el rol
+#                 if role.name.lower() == 'manager':
+#                     Manager.objects.update_or_create(
+#                         user=user,
+#                         defaults={'association': association}
+#                     )
+#                 elif role.name.lower() == 'member':
+#                     Member.objects.update_or_create(
+#                         user=user,
+#                         defaults={'association': association}
+#                     )
+
+#                 user.role = role
+#                 user.save()
+
+#                 print("user.association.id guardado:", user.association.id if user.association else None)
+#                 return redirect('areaStaff')
+#             else:
+#                 error = 'Debes seleccionar un usuario y un rol.'
+
+
+
+#     return render(request, 'role.html', {
+#         'roles': roles,
+#         'users': users,
+#         'associations': associations,
+#         'error': error
+#     })
 @login_required
 def assign_role(request):
     if not request.user.is_superuser:
         return redirect('areaStaff')
+
     roles = Role.objects.all()
     users = User.objects.all()
     associations = Association.objects.all()
+    selected_role_id = request.POST.get('role_id')
+    selected_association_id = request.POST.get('association_id')
+    tiene_trampa = request.POST.get('tiene_trampa')
+    show_association = False
+    show_trampa = False
     error = None
 
-    if request.method == 'POST':
-        if 'create_role' in request.POST:
-            # Crear un nuevo rol
-            role_name = request.POST.get('new_role_name')
-            if role_name:
-                if not Role.objects.filter(name=role_name).exists():
-                    Role.objects.create(name=role_name)
-                else:
-                    error = 'Ese rol ya existe.'
-            else:
-                error = 'Debes ingresar un nombre para el rol.'
-        
-        elif 'delete_role' in request.POST:
-            # Borrar rol
-            delete_role_id = request.POST.get('delete_role_id')
-            if delete_role_id:
-                try:
-                    role = get_object_or_404(Role, id=delete_role_id)
-                    
-                    # Verificar si hay usuarios con este rol
-                    users_with_role = User.objects.filter(role=role).count()
-                    
-                    if users_with_role > 0:
-                        error = f'No se puede borrar el rol "{role.name}" porque hay {users_with_role} usuario(s) asignado(s) a este rol'
-                    else:
-                        role_name = role.name
-                        role.delete()
-                        # Recargar roles después de borrar
-                        roles = Role.objects.all()
-                        return render(request, 'role.html', {
-                            'roles': roles,
-                            'users': users,
-                            'success': f'Rol "{role_name}" eliminado exitosamente'
-                        })
-                        
-                except Exception as e:
-                    error = f'Error al eliminar rol: {str(e)}'
-            else:
-                error = 'Debes seleccionar un rol para borrar.'
-        
+    if selected_role_id:
+        try:
+            role = Role.objects.get(id=selected_role_id)
+            show_association = role.name.lower() in ['manager', 'member']
+            show_trampa = role.name.lower() == 'capturador'
+        except Role.DoesNotExist:
+            error = "Rol inválido"
+
+    if request.method == 'POST' and 'assign_role' in request.POST:
+        user_id = request.POST.get('user_id')
+
+        if not user_id or not selected_role_id:
+            error = "Debes seleccionar un usuario y un rol."
         else:
-            user_id = request.POST.get('user_id')
-            role_id = request.POST.get('role_id')
-            association_id = request.POST.get('association_id')
-            print("association_id recibido:", association_id)
-            if user_id and role_id:
-                user = get_object_or_404(User, id=user_id)
-                role = get_object_or_404(Role, id=role_id)
-                association = None
-                if association_id and association_id != "":
-                    try:
-                        association = Association.objects.get(id=int(association_id))
-                    except Association.DoesNotExist:
-                        association = None
+            user = get_object_or_404(User, id=user_id)
+            role = get_object_or_404(Role, id=selected_role_id)
+            association = None
 
-                # Elimina al usuario de ambas tablas antes de asignar el nuevo rol
-                Manager.objects.filter(user=user).delete()
-                Member.objects.filter(user=user).delete()
+            if show_association and selected_association_id:
+                association = get_object_or_404(Association, id=selected_association_id)
 
-                # Asigna el usuario a la tabla correspondiente según el rol
-                if role.name.lower() == 'manager':
-                    Manager.objects.update_or_create(
-                        user=user,
-                        defaults={'association': association}
-                    )
-                elif role.name.lower() == 'member':
-                    Member.objects.update_or_create(
-                        user=user,
-                        defaults={'association': association}
-                    )
+            # Limpiar y asignar
+            Manager.objects.filter(user=user).delete()
+            Member.objects.filter(user=user).delete()
+            Capturador.objects.filter(user=user).delete()
 
-                user.role = role
-                user.save()
+            if role.name.lower() == 'manager':
+                Manager.objects.update_or_create(user=user, defaults={'association': association})
+            elif role.name.lower() == 'member':
+                Member.objects.update_or_create(user=user, defaults={'association': association})
+            elif role.name.lower() == 'capturador':
+                Capturador.objects.update_or_create(
+                    user=user,
+                    defaults={'tiene_trampa': (tiene_trampa == 'si')}
+                )
 
-                print("user.association.id guardado:", user.association.id if user.association else None)
-                return redirect('areaStaff')
-            else:
-                error = 'Debes seleccionar un usuario y un rol.'
-
-
+            user.role = role
+            user.association = association if show_association else None
+            user.save()
+            return redirect('areaStaff')
 
     return render(request, 'role.html', {
         'roles': roles,
         'users': users,
         'associations': associations,
+        'selected_role_id': int(selected_role_id) if selected_role_id else None,
+        'selected_association_id': int(selected_association_id) if selected_association_id else None,
+        'show_association': show_association,
+        'show_trampa': show_trampa,
         'error': error
     })
+
+# --- Búsqueda AJAX para usuarios ---
+
+@require_GET
+@login_required
+def search_users(request):
+    q = request.GET.get('q', '').strip()
+    users = User.objects.filter(Q(username__icontains=q) | Q(email__icontains=q))[:20]
+    data = [{'id': u.id, 'username': u.username, 'email': u.email} for u in users]
+    return JsonResponse({'results': data})
+
+@require_GET
+@login_required
+def search_associations(request):
+    q = request.GET.get('q', '').strip()
+    associations = Association.objects.filter(name__icontains=q)[:20]
+    data = [{'id': a.id, 'name': a.name} for a in associations]
+    return JsonResponse({'results': data})
+
 @login_required
 def delete_user(request):
     if request.method == "POST":
