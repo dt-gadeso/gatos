@@ -87,5 +87,5 @@ def create_default_roles(sender, **kwargs):
     if sender.name == 'users':
         Role.objects.get_or_create(name='member')
         Role.objects.get_or_create(name='manager')
-        Role.objects.get_or_create(name='manager')
-        Role.objects.get_or_create(name='manager')
+        Role.objects.get_or_create(name='capturador')
+        Role.objects.get_or_create(name='free')

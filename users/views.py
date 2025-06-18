@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .form import CreateNewUser, LoginUser, CreateRole, EditUser, AssignedRole, AssociationForm
-from .models import User, Role, Member, Manager, Association
+from .form import CreateNewUser, LoginUser,EditUser, AssociationForm
+from .models import User, Role, Member, Manager, Association, Capturador, Free
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.db.models.signals import post_save
@@ -258,3 +258,17 @@ def role_member(sender, instance, **kwargs):
     if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'member':
         # Crea o actualiza el registro en la tabla Member con el user_id
         Member.objects.update_or_create(user_id=instance.id, defaults={})
+
+@receiver(post_save, sender=User)
+def role_free(sender, instance, **kwargs):
+    # Verifica si el usuario tiene un rol y si ese rol es "free"
+    if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'free':
+        # Crea o actualiza el registro en la tabla Free con el user_id
+        Free.objects.update_or_create(user_id=instance.id, defaults={})
+
+@receiver(post_save, sender=User)
+def role_capturador(sender, instance, **kwargs):
+    # Verifica si el usuario tiene un rol y si ese rol es "capturador"
+    if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'capturador':
+        # Crea o actualiza el registro en la tabla Capturador con el user_id
+        Capturador.objects.update_or_create(user_id=instance.id, defaults={})
