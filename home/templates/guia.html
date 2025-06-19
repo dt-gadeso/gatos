@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mishilovers Home</title>
+    </head>
+    <body>
+        {% extends 'base.html' %}
+        {% block content %}
+        <main>
+            <div class="card">
+                <h2>Bienvenido a la guia de usuario </h2>
+            </div>
+            <section>
+                <h3>Sobre la creacion de un <b>popup</b></h3>
+                <h4>Primer paso:</h4>
+                <p>Hay que crear una <b>zona</b> (simplemente pon el nombre de la zona)</p>
+                <h4>Segundo paso:</h4>
+                <p>Crear un municipio (simplemente pon el nombre del municipio) y pon una zona para connectarlo con esa zona</p>
+                <h4>Tercer paso:</h4>
+                <p>Crear una localizacion colocando el nombre que le quieres poner, la direccion (por ejemplo: la calle, codigo postal, etc...), 
+                    una descripcion del sitio (opcional), lo connectas con un municipio (ja creado), 
+                    por ultimo pones las coordenadas (latitud y longitud) para colocar el popup en el mapa</p>
+            </section>
+            <section>
+                <h3>Sobre la creacion de un <b>gato</b></h3>
+                <h4>Primer paso:</h4>
+                <p>Pones el nombre del gato que vas a guardar</p>
+                <h4>Segundo paso:</h4>
+                <p>Pones una foto del gato (opcional)</p>
+                <h4>Tercer paso:</h4>
+                <p>Poner el numero del chip del gato</p>
+                <h4>Quarto paso:</h4>
+                <p>Poner el año de nacimiento del gato</p>
+                <h4>Quinto paso:</h4>
+                <p>Poner el genero (M si es masculino, F si es femenino) del gato</p>
+                <h4>Sexto paso:</h4>
+                <p>Poner si el gato ha sido esterilizado o no</p>
+                <h4>Septimo paso:</h4>
+                <p>Poner el numero del chip del gato</p>
+                <h4>Octavo paso:</h4>
+                <p>Poner si el gato sigue con vida o no</p>
+                <h4>Noveno paso:</h4>
+                <p>Poner de que colonia es el gato (opcional)</p>
+            </section>
+            <section>
+                <h3>Sobre la creacion de <b>colonias</b></h3>
+                <h4>Primer paso:</h4>
+                <p>Pones el nombre de la colonia</p>
+                <h4>Segundo paso:</h4>
+                <p>Connectas la colonia con una localizacion (ya creada previamente)</p>
+                <h4>Tercer paso:</h4>
+                <p>Pones el nombre de la persona que se encarga de la colonia</p>
+            </section>
+        </main>
+        
+        {% endblock %}
+    </body>
+</html>

@@ -28,10 +28,22 @@ class CreateNewUser(forms.Form):
         required=False,
         widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
     )
-    volunteer_number = forms.CharField(
-        label='Numero de Voluntario (opcional)',
+    carnet_gatos = forms.CharField(
+        label='Carnet de Gatos (opcional)',
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    casa_acogida = forms.ChoiceField(
+        label='Casa de acogida',
+        choices=[('', '-- Selecciona --'), ('si', 'Sí'), ('no', 'No')],
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    tiene_relevo = forms.ChoiceField(
+        label='¿Tiene relevo?',
+        choices=[('', '-- Selecciona --'), ('si', 'Sí'), ('no', 'No')],
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-control'})
     )
 
 class LoginUser(forms.Form):
@@ -59,12 +71,12 @@ class CreateRole(forms.ModelForm):
 class EditUser(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'avatar_file', 'volunteer_number']
+        fields = ['username', 'email', 'avatar_file', 'carnet_gatos']
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'avatar_file': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
-            'volunteer_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'carnet_gatos': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):

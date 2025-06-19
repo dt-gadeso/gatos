@@ -187,9 +187,3 @@ class ColonyForm(forms.Form):
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-
-    user = forms.ModelChoiceField(
-        label='Usuario',
-        queryset=User.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )

@@ -33,8 +33,11 @@ class User(AbstractUser):
     email_verified_at = models.DateTimeField(null=True, blank=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
     avatar_file = models.ImageField(upload_to='users/img/')
-    volunteer_number = models.CharField(max_length=50, null=True, blank=True)
+    carnet_gatos = models.CharField(max_length=50, null=True, blank=True)
     association = models.ForeignKey(Association, null=True, blank=True, on_delete=models.SET_NULL)
+    casa_acogida = models.BooleanField(default=False)
+    tiene_relevo = models.BooleanField(default=False)
+    activo = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

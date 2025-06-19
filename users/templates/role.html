@@ -2,61 +2,49 @@
 {% load static %}
 {% block content %}
 <h2>Asignar Rol a Usuario</h2>
-<form method="post">
+<form method="post" id="assign-role-form">
   {% csrf_token %}
-
   <label for="user-search">Buscar usuario:</label>
-  <input type="text" id="user-search" placeholder="Buscar usuario...">
+  <input type="text" id="user-search" placeholder="Nombre o email...">
+  <label for="user-select">Usuario:</label>
   <select name="user_id" id="user-select" required>
     <option value="">-- Selecciona un usuario --</option>
     {% for user in users %}
-      <option value="{{ user.id }}">{{ user.username }}</option>
+      <option value="{{ user.id }}"{% if user.id|stringformat:"s" == request.POST.user_id %} selected{% endif %}>{{ user.username }}</option>
     {% endfor %}
   </select>
 
   <label for="role">Rol:</label>
-  <select name="role_id" id="role" onchange="this.form.submit()">
+  <select name="role_id" id="role" required>
     <option value="">-- Selecciona un rol --</option>
     {% for role in roles %}
       <option value="{{ role.id }}" {% if selected_role_id == role.id %}selected{% endif %}>{{ role.name }}</option>
     {% endfor %}
   </select>
 
-  {% if show_association %}
+  <div id="association-div" style="display: none;">
     <label for="association-search">Buscar asociación:</label>
-    <input type="text" id="association-search" placeholder="Buscar asociación...">
-    <select name="association_id" id="association" required>
+    <input type="text" id="association-search" placeholder="Nombre de asociación...">
+    <select name="association_id" id="association">
       <option value="">-- Selecciona una asociación --</option>
       {% for association in associations %}
         <option value="{{ association.id }}" {% if selected_association_id == association.id %}selected{% endif %}>{{ association.name }}</option>
       {% endfor %}
     </select>
-  {% endif %}
+  </div>
 
-  {% if show_trampa %}
+  <div id="trampa-div" style="display: none;">
     <label for="tiene_trampa">¿Tiene trampa?</label>
-    <select name="tiene_trampa" id="tiene_trampa" required>
+    <select name="tiene_trampa" id="tiene_trampa">
       <option value="">-- Selecciona --</option>
       <option value="si">Sí</option>
       <option value="no">No</option>
     </select>
-  {% endif %}
+  </div>
 
   <button type="submit" name="assign_role">Asignar rol</button>
 </form>
-
 <hr>
-
-<h2>Crear Nuevo Rol</h2>
-<form method="POST">
-    {% csrf_token %}
-    <input type="hidden" name="create_role" value="1">
-    <div>
-        <label for="new_role_name">Nombre del nuevo rol:</label>
-        <input type="text" name="new_role_name" id="new_role_name" required>
-    </div>
-    <button type="submit" name="create_role_btn">Crear Rol</button>
-</form>
 
 {% if error %}
     <div class="alert alert-danger mt-3">{{ error }}</div>
@@ -65,58 +53,85 @@
 {% if success %}
 <div class="alert alert-success mt-3">{{ success }}</div>
 {% endif %}
-<h2>Borrar Rol</h2>
-<form method="POST">
-    {% csrf_token %}
-    <input type="hidden" name="delete_role" value="1">
-    <div>
-        <label for="delete_role_id">Selecciona el rol a borrar:</label>
-        <select name="delete_role_id" id="delete_role_id" required>
-            <option value="" disabled selected>Selecciona un rol</option>
-            {% for role in roles %}
-                <option value="{{ role.id }}">{{ role.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <button type="submit" name="delete_role_btn" onclick="return confirm('¿Estás seguro de que deseas borrar este rol?');">Borrar Rol</button>
-</form>
 <script src="{% static 'js/users.js' %}"></script>
 <script>
-// document.addEventListener('DOMContentLoaded', function () {
-//     // Filtrado de usuarios
-//     const userSearch = document.getElementById('user-search');
-//     const userSelect = document.getElementById('user-select');
-//     userSearch.addEventListener('input', function () {
-//         fetch(`/users/search_users/?q=${encodeURIComponent(this.value)}`)
-//             .then(r => r.json())
-//             .then(data => {
-//                 userSelect.innerHTML = '<option value="">-- Selecciona un usuario --</option>';
-//                 data.results.forEach(u => {
-//                     const opt = document.createElement('option');
-//                     opt.value = u.id;
-//                     opt.textContent = `${u.username} (${u.email})`;
-//                     userSelect.appendChild(opt);
-//                 });
-//             });
-//     });
-// });
-//     // Filtrado de asociaciones
-//     const associationSearch = document.getElementById('association-search');
-//     const associationSelect = document.getElementById('association');
-//     if (associationSearch && associationSelect) {
-//       associationSearch.addEventListener('input', function () {
-//         fetch(`/users/search_associations/?q=${encodeURIComponent(this.value)}`)
-//             .then(r => r.json())
-//             .then(data => {
-//                 associationSelect.innerHTML = '<option value="">-- Selecciona una asociación --</option>';
-//                 data.results.forEach(a => {
-//                     const opt = document.createElement('option');
-//                     opt.value = a.id;
-//                     opt.textContent = a.name;
-//                     associationSelect.appendChild(opt);
-//                 });
-//             });
-//       });
-//     };
+document.addEventListener('DOMContentLoaded', function () {
+    const roleSelect = document.getElementById('role');
+    const associationDiv = document.getElementById('association-div');
+    const associationSelect = document.getElementById('association');
+    const trampaDiv = document.getElementById('trampa-div');
+    const trampaSelect = document.getElementById('tiene_trampa');
+    const userSearch = document.getElementById('user-search');
+    const userSelect = document.getElementById('user-select');
+    const associationSearch = document.getElementById('association-search');
+
+    function updateFields() {
+        const selectedRole = roleSelect.options[roleSelect.selectedIndex]?.text?.toLowerCase();
+        if (selectedRole === 'manager' || selectedRole === 'member') {
+            associationDiv.style.display = 'block';
+            associationSelect.required = true;
+            trampaDiv.style.display = 'none';
+            trampaSelect.required = false;
+        } else if (selectedRole === 'capturador') {
+            associationDiv.style.display = 'none';
+            associationSelect.required = false;
+            trampaDiv.style.display = 'block';
+            trampaSelect.required = true;
+        } else {
+            associationDiv.style.display = 'none';
+            associationSelect.required = false;
+            trampaDiv.style.display = 'none';
+            trampaSelect.required = false;
+        }
+    }
+
+    roleSelect.addEventListener('change', updateFields);
+    updateFields(); // inicializa los campos según el rol seleccionado
+
+    userSearch.addEventListener('input', function () {
+        const query = userSearch.value.trim().toLowerCase();
+        const selectedUserId = userSelect.value;
+        fetch(`/users/search_users?search=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(users => {
+                userSelect.innerHTML = '<option value="">-- Selecciona un usuario --</option>';
+                users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = user.username;
+                    if (selectedUserId && user.id.toString() === selectedUserId) {
+                        option.selected = true;
+                    }
+                    userSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error al buscar usuarios:', error);
+            });
+    });
+
+    associationSearch.addEventListener('input', function () {
+        const query = associationSearch.value.trim().toLowerCase();
+        const selectedAssociationId = associationSelect.value;
+        fetch(`/users/search_associations?search=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(associations => {
+                associationSelect.innerHTML = '<option value="">-- Selecciona una asociación --</option>';
+                associations.forEach(association => {
+                    const option = document.createElement('option');
+                    option.value = association.id;
+                    option.textContent = association.name;
+                    if (selectedAssociationId && association.id.toString() === selectedAssociationId) {
+                        option.selected = true;
+                    }
+                    associationSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error al buscar asociaciones:', error);
+            });
+    });
+});
 </script>
 {% endblock %}
+

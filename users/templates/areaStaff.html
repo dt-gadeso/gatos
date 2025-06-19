@@ -24,8 +24,8 @@
                         <p class="card-text">Bienvenido, <strong>{{ user.username }}</strong></p>
                         <p><strong>Email:</strong> {{ user.email }}</p>
                         
-                        {% if user.volunteer_number %}
-                        <p><strong>Número de voluntario:</strong> {{ user.volunteer_number }}</p>
+                        {% if user.carnet_gatos %}
+                        <p><strong>Carnet de Gatos:</strong> {{ user.carnet_gatos }}</p>
                         {% endif %}
                         
                         {% if user.avatar_file %}
@@ -34,6 +34,13 @@
                                  class="avatar-image" width="100" height="100">
                         </div>
                         {% endif %}
+                        <p><strong>Activo:</strong> 
+                            {% if user.activo %}
+                                <span class="badge badge-success">Sí</span>
+                            {% else %}
+                                <span class="badge badge-danger">No</span>
+                            {% endif %}
+                        </p>
                     </div>
                     
                     <div class="profile-actions">
@@ -42,10 +49,14 @@
                         </button>
                         
                         <form method="POST" action="{% url 'delete_user' %}" 
-                              onsubmit="return confirm('¿Estás seguro de que deseas borrar tu cuenta? Esta acción no se puede deshacer.');" 
+                              onsubmit="return confirm('{% if user.is_superuser %}¿Estás seguro de que deseas borrar tu cuenta? Esta acción no se puede deshacer.{% else %}¿Estás seguro de que deseas darte de baja?{% endif %}');" 
                               class="delete-form">
                             {% csrf_token %}
-                            <button type="submit" class="staff-delete">Borrar Cuenta</button>
+                            {% if user.is_superuser %}
+                                <button type="submit" class="staff-delete">Borrar Cuenta</button>
+                            {% else %}
+                                <button type="submit" class="staff-delete">Darse de baja</button>
+                            {% endif %}
                         </form>
                     </div>
                 </div>
@@ -180,9 +191,6 @@
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle"></i>
                                 No hay roles disponibles en el sistema.
-                                {% if user.is_superuser %}
-                                    <br><small>Puedes crear roles desde el panel de administración de Django.</small>
-                                {% endif %}
                             </div>
                         {% endif %}
 

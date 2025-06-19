@@ -13,6 +13,6 @@ urlpatterns = [
     path('role/', views.assign_role, name='assign_role'),
     path('associations/', views.association_list, name='association_list'),
     path('associations/create/', views.association_create, name='association_create'),
-    path('users/search_users/', views.search_users, name='search_users'),
-    path('users/search_associations/', views.search_associations, name='search_associations'),
+    path('search_users/', views.search_users, name='search_users'),
+    path('search_associations/', views.search_associations, name='search_associations'),
 ]
