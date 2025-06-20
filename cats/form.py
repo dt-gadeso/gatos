@@ -43,17 +43,16 @@ class CreateCat(forms.Form):
     )
     colony = forms.ModelChoiceField(
         label='Colonia',
-        queryset=Colony.objects.none(),
-        required=False,
-        empty_label="Selecciona una colonia (opcional)",
+        queryset=Colony.objects.all(),
+        empty_label="Selecciona una colonia",
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
+        # Elimina el parámetro 'user' antes de llamar a super().__init__
+        kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        if user:
-            self.fields['colony'].queryset = Colony.objects.filter(user=user)
+        self.fields['colony'].queryset = Colony.objects.all()
 
     def clean_catname(self):
         catname = self.cleaned_data.get('catname')
@@ -78,5 +77,6 @@ class EditCat(forms.ModelForm):
         model = Cat
         fields = ['catname', 'photo_file', 'chip', 'birthday', 'sex', 'sterilized', 'dead', 'colony']
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
+        kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+        self.fields['colony'].queryset = Colony.objects.all()

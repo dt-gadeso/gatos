@@ -1,12 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mishilovers Home</title>
+    <link rel="stylesheet" href="{% static 'styles/cats.css' %}">
 </head>
 <body>
-    {% extends 'base.html' %}
     {% block content %}
         <main>
             <div>
@@ -22,7 +24,31 @@
                 <input type="text" name="chip" placeholder="Número de chip" required>
                 <button type="submit">editar gatos</button>
             </form>
+            <h1>Gatos</h1>
+            <form method="get" action="" style="display:inline;">
+                <input id="searchInput" type="text" name="q" placeholder="Buscar gatos..." value="{{ request.GET.q|default:'' }}">
+                <button type="submit">Buscar</button>
+            </form>
+
+            <div id="catsContainer">
+                {% for cat in cats %}
+                <div class="cat-card" onclick="openEditForm({{ cat.id }})">
+                    <img src="{{ cat.photo_file.url }}" alt="{{ cat.catname }}" class="cat-photo">
+                    <h3>{{ cat.catname }}</h3>
+                    <p>Chip: {{ cat.chip }}</p>
+                    <p>Sexo: {{ cat.get_sex_display }}</p>
+                    <p>Cumpleaños: {{ cat.birthday }}</p>
+                    <p>Sterilizado: {{ cat.sterilized }}</p>
+                    <p>Muerto: {{ cat.dead }}</p>
+                </div>
+                {% empty %}
+                <p>No se encontraron gatos.</p>
+                {% endfor %}
+            </div>
+
+            <div id="editModal"></div>
         </main>
     {% endblock %}
+<script src="{% static 'js/cats.js' %}"></script>
 </body>
 </html>

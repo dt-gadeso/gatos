@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from .form import CreateCat, EditCat
 from .models import Cat
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, UpdateView
+from django.http import JsonResponse
+from .models import Cat
+from .form import EditCat
 
 @login_required
 def cat(request):
@@ -17,16 +21,16 @@ def newCat(request):
         form = CreateCat(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             try:
-                print("Cleaned data:", form.cleaned_data)
+                # Usar ModelForm para guardar correctamente
                 cat = Cat(
                     catname=form.cleaned_data.get('catname'),
                     photo_file=form.cleaned_data.get('photo_file'),
                     chip=form.cleaned_data.get('chip'),
                     birthday=form.cleaned_data.get('birthday'),
                     sex=form.cleaned_data.get('sex'),
-                    sterilized=form.cleaned_data.get('sterilized') == 'True',
-                    dead=form.cleaned_data.get('dead') == 'True',
-                    colony=form.cleaned_data.get('colony').id if form.cleaned_data.get('colony') else None,
+                    sterilized=form.cleaned_data.get('sterilized') in [True, 'True', 'true', '1', 1],
+                    dead=form.cleaned_data.get('dead') in [True, 'True', 'true', '1', 1],
+                    colony=form.cleaned_data.get('colony'),  # Ya no puede ser None
                     user=request.user
                 )
                 cat.save()
@@ -91,3 +95,42 @@ def editCat(request, chip):
                 'chip': chip,
                 'error': 'Formulario inválido'
             })
+
+class CatListView(ListView):
+    model = Cat
+    template_name = 'cats/cat.html'
+    context_object_name = 'cats'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        q = self.request.GET.get('q')
+        if q:
+            queryset = queryset.filter(catname__icontains=q)
+        return queryset
+
+class CatUpdateView(UpdateView):
+    model = Cat
+    form_class = EditCat
+    template_name = 'cats/formEditCat.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        self.object = form.save()
+        data = {
+            'success': True,
+            'catname': self.object.catname,
+            'chip': self.object.chip,
+            'birthday': self.object.birthday.strftime('%Y-%m-%d'),
+            'sex': self.object.sex,
+            'sterilized': self.object.sterilized,
+            'dead': self.object.dead,
+            'colony': self.object.colony.id if self.object.colony else None,
+        }
+        return JsonResponse(data)
+
+    def form_invalid(self, form):
+        return JsonResponse({'success': False, 'errors': form.errors}, status=400)

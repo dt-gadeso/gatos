@@ -1,0 +1,27 @@
+.cat-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+      cursor: pointer;
+      display: inline-block;
+      width: 200px;
+      vertical-align: top;
+}
+.cat-photo {
+  width: 100%;
+  height: auto;
+}
+#editModal {
+  display: none;
+  position: fixed;
+  top: 20%;
+  left: 30%;
+  width: 40%;
+  background: white;
+  border: 1px solid #888;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.5);
+}
+#editModal.active {
+  display: block;
+}
