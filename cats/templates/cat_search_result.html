@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    body, .dark-bg {
+        background: #181a1b;
+        color: #f1f1f1;
+    }
+    .cat-search-container {
+        margin: 2rem auto;
+        max-width: 700px;
+        background: #23272b;
+        border-radius: 12px;
+        box-shadow: 0 2px 16px #1118;
+        padding: 2rem;
+    }
+    .cat-search-title {
+        text-align: center;
+        color: #90caf9;
+        margin-bottom: 1rem;
+    }
+    .cat-search-query {
+        text-align: center;
+        color: #bdbdbd;
+        margin-bottom: 2rem;
+    }
+    .cat-search-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+    }
+    .cat-search-card {
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 1rem;
+        width: 250px;
+        background: #22292f;
+        box-shadow: 0 2px 8px #0006;
+        transition: transform 0.15s;
+    }
+    .cat-search-card:hover {
+        transform: translateY(-4px) scale(1.03);
+        border-color: #90caf9;
+    }
+    .cat-search-card h3 {
+        text-align: center;
+        color: #fff;
+    }
+    .cat-search-card img {
+        display: block;
+        margin: 0 auto 1rem auto;
+        max-width: 180px;
+        max-height: 180px;
+        border-radius: 8px;
+        background: #111;
+    }
+    .cat-search-card .no-photo {
+        width: 180px;
+        height: 180px;
+        background: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem auto;
+        border-radius: 8px;
+        color: #888;
+    }
+    .cat-search-card p {
+        color: #bdbdbd;
+    }
+    .cat-search-card a {
+        display: block;
+        text-align: center;
+        margin-top: 1rem;
+        background: #1976d2;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background 0.2s;
+    }
+    .cat-search-card a:hover {
+        background: #1565c0;
+    }
+    .cat-search-back {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    .cat-search-back a {
+        color: #90caf9;
+        text-decoration: underline;
+    }
+</style>
+<div class="cat-search-container dark-bg">
+    <h2 class="cat-search-title">Resultados de la búsqueda</h2>
+    <!-- <p class="cat-search-query">Nombre buscado: <strong>{{ query }}</strong></p> -->
+    <p class="cat-search-query">
+        {% if query %}Nombre: <strong>{{ query }}</strong><br>{% endif %}
+        {% if colony_id %}
+            {% for col in colonies %}
+                {% if col.id|stringformat:"s" == colony_id %}
+                    <p>Colonia: <strong>{{ col.name }}</strong></p>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if sex %}Sexo: <strong>{{ sex }}</strong><br>{% endif %}
+        {% if sterilized %}Esterilizado: <strong>{{ sterilized }}</strong><br>{% endif %}
+        {% if dead %}Muerto: <strong>{{ dead }}</strong><br>{% endif %}
+    </p>
+
+    <div class="cat-search-list">
+        {% for cat in cats %}
+        <div class="cat-search-card">
+            <h3>{{ cat.catname }}</h3>
+            {% if cat.photo_file %}
+                <img src="{{ cat.photo_file.url }}" alt="Foto de {{ cat.catname }}">
+            {% else %}
+                <div class="no-photo">Sin foto</div>
+            {% endif %}
+            <p><strong>Colonia:</strong> {{ cat.colony }}</p>
+            <a href="{% url 'formEditCat' cat.chip %}">Editar este gato</a>
+        </div>
+        {% empty %}
+        <p>No se encontraron gatos.</p>
+        {% endfor %}
+    </div>
+    <div class="cat-search-back">
+        <a href="{% url 'cats' %}">Volver a la página principal</a>
+    </div>
+</div>
+{% endblock %}

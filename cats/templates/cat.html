@@ -20,33 +20,43 @@
                 <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
             </section>
             <a href="/cats/formNewCat">crear gatos</a>
-            <form action="/cats/buscarEditarGato" method="get" style="display:inline;">
-                <input type="text" name="chip" placeholder="Número de chip" required>
-                <button type="submit">editar gatos</button>
-            </form>
-            <h1>Gatos</h1>
-            <form method="get" action="" style="display:inline;">
-                <input id="searchInput" type="text" name="q" placeholder="Buscar gatos..." value="{{ request.GET.q|default:'' }}">
-                <button type="submit">Buscar</button>
-            </form>
+            <!-- <form action="{% url 'searchEditCat' %}" method="get" style="display:inline;">
+                <input type="text" name="catname" placeholder="Nombre del gato" required>
+                <button type="submit">Buscar gato</button>
+            </form> -->
+            <form action="{% url 'searchEditCat' %}" method="get" style="display:inline;">
+                <input type="text" name="catname" placeholder="Nombre del gato">
+                <select name="colony">
+                    <option value="">Colonia</option>
+                    {% if colonies %}
+                        {% for colony in colonies %}
+                            <option value="{{ colony.id }}">{{ colony.name }}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option value="">No hay colonias</option>
+                    {% endif %}
+                </select>
 
-            <div id="catsContainer">
-                {% for cat in cats %}
-                <div class="cat-card" onclick="openEditForm({{ cat.id }})">
-                    <img src="{{ cat.photo_file.url }}" alt="{{ cat.catname }}" class="cat-photo">
-                    <h3>{{ cat.catname }}</h3>
-                    <p>Chip: {{ cat.chip }}</p>
-                    <p>Sexo: {{ cat.get_sex_display }}</p>
-                    <p>Cumpleaños: {{ cat.birthday }}</p>
-                    <p>Sterilizado: {{ cat.sterilized }}</p>
-                    <p>Muerto: {{ cat.dead }}</p>
-                </div>
-                {% empty %}
-                <p>No se encontraron gatos.</p>
-                {% endfor %}
-            </div>
+                <select name="sex">
+                    <option value="">Sexo</option>
+                    <option value="M">Macho</option>
+                    <option value="F">Hembra</option>
+                </select>
 
-            <div id="editModal"></div>
+                <select name="sterilized">
+                    <option value="">¿Esterilizado?</option>
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                </select>
+
+                <select name="dead">
+                    <option value="">¿Muerto?</option>
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                </select>
+
+                <button type="submit">Buscar gato</button>
+            </form>
         </main>
     {% endblock %}
 <script src="{% static 'js/cats.js' %}"></script>

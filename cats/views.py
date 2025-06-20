@@ -6,10 +6,17 @@ from django.views.generic import ListView, UpdateView
 from django.http import JsonResponse
 from .models import Cat
 from .form import EditCat
+from colonies.models import Colony
 
 @login_required
 def cat(request):
-    return render(request, 'cat.html')
+    colonies = Colony.objects.filter(user=request.user)
+    cats = Cat.objects.filter(user=request.user)
+    return render(request, 'cat.html', {
+        'colonies': colonies,
+        'cats': cats
+    })
+
 
 @login_required
 def newCat(request):    
@@ -30,7 +37,7 @@ def newCat(request):
                     sex=form.cleaned_data.get('sex'),
                     sterilized=form.cleaned_data.get('sterilized') in [True, 'True', 'true', '1', 1],
                     dead=form.cleaned_data.get('dead') in [True, 'True', 'true', '1', 1],
-                    colony=form.cleaned_data.get('colony'),  # Ya no puede ser None
+                    colony=form.cleaned_data.get('colony'),
                     user=request.user
                 )
                 cat.save()
@@ -48,16 +55,60 @@ def newCat(request):
                 'error': 'Formulario inválido'
             })
         
+# @login_required
+# def searchEditCat(request):
+#     query = request.GET.get('catname')
+#     cats = Cat.objects.filter(
+#         catname__icontains=query,
+#         user=request.user
+#     )
+#     if cats.exists():
+#         return render(request, 'cat_search_result.html', {
+#             'cats': cats,
+#             'query': query
+#         })
+#     else:
+#         return render(request, 'cat.html', {
+#             'error': f'No se encontró ningún gato con el nombre "{query}".'
+#         })
+
 @login_required
 def searchEditCat(request):
-    chip = request.GET.get('chip')
-    try:
-        cat = Cat.objects.get(chip=chip, user=request.user)
-        return redirect('formEditCat', chip=cat.chip)
-    except Cat.DoesNotExist:
-        return render(request, 'cat.html', {
-            'error': f'No se encontró un gato con el chip "{chip}".'
-        })
+    filters = {'user': request.user}
+
+    catname = request.GET.get('catname')
+    colony_id = request.GET.get('colony')
+    sex = request.GET.get('sex')
+    sterilized = request.GET.get('sterilized')
+    dead = request.GET.get('dead')
+
+    if catname:
+        filters['catname__icontains'] = catname
+    if colony_id:
+        filters['colony__id'] = colony_id
+    if sex:
+        filters['sex'] = sex
+    if sterilized in ['true', 'false']:
+        filters['sterilized'] = sterilized == 'true'
+    if dead in ['true', 'false']:
+        filters['dead'] = dead == 'true'
+
+    cats = Cat.objects.filter(**filters)
+    colonies = Colony.objects.filter(user=request.user)  
+
+    context = {
+        'cats': cats,
+        'query': catname or '',
+        'colony_id': colony_id or '',
+        'sex': sex or '',
+        'sterilized': sterilized or '',
+        'dead': dead or '',
+        'colonies': colonies
+    }
+
+    return render(request, 'cat_search_result.html', context)
+
+
 
 @login_required
 def editCat(request, chip):
@@ -103,9 +154,9 @@ class CatListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        q = self.request.GET.get('q')
-        if q:
-            queryset = queryset.filter(catname__icontains=q)
+        catname = self.request.GET.get('catname')
+        if catname:
+            queryset = queryset.filter(catname__icontains=catname)
         return queryset
 
 class CatUpdateView(UpdateView):
