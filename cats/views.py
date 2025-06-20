@@ -94,7 +94,7 @@ def searchEditCat(request):
         filters['dead'] = dead == 'true'
 
     cats = Cat.objects.filter(**filters)
-    colonies = Colony.objects.filter(user=request.user)  
+    colonies = Colony.objects.filter(user=request.user) 
 
     context = {
         'cats': cats,
