@@ -13,21 +13,16 @@
                 <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
             </section>
             <a href="/cats/formNewCat">crear gatos</a>
-            <!-- <form action="{% url 'searchEditCat' %}" method="get" style="display:inline;">
-                <input type="text" name="catname" placeholder="Nombre del gato" required>
-                <button type="submit">Buscar gato</button>
-            </form> -->
             <form action="{% url 'searchEditCat' %}" method="get" style="display:inline;">
                 <input type="text" name="catname" placeholder="Nombre del gato">
                 <select name="colony">
                     <option value="">Colonia</option>
-                    {% if colonies %}
-                        {% for colony in colonies %}
-                            <option value="{{ colony.id }}">{{ colony.name }}</option>
-                        {% endfor %}
-                    {% else %}
+                    {# Mostrar todas las colonias sin filtrar por usuario #}
+                    {% for colony in colonies.all %}
+                        <option value="{{ colony.id }}">{{ colony.name }}</option>
+                    {% empty %}
                         <option value="">No hay colonias</option>
-                    {% endif %}
+                    {% endfor %}
                 </select>
 
                 <select name="sex">

@@ -10,7 +10,7 @@ from colonies.models import Colony
 
 @login_required
 def cat(request):
-    colonies = Colony.objects.filter(user=request.user)
+    colonies = Colony.objects.all()  # Mostrar todas las colonias
     cats = Cat.objects.filter(user=request.user)
     return render(request, 'cat.html', {
         'colonies': colonies,
@@ -54,27 +54,10 @@ def newCat(request):
                 'form': form,
                 'error': 'Formulario inválido'
             })
-        
-# @login_required
-# def searchEditCat(request):
-#     query = request.GET.get('catname')
-#     cats = Cat.objects.filter(
-#         catname__icontains=query,
-#         user=request.user
-#     )
-#     if cats.exists():
-#         return render(request, 'cat_search_result.html', {
-#             'cats': cats,
-#             'query': query
-#         })
-#     else:
-#         return render(request, 'cat.html', {
-#             'error': f'No se encontró ningún gato con el nombre "{query}".'
-#         })
 
 @login_required
 def searchEditCat(request):
-    filters = {'user': request.user}
+    filters = {}
 
     catname = request.GET.get('catname')
     colony_id = request.GET.get('colony')
@@ -94,7 +77,8 @@ def searchEditCat(request):
         filters['dead'] = dead == 'true'
 
     cats = Cat.objects.filter(**filters)
-    colonies = Colony.objects.filter(user=request.user) 
+    # Mostrar todas las colonias, no solo las del usuario
+    colonies = Colony.objects.all()
 
     context = {
         'cats': cats,
@@ -103,7 +87,7 @@ def searchEditCat(request):
         'sex': sex or '',
         'sterilized': sterilized or '',
         'dead': dead or '',
-        'colonies': colonies
+        'colonies': colonies  # Todas las colonias disponibles
     }
 
     return render(request, 'cat_search_result.html', context)

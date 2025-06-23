@@ -74,3 +74,12 @@ class VisitService(models.Model):
     class Meta:
         db_table = 'visit_services'
         unique_together = ['visit', 'vet_service']
+
+class agreementService(models.Model):
+    agreement = models.ForeignKey(Agreement, on_delete=models.CASCADE)
+    vet_service = models.ForeignKey(VetService, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'agreement_services'
+        unique_together = ['agreement', 'vet_service']

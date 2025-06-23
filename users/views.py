@@ -9,14 +9,19 @@ from django.dispatch import receiver
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 
 class Staff(View):
     def get(self, request):
-        # Controla el acceso de usuario autenticado y lista roles y asociaciones
         if request.user.is_authenticated:
             roles = Role.objects.all()
             associations = Association.objects.all()
-            return render(request, 'areaStaff.html', {'roles': roles, 'associations': associations})
+            users = User.objects.all()
+            return render(request, 'areaStaff.html', {
+                'roles': roles,
+                'associations': associations,
+                'users': users
+            })
         else:
             return render(request, 'users.html')
 
@@ -41,13 +46,18 @@ def signup(request):
             try:
                 if form.is_valid():
                     print("Cleaned data:", form.cleaned_data)
+                    casa_acogida_val = request.POST.get('casa_acogida')
+                    tiene_relevo_val = request.POST.get('tiene_relevo')
+                    # Si no es casa de acogida, forzar tiene_relevo a False
+                    if casa_acogida_val != 'si':
+                        tiene_relevo_val = 'no'
                     user = User(
                         username=form.cleaned_data.get('username'),
                         email=form.cleaned_data.get('email'),
                         avatar_file=form.cleaned_data.get('avatar_file'),
-                        carnet_gatos=form.cleaned_data.get('volunteer_number'),
-                        casa_acogida=(request.POST.get('casa_acogida') == 'si'),
-                        tiene_relevo=(request.POST.get('tiene_relevo') == 'si')
+                        carnet_gatos=form.cleaned_data.get('carnet_gatos'),
+                        casa_acogida=(casa_acogida_val == 'si'),
+                        tiene_relevo=(tiene_relevo_val == 'si')
                     )
                     user.set_password(form.cleaned_data.get('password'))
                     user.save()
@@ -166,17 +176,25 @@ def assign_role(request):
 @login_required
 def delete_user(request):
     if request.method == "POST":
-        if request.user.is_superuser:
-            # Admin puede borrar su cuenta realmente
-            request.user.delete()
-            return JsonResponse({"message": "Cuenta eliminada con éxito"}, status=200)
-        else:
-            # Usuario normal solo se da de baja (activo=False)
-            request.user.activo = False
-            request.user.save()
-            logout(request)
-            return redirect('/')  # Redirige al home después de darse de baja
+        if not request.user.is_superuser:
+            return JsonResponse({"error": "No tienes permiso para borrar usuarios"}, status=403)
+
+        user_id = request.POST.get('user_id')
+        if not user_id:
+            return JsonResponse({"error": "No se especificó usuario a borrar"}, status=400)
+
+        # Obtener el usuario a borrar
+        user_to_delete = get_object_or_404(User, id=user_id)
+
+        # Evitar que el admin se borre a sí mismo
+        if user_to_delete == request.user:
+            return JsonResponse({"error": "No puedes borrar tu propia cuenta desde aquí"}, status=400)
+
+        user_to_delete.delete()
+        return JsonResponse({"message": f"Usuario {user_to_delete.username} eliminado con éxito"}, status=200)
+
     return JsonResponse({"error": "Método no permitido"}, status=400)
+
 
 @login_required
 def areaEdit(request):
@@ -290,3 +308,15 @@ def search_associations(request):
     else:
         associations = Association.objects.all().values('id', 'name')
     return JsonResponse(list(associations), safe=False)
+
+
+@login_required
+@csrf_exempt
+def admin_delete_user(request):
+    if request.method == 'POST' and request.user.is_superuser:
+        user_id = request.POST.get('user_id')
+        user_to_delete = get_object_or_404(User, id=user_id)
+        user_to_delete.delete()
+        return JsonResponse({'message': f'Usuario {user_to_delete.username} eliminado con éxito'}, status=200)
+    return JsonResponse({'error': 'No autorizado o método inválido'}, status=400)
+

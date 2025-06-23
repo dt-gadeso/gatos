@@ -15,4 +15,5 @@ urlpatterns = [
     path('associations/create/', views.association_create, name='association_create'),
     path('search_users/', views.search_users, name='search_users'),
     path('search_associations/', views.search_associations, name='search_associations'),
+    path('delete_user/', views.admin_delete_user, name='admin_delete_user'),
 ]

@@ -47,17 +47,36 @@
                         <button class="staff-button mb-2" onclick="window.location.href='{% url 'areaEdit' %}'">
                             Editar Perfil
                         </button>
-                        
                         <form method="POST" action="{% url 'delete_user' %}" 
-                              onsubmit="return confirm('{% if user.is_superuser %}¿Estás seguro de que deseas borrar tu cuenta? Esta acción no se puede deshacer.{% else %}¿Estás seguro de que deseas darte de baja?{% endif %}');" 
-                              class="delete-form">
+                            onsubmit="return confirm('¿Estás seguro de que deseas darte de baja?');" 
+                            class="delete-form">
                             {% csrf_token %}
-                            {% if user.is_superuser %}
-                                <button type="submit" class="staff-delete">Borrar Cuenta</button>
-                            {% else %}
-                                <button type="submit" class="staff-delete">Darse de baja</button>
-                            {% endif %}
+                            <button type="submit" class="staff-delete">Darse de baja</button>
                         </form>
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h4>Eliminar Usuario</h4>
+                                <form id="adminDeleteForm" method="POST" action="{% url 'admin_delete_user' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="userSelect">Selecciona un usuario:</label>
+                                        <select class="form-control" id="userSelect" name="user_id" required>
+                                            <option value="" disabled selected>-- Elige un usuario --</option>
+                                            {% for user_name in users %}
+                                                {% if user_name.id != user.id %}
+                                                    <option value="{{ user_name.id }}">{{ user_name.username }} ({{ user_name.email }})</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-danger mt-2" 
+                                        onclick="return confirm('¿Seguro que quieres eliminar este usuario? Esta acción no se puede deshacer.')">
+                                        Eliminar Usuario
+                                    </button>
+                                </form>
+                                <div id="deleteUserResult" class="mt-2"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -200,4 +219,28 @@
         </div>
     </div>
 </main>
+<script>
+    document.getElementById('adminDeleteForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+
+        const response = await fetch("{% url 'admin_delete_user' %}", {
+            method: "POST",
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            },
+            body: formData
+        });
+
+        const resultDiv = document.getElementById("deleteUserResult");
+        const data = await response.json();
+        if (response.ok) {
+            resultDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+            form.reset();
+        } else {
+            resultDiv.innerHTML = `<div class="alert alert-danger">${data.error || 'Error al eliminar usuario'}</div>`;
+        }
+    });
+</script>
 {% endblock %}

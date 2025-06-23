@@ -119,7 +119,7 @@
             {% else %}
                 <div class="no-photo">Sin foto</div>
             {% endif %}
-            <p><strong>Colonia:</strong> {{ cat.colony }}</p>
+            <p><strong>Colonia:</strong> {{ cat.colony.name }}</p>
             <a href="{% url 'formEditCat' cat.chip %}">Editar este gato</a>
         </div>
         {% empty %}

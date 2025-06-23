@@ -42,7 +42,7 @@ class CreateNewUser(forms.Form):
     tiene_relevo = forms.ChoiceField(
         label='¿Tiene relevo?',
         choices=[('', '-- Selecciona --'), ('si', 'Sí'), ('no', 'No')],
-        required=True,
+        required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
