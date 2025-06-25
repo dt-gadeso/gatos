@@ -1,5 +1,5 @@
 from django import forms
-from .models import Location, Municipality, Zone, Manager, Colony
+from .models import Location, Municipality, Zone, Manager, Colony, Incident
 from users.models import User
 
 class NewLocation(forms.ModelForm):
@@ -188,3 +188,50 @@ class ColonyForm(forms.ModelForm):
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+
+class IncidentForm(forms.Form):
+    title = forms.CharField(
+        label='Título de la incidencia',
+        max_length=200,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ingrese el título'
+        })
+    )
+
+    description = forms.CharField(
+        label='Descripción',
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'placeholder': 'Describa la incidencia',
+            'rows': 4
+        })
+    )
+
+    is_resolved = forms.BooleanField(
+        label='¿Está resuelta?',
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input'
+        })
+    )
+
+    colony = forms.ModelChoiceField(
+        label='Colonia',
+        queryset=Colony.objects.all(),
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        })
+    )
+
+class EditIncident(forms.ModelForm):
+    class Meta:
+        model = Incident
+        fields = ['title', 'description', 'is_resolved', 'colony']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({'class': 'form-control'})
+        self.fields['description'].widget.attrs.update({'class': 'form-control', 'rows': 4})
+        self.fields['is_resolved'].widget.attrs.update({'class': 'form-check-input'})
+        self.fields['colony'].widget.attrs.update({'class': 'form-control'})

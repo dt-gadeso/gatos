@@ -8,4 +8,5 @@ urlpatterns = [
     path('formNewVetService/', views.vetservice_form_view, name='formNewVetService'),
     path('formNewVisit/', views.visit_form_view, name='formNewVisit'),
     path('formNewVisitService/', views.visitservice_form_view, name='formNewVisitService'),
+    path('search/', views.search_vet_centers, name='search_vet_centers'),
 ]

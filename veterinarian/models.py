@@ -9,7 +9,7 @@ class VetCenter(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=15)
-    logo_file = models.CharField(max_length=255, null=True, blank=True)
+    logo_file = models.ImageField(upload_to='veterinarian/img/', blank=True, null=True)
     location = models.ForeignKey('colonies.Location', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -75,11 +75,18 @@ class VisitService(models.Model):
         db_table = 'visit_services'
         unique_together = ['visit', 'vet_service']
 
-class agreementService(models.Model):
-    agreement = models.ForeignKey(Agreement, on_delete=models.CASCADE)
-    vet_service = models.ForeignKey(VetService, on_delete=models.CASCADE)
+class AgreementService(models.Model):
+    agreement = models.ForeignKey('Agreement', on_delete=models.CASCADE)
+    vet_service = models.ForeignKey('VetService', on_delete=models.CASCADE)
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal('0.00'),
+        validators=[MinValueValidator(Decimal('0.00'))]
+    )
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    updated_at = models.DateTimeField(auto_now=True)
+
     class Meta:
         db_table = 'agreement_services'
         unique_together = ['agreement', 'vet_service']

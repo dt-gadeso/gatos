@@ -4,31 +4,24 @@ from users.models import User
 from cats.models import Cat
 from .models import VetCenter, Agreement, VetService, Visit, VisitService
 
-class VetCenterForm(forms.Form):
-    name = forms.CharField(
-        label='Nombre',
-        max_length=100,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del centro'})
-    )
-    email = forms.EmailField(
-        label='Correo electrónico',
-        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'correo@ejemplo.com'})
-    )
-    phone = forms.CharField(
-        label='Teléfono',
-        max_length=15,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. 600123123'})
-    )
-    logo_file = forms.CharField(
-        label='Archivo del logo',
-        required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ruta o URL del logo'})
-    )
-    location = forms.ModelChoiceField(
-        label='Ubicación',
-        queryset=Location.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
+class VetCenterForm(forms.ModelForm):
+    class Meta:
+        model = VetCenter
+        fields = ['name', 'email', 'phone', 'logo_file', 'location']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del centro'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'correo@ejemplo.com'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. 600123123'}),
+            'logo_file': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'location': forms.Select(attrs={'class': 'form-control'})
+        }
+        labels = {
+            'name': 'Nombre',
+            'email': 'Correo electrónico',
+            'phone': 'Teléfono',
+            'logo_file': 'Archivo del logo',
+            'location': 'Ubicación'
+        }
 
 class AgreementForm(forms.Form):
     council = forms.ModelChoiceField(

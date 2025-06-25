@@ -69,3 +69,16 @@ class Zone(models.Model):
     
     class Meta:
         db_table = 'zones'
+
+class Incident(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    reported_at = models.DateTimeField(auto_now_add=True)
+    is_resolved = models.BooleanField(default=False)
+    colony = models.ForeignKey('Colony', on_delete=models.CASCADE, related_name='incidents')
+
+    def __str__(self):
+        return f"{self.title} - {'Resuelta' if self.is_resolved else 'Pendiente'}"
+    
+    class Meta:
+        db_table = 'incidents'

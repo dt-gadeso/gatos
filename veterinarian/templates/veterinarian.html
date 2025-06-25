@@ -1,28 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mishilovers Home</title>
-</head>
-<body>
-    {% extends 'base.html' %}
-    {% block content %}
-        <main>
-            <div>
-                <h2>¡Hola!</h2>
-                <p>Esta es la página principal de Mishilovers.</p>
-            </div>
-            <section>
-                <h3>Sobre nosotros</h3>
-                <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
-                <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewVetCenter'">Guardar centro veterinario</button>
-                <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewVetService'">Guardar servicio veterinario</button>
-                <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewAgreement'">Guardar acuerdo</button>
-                <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewVisit'">Guardar visita</button>
-                <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewVisitService'">Guardar servicio visita</button>
-            </section>
-        </main>
-    {% endblock %}
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+    <main>
+        <div>
+            <h2>Veterinarios</h2>
+            <p>Gestiona y busca centros veterinarios.</p>
+        </div>
+        <section>
+            <h3>Buscar Veterinarios</h3>
+            <form action="{% url 'search_vet_centers' %}" method="get" style="display:inline;">
+                <input type="text" name="name" placeholder="Nombre del centro veterinario" value="{{ request.GET.name }}">                    <select name="location">
+                        <option value="">Seleccionar ubicación</option>
+                        {% for location in locations %}
+                            <option value="{{ location.id }}" {% if request.GET.location == location.id|stringformat:"s" %}selected{% endif %}>
+                                {% if location.nombre %}
+                                    {{ location.nombre }} - {{ location.address }}
+                                {% else %}
+                                    {{ location.address }}, {{ location.municipality.name }}
+                                {% endif %}
+                            </option>
+                        {% empty %}
+                            <option value="">No hay ubicaciones</option>
+                        {% endfor %}
+                    </select>
+
+                <input type="email" name="email" placeholder="Email del centro" value="{{ request.GET.email }}">
+                
+                <button type="submit">Buscar veterinario</button>
+            </form>
+            
+            <h3>Gestión</h3>
+            <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewVetCenter'">Guardar centro veterinario</button>
+            <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewVetService'">Guardar servicio veterinario</button>
+            <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewAgreement'">Guardar acuerdo</button>
+            <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewVisit'">Guardar visita</button>
+            <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewVisitService'">Guardar servicio visita</button>
+        </section>
+    </main>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    body, .dark-bg {
+        background: #181a1b;
+        color: #f1f1f1;
+    }
+    .vet-search-container {
+        margin: 2rem auto;
+        max-width: 1000px;
+        background: #23272b;
+        border-radius: 12px;
+        box-shadow: 0 2px 16px #1118;
+        padding: 2rem;
+    }
+    .vet-search-title {
+        text-align: center;
+        color: #90caf9;
+        margin-bottom: 1rem;
+    }
+    .vet-search-query {
+        text-align: center;
+        color: #bdbdbd;
+        margin-bottom: 2rem;
+    }
+    .vet-search-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+    }
+    .vet-search-card {
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 1.5rem;
+        width: 300px;
+        background: #22292f;
+        box-shadow: 0 2px 8px #0006;
+        transition: transform 0.15s;
+    }
+    .vet-search-card:hover {
+        transform: translateY(-4px) scale(1.03);
+        border-color: #90caf9;
+    }
+    .vet-search-card h3 {
+        text-align: center;
+        color: #fff;
+        margin-bottom: 1rem;
+    }
+    .vet-search-card .logo {
+        display: block;
+        margin: 0 auto 1rem auto;
+        max-width: 100px;
+        max-height: 100px;
+        border-radius: 8px;
+        background: #111;
+    }
+    .vet-search-card .no-logo {
+        width: 100px;
+        height: 100px;
+        background: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem auto;
+        border-radius: 8px;
+        color: #888;
+        font-size: 0.8rem;
+    }
+    .vet-search-card p {
+        color: #bdbdbd;
+        margin: 0.5rem 0;
+    }
+    .vet-search-card .vet-info {
+        background: #1a1f23;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+    .vet-search-card .vet-info strong {
+        color: #90caf9;
+    }
+    .vet-search-back {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    .vet-search-back a {
+        color: #90caf9;
+        text-decoration: underline;
+    }
+    .no-results {
+        text-align: center;
+        color: #bdbdbd;
+        font-size: 1.1rem;
+    }
+</style>
+<div class="vet-search-container dark-bg">
+    <h2 class="vet-search-title">Resultados de búsqueda de veterinarios</h2>
+    
+    <div class="vet-search-query">
+        {% if query %}
+            <p>Nombre: <strong>{{ query }}</strong></p>
+        {% endif %}        {% if location_id %}
+            {% for location in locations %}
+                {% if location.id|stringformat:"s" == location_id %}
+                    <p>Ubicación: <strong>
+                        {% if location.nombre %}
+                            {{ location.nombre }} - {{ location.address }}
+                        {% else %}
+                            {{ location.address }}, {{ location.municipality.name }}
+                        {% endif %}
+                    </strong></p>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if email %}
+            <p>Email: <strong>{{ email }}</strong></p>
+        {% endif %}
+    </div>
+
+    <div class="vet-search-list">
+        {% for vet_center in vet_centers %}
+        <div class="vet-search-card">
+            <h3>{{ vet_center.name }}</h3>
+              {% if vet_center.logo_file %}
+                <img class="logo" src="{{ vet_center.logo_file.url }}" alt="Logo de {{ vet_center.name }}">
+            {% else %}
+                <div class="no-logo">Sin logo</div>
+            {% endif %}
+              <div class="vet-info">
+                <p><strong>Email:</strong> {{ vet_center.email }}</p>
+                <p><strong>Teléfono:</strong> {{ vet_center.phone }}</p>
+                <p><strong>Ubicación:</strong> 
+                    {% if vet_center.location.nombre %}
+                        {{ vet_center.location.nombre }}
+                    {% else %}
+                        {{ vet_center.location.address }}
+                    {% endif %}
+                </p>
+                <p><strong>Municipio:</strong> {{ vet_center.location.municipality.name }}</p>
+                <p><strong>Creado:</strong> {{ vet_center.created_at|date:"d/m/Y" }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-results">
+            <p>No se encontraron centros veterinarios con los criterios especificados.</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="vet-search-back">
+        <a href="{% url 'veterinarian' %}">Volver a la página de veterinarios</a>
+    </div>
+</div>
+{% endblock %}

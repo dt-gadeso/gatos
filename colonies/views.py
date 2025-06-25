@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .models import Municipality, Location, Zone, Council
-from .form import LocationForm, MunicipalityForm, ZoneForm, CouncilForm, ColonyForm
+from .models import Municipality, Location, Zone, Council, Incident, Colony
+from .form import LocationForm, MunicipalityForm, ZoneForm, CouncilForm, ColonyForm, EditIncident, IncidentForm
+from django.contrib.auth.decorators import login_required
 
 # Vista principal que muestra las ubicaciones, municipios y zonas
 def colonies_view(request):
@@ -266,3 +267,99 @@ def new_colony(request):
             form.save()
             return redirect('colonies')
         return render(request, 'formNewColony.html', {'form': form})
+
+@csrf_exempt
+def save_incident(request):
+    if request.method == 'GET':
+        return render(request, 'formNewIncident.html', {'form': IncidentForm()})
+
+    elif request.method == 'POST':
+        is_ajax = False
+        try:
+            if request.content_type == 'application/json':
+                if not request.body:
+                    return JsonResponse({'success': False, 'error': 'Request body is empty'}, status=400)
+                data = json.loads(request.body)
+                is_ajax = True
+                form = IncidentForm(data)
+            else:
+                form = IncidentForm(request.POST)
+
+            if form.is_valid():
+                incident = Incident.objects.create(
+                    title=form.cleaned_data['title'],
+                    description=form.cleaned_data['description'],
+                    is_resolved=form.cleaned_data['is_resolved'],
+                    colony=form.cleaned_data['colony']
+                )
+                if is_ajax:
+                    return JsonResponse({'success': True, 'message': 'Incidencia guardada exitosamente', 'id': incident.id})
+                return redirect('colonies')
+            else:
+                if is_ajax:
+                    return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+                return render(request, 'formNewIncident.html', {'form': form})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Formato JSON inválido'}, status=400)
+        except Exception as e:
+            if is_ajax:
+                return JsonResponse({'success': False, 'error': str(e)}, status=400)
+            return render(request, 'formNewIncident.html', {
+                'form': IncidentForm(),
+                'error': str(e)
+            })
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+@login_required
+def editIncident(request, incident_id):
+    incident = get_object_or_404(Incident, id=incident_id)
+
+    if request.method == 'GET':
+        form = EditIncident(instance=incident)
+        return render(request, 'formEditIncident.html', {
+            'form': form,
+            'incident': incident
+        })
+    else:
+        form = EditIncident(request.POST, instance=incident)
+        if form.is_valid():
+            try:
+                form.save()
+                return redirect('colonies')
+            except Exception as e:
+                return render(request, 'formEditIncident.html', {
+                    'form': form,
+                    'incident': incident,
+                    'error': f'Error al guardar la incidencia: {str(e)}'
+                })
+        else:
+            return render(request, 'formEditIncident.html', {
+                'form': form,
+                'incident': incident,
+                'error': 'Formulario inválido'
+            })
+        
+# @login_required
+# def searchIncidents(request):
+#     filters = {}
+#     colony_id = request.GET.get('colony')
+#     is_resolved = request.GET.get('is_resolved')
+
+#     if colony_id:
+#         filters['colony__id'] = colony_id
+#     if is_resolved in ['true', 'false']:
+#         filters['is_resolved'] = is_resolved == 'true'
+
+#     incidents = Incident.objects.filter(**filters).order_by('-reported_at')
+#     colonies = Colony.objects.all()
+
+#     context = {
+#         'incidents': incidents,
+#         'colony_id': colony_id or '',
+#         'is_resolved': is_resolved or '',
+#         'colonies': colonies
+#     }
+
+#     return render(request, 'incidents/search.html', context)
