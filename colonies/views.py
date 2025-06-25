@@ -341,25 +341,25 @@ def editIncident(request, incident_id):
                 'error': 'Formulario inválido'
             })
         
-# @login_required
-# def searchIncidents(request):
-#     filters = {}
-#     colony_id = request.GET.get('colony')
-#     is_resolved = request.GET.get('is_resolved')
+@login_required
+def searchIncidents(request):
+    filters = {}
+    colony_id = request.GET.get('colony')
+    is_resolved = request.GET.get('is_resolved')
 
-#     if colony_id:
-#         filters['colony__id'] = colony_id
-#     if is_resolved in ['true', 'false']:
-#         filters['is_resolved'] = is_resolved == 'true'
+    if colony_id:
+        filters['colony__id'] = colony_id
+    if is_resolved in ['true', 'false']:
+        filters['is_resolved'] = is_resolved == 'true'
 
-#     incidents = Incident.objects.filter(**filters).order_by('-reported_at')
-#     colonies = Colony.objects.all()
+    incidents = Incident.objects.filter(**filters).order_by('-reported_at')
+    colonies = Colony.objects.all()
 
-#     context = {
-#         'incidents': incidents,
-#         'colony_id': colony_id or '',
-#         'is_resolved': is_resolved or '',
-#         'colonies': colonies
-#     }
+    context = {
+        'incidents': incidents,
+        'colony_id': colony_id or '',
+        'is_resolved': is_resolved or '',
+        'colonies': colonies
+    }
 
-#     return render(request, 'incidents/search.html', context)
+    return render(request, 'incident_search_result.html', context)

@@ -77,7 +77,6 @@ def searchEditCat(request):
         filters['dead'] = dead == 'true'
 
     cats = Cat.objects.filter(**filters)
-    # Mostrar todas las colonias, no solo las del usuario
     colonies = Colony.objects.all()
 
     context = {
@@ -87,7 +86,7 @@ def searchEditCat(request):
         'sex': sex or '',
         'sterilized': sterilized or '',
         'dead': dead or '',
-        'colonies': colonies  # Todas las colonias disponibles
+        'colonies': colonies
     }
 
     return render(request, 'cat_search_result.html', context)

@@ -13,5 +13,7 @@ urlpatterns = [
     path('formNewCouncil/', views.save_council, name='save_council'),
     path('formNewColony/', views.new_colony, name='new_colony'),
     path('formNewIncident/', views.save_incident, name='save_incident'),
-    path('formEditIncident/', views.editIncident, name='editIncident'),
+    path('formEditIncident/<int:incident_id>/', views.editIncident, name='editIncident'),
+    path('incidents/search/', views.searchIncidents, name='searchIncidents'),
+    path('incident_search_result/', views.searchIncidents, name='incident_search_result'),
 ]
