@@ -53,30 +53,6 @@
                             {% csrf_token %}
                             <button type="submit" class="staff-delete">Darse de baja</button>
                         </form>
-                        <div class="card mt-3">
-                            <div class="card-body">
-                                <h4>Eliminar Usuario</h4>
-                                <form id="adminDeleteForm" method="POST" action="{% url 'admin_delete_user' %}">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                        <label for="userSelect">Selecciona un usuario:</label>
-                                        <select class="form-control" id="userSelect" name="user_id" required>
-                                            <option value="" disabled selected>-- Elige un usuario --</option>
-                                            {% for user_name in users %}
-                                                {% if user_name.id != user.id %}
-                                                    <option value="{{ user_name.id }}">{{ user_name.username }} ({{ user_name.email }})</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <button type="submit" class="btn btn-danger mt-2" 
-                                        onclick="return confirm('¿Seguro que quieres eliminar este usuario? Esta acción no se puede deshacer.')">
-                                        Eliminar Usuario
-                                    </button>
-                                </form>
-                                <div id="deleteUserResult" class="mt-2"></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -218,7 +194,44 @@
             </div>
         </div>
     </div>
+    
+    <!-- Admin Section - Solo para administradores -->
+    {% if user.is_superuser %}
+    <div class="card staff-form mt-3">
+        <div class="card-body">
+            <h3 class="card-title text-danger">
+                <i class="fas fa-shield-alt"></i> Panel de Administración
+            </h3>
+            <div class="admin-section">
+                <h4>Gestión de Usuarios</h4>
+                <form id="adminDeleteForm" method="POST" action="{% url 'admin_delete_user' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="userSelect">Selecciona un usuario para eliminar:</label>
+                        <br>
+                        <select class="form-control" id="userSelect" name="user_id" required>
+                            <option value="" disabled selected>-- Elige un usuario --</option>
+                            {% for user_name in users %}
+                                {% if user_name.id != user.id %}
+                                    <option value="{{ user_name.id }}">{{ user_name.username }} ({{ user_name.email }})</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-danger mt-2" 
+                        onclick="return confirm('¿Seguro que quieres eliminar este usuario? Esta acción no se puede deshacer.')">
+                        <i class="fas fa-trash"></i> Eliminar Usuario
+                    </button>
+                </form>
+                <div id="deleteUserResult" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
 </main>
+
+{% if user.is_superuser %}
 <script>
     document.getElementById('adminDeleteForm').addEventListener('submit', async function(event) {
         event.preventDefault();
@@ -238,9 +251,14 @@
         if (response.ok) {
             resultDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
             form.reset();
+            // Opcional: recargar la página para actualizar la lista de usuarios
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
         } else {
             resultDiv.innerHTML = `<div class="alert alert-danger">${data.error || 'Error al eliminar usuario'}</div>`;
         }
     });
 </script>
+{% endif %}
 {% endblock %}

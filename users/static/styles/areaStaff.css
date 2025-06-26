@@ -1,4 +1,3 @@
-
 .staff-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -90,4 +89,41 @@
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
+}
+
+/* Estilos para la sección de administración */
+.admin-section {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #dc3545;
+}
+
+.admin-section h4 {
+    color: #dc3545;
+    margin-bottom: 15px;
+}
+
+.admin-section .form-group {
+    margin-bottom: 15px;
+}
+
+.admin-section .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.admin-section .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
+.text-danger {
+    color: #dc3545 !important;
 }

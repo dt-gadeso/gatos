@@ -1,0 +1,328 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'styles/cats.css' %}">
+
+<div class="container">
+    <h2>Contador de Gatos Esterilizados por Colonia</h2>
+    
+    {% if is_admin %}
+        <div class="admin-badge">
+            <span class="badge badge-admin">Administrador - Vista completa</span>
+        </div>
+    {% else %}
+        <div class="user-badge">
+            <span class="badge badge-user">Tus colonias</span>
+        </div>
+    {% endif %}
+
+    {% if colonies_data %}
+        <div class="colonies-grid">
+            {% for data in colonies_data %}
+                <div class="colony-card">
+                    <div class="colony-header">
+                        <h3>{{ data.colony.name }}</h3>
+                        <p class="colony-location">{{ data.colony.location.address }}, {{ data.colony.location.municipality.name }}</p>
+                        {% if data.colony.manager %}
+                            <p class="colony-manager">Responsable: {{ data.colony.manager.username }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="stats-container">
+                        <div class="stat-row">
+                            <div class="stat-card male">
+                                <div class="stat-header">
+                                    <span class="icon">♂</span>
+                                    <span class="label">Machos</span>
+                                </div>
+                                <div class="stat-numbers">
+                                    <span class="sterilized">{{ data.male_sterilized }}</span>
+                                    <span class="separator">/</span>
+                                    <span class="total">{{ data.total_male }}</span>
+                                </div>
+                                <div class="stat-label">Esterilizados</div>
+                                {% if data.total_male > 0 %}
+                                    <div class="percentage">
+                                        {% widthratio data.male_sterilized data.total_male 100 %}%
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="stat-card female">
+                                <div class="stat-header">
+                                    <span class="icon">♀</span>
+                                    <span class="label">Hembras</span>
+                                </div>
+                                <div class="stat-numbers">
+                                    <span class="sterilized">{{ data.female_sterilized }}</span>
+                                    <span class="separator">/</span>
+                                    <span class="total">{{ data.total_female }}</span>
+                                </div>
+                                <div class="stat-label">Esterilizadas</div>
+                                {% if data.total_female > 0 %}
+                                    <div class="percentage">
+                                        {% widthratio data.female_sterilized data.total_female 100 %}%
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="total-stats">
+                            <div class="total-card">
+                                <div class="total-header">Total General</div>
+                                <div class="total-numbers">
+                                    <span class="sterilized">{{ data.total_sterilized }}</span>
+                                    <span class="separator">/</span>
+                                    <span class="total">{{ data.total_cats }}</span>
+                                </div>
+                                <div class="total-label">Esterilizados</div>
+                                {% if data.total_cats > 0 %}
+                                    <div class="total-percentage">
+                                        {% widthratio data.total_sterilized data.total_cats 100 %}%
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-data">
+            <p>No hay colonias disponibles para mostrar.</p>
+            {% if not is_admin %}
+                <p>Como usuario normal, solo puedes ver las colonias que has creado.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div class="actions">
+        <a href="{% url 'cats' %}" class="btn btn-secondary">Volver a Gatos</a>
+    </div>
+</div>
+
+<style>
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.admin-badge, .user-badge {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.badge-admin {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-user {
+    background-color: #28a745;
+    color: white;
+}
+
+.colonies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.colony-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.colony-header h3 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 1.4em;
+}
+
+.colony-location {
+    color: #666;
+    font-size: 0.9em;
+    margin: 0 0 4px 0;
+}
+
+.colony-manager {
+    color: #888;
+    font-size: 0.85em;
+    margin: 0 0 15px 0;
+}
+
+.stats-container {
+    margin-top: 15px;
+}
+
+.stat-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.stat-card {
+    flex: 1;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-card.male {
+    background-color: #e3f2fd;
+    border: 1px solid #2196f3;
+}
+
+.stat-card.female {
+    background-color: #fce4ec;
+    border: 1px solid #e91e63;
+}
+
+.stat-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.icon {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.stat-card.male .icon {
+    color: #2196f3;
+}
+
+.stat-card.female .icon {
+    color: #e91e63;
+}
+
+.label {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.stat-numbers {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.sterilized {
+    color: #28a745;
+}
+
+.separator {
+    color: #666;
+    margin: 0 5px;
+}
+
+.total {
+    color: #333;
+}
+
+.stat-label {
+    font-size: 0.8em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.percentage {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.total-stats {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.total-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+.total-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.total-numbers {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.total-label {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.total-percentage {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+    color: white;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .colonies-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-row {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}

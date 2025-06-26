@@ -12,7 +12,10 @@
                 <h3>Sobre nosotros</h3>
                 <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
             </section>
-            <a href="/cats/formNewCat">crear gatos</a>
+            <div class="actions">
+                <a href="/cats/formNewCat" class="btn btn-primary">Crear gatos</a>
+                <a href="{% url 'sterilized_counter' %}" class="btn btn-info">Ver contador de esterilizaciones</a>
+            </div>
             <form action="{% url 'searchEditCat' %}" method="get" style="display:inline;">
                 <input type="text" name="catname" placeholder="Nombre del gato">
                 <select name="colony">

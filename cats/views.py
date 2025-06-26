@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from .models import Cat
 from .form import EditCat
 from colonies.models import Colony
+from django.db.models import Count, Q
 
 @login_required
 def cat(request):
@@ -168,3 +169,68 @@ class CatUpdateView(UpdateView):
 
     def form_invalid(self, form):
         return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+
+@login_required
+def sterilized_counter(request):
+    """Vista para mostrar contador de gatos esterilizados por colonia"""
+    user = request.user
+    
+    # Verificar si el usuario es admin (puedes ajustar esta condición según tu lógica)
+    is_admin = user.is_superuser or (user.role and user.role.name == 'Admin')
+    
+    if is_admin:
+        # Admin puede ver todas las colonias
+        colonies_data = []
+        colonies = Colony.objects.all()
+        
+        for colony in colonies:
+            cats_data = Cat.objects.filter(colony=colony).aggregate(
+                total_male_sterilized=Count('id', filter=Q(sex='M', sterilized=True)),
+                total_female_sterilized=Count('id', filter=Q(sex='F', sterilized=True)),
+                total_male=Count('id', filter=Q(sex='M')),
+                total_female=Count('id', filter=Q(sex='F')),
+                total_sterilized=Count('id', filter=Q(sterilized=True)),
+                total_cats=Count('id')
+            )
+            
+            colonies_data.append({
+                'colony': colony,
+                'male_sterilized': cats_data['total_male_sterilized'],
+                'female_sterilized': cats_data['total_female_sterilized'],
+                'total_male': cats_data['total_male'],
+                'total_female': cats_data['total_female'],
+                'total_sterilized': cats_data['total_sterilized'],
+                'total_cats': cats_data['total_cats'],
+            })
+    else:
+        # Usuario normal solo puede ver sus colonias
+        user_colonies = Colony.objects.filter(user=user)
+        colonies_data = []
+        
+        for colony in user_colonies:
+            cats_data = Cat.objects.filter(colony=colony).aggregate(
+                total_male_sterilized=Count('id', filter=Q(sex='M', sterilized=True)),
+                total_female_sterilized=Count('id', filter=Q(sex='F', sterilized=True)),
+                total_male=Count('id', filter=Q(sex='M')),
+                total_female=Count('id', filter=Q(sex='F')),
+                total_sterilized=Count('id', filter=Q(sterilized=True)),
+                total_cats=Count('id')
+            )
+            
+            colonies_data.append({
+                'colony': colony,
+                'male_sterilized': cats_data['total_male_sterilized'],
+                'female_sterilized': cats_data['total_female_sterilized'],
+                'total_male': cats_data['total_male'],
+                'total_female': cats_data['total_female'],
+                'total_sterilized': cats_data['total_sterilized'],
+                'total_cats': cats_data['total_cats'],
+            })
+    
+    context = {
+        'colonies_data': colonies_data,
+        'is_admin': is_admin,
+        'user': user
+    }
+    
+    return render(request, 'sterilized_counter.html', context)
