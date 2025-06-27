@@ -888,3 +888,293 @@ h3 { font-size: 1.5rem; margin-bottom: 15px; }
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* Modo oscuro completo */
+.dark-mode {
+    background: linear-gradient(135deg, #1a1a1a 60%, #2a2a2a 100%) !important;
+    color: #f0f0f0 !important;
+}
+
+.dark-mode main {
+    background: #232323 !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .card {
+    background: #2a2a2a !important;
+    color: #f1f1f1 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+}
+
+.dark-mode h1, 
+.dark-mode h2, 
+.dark-mode h3 {
+    color: #ffb380 !important;
+}
+
+.dark-mode .map-container {
+    box-shadow: 0 4px 24px rgba(0,0,0,0.6) !important;
+    background: #1a1a1a !important;
+}
+
+.dark-mode .sidebar {
+    background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%) !important;
+    color: #f1f1f1 !important;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.8) !important;
+}
+
+.dark-mode .sidebar h3 {
+    color: #ffb380 !important;
+}
+
+.dark-mode .sidebar-item {
+    background: #333 !important;
+    color: #f1f1f1 !important;
+    border-color: #555 !important;
+}
+
+.dark-mode .sidebar-item:hover {
+    background: #3a3a3a !important;
+}
+
+.dark-mode .map-btn {
+    background: #ffb380 !important;
+    color: #222 !important;
+}
+
+.dark-mode .map-btn:hover {
+    background: #ff9f4a !important;
+    box-shadow: 0 2px 8px rgba(255, 179, 128, 0.3) !important;
+}
+
+.dark-mode .map-btn.active {
+    background: #28a745 !important;
+    color: white !important;
+}
+
+.dark-mode #create-map {
+    background: #28a745 !important;
+    color: white !important;
+}
+
+.dark-mode #create-map:hover {
+    background: #218838 !important;
+}
+
+.dark-mode #debug-toggle {
+    background: #17a2b8 !important;
+    color: white !important;
+}
+
+.dark-mode #debug-toggle:hover {
+    background: #138496 !important;
+}
+
+.dark-mode .map-status {
+    background: #2a2a2a !important;
+    color: #f1f1f1 !important;
+    border-left-color: #ffb380 !important;
+}
+
+.dark-mode .map-debug {
+    background: #1a1a1a !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .popup-content textarea,
+.dark-mode .popup-content select {
+    background: #333 !important;
+    color: #f1f1f1 !important;
+    border-color: #555 !important;
+}
+
+.dark-mode .popup-content textarea:focus,
+.dark-mode .popup-content select:focus {
+    border-color: #ffb380 !important;
+    box-shadow: 0 0 0 3px rgba(255, 179, 128, 0.1) !important;
+}
+
+.dark-mode .coordinates-display {
+    background: #2a2a2a !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .marker-popup {
+    background: #2a2a2a !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .marker-popup h4 {
+    color: #ffb380 !important;
+}
+
+.dark-mode .marker-popup p {
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .popup-coords {
+    background: #1a1a1a !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .popup-coords small {
+    color: #aaa !important;
+}
+
+.dark-mode .markers-count {
+    background: linear-gradient(135deg, #ffb380, #ff9f4a) !important;
+    color: #222 !important;
+}
+
+.dark-mode .notification {
+    background: #ffb380 !important;
+    color: #222 !important;
+}
+
+.dark-mode .map-controls {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a) !important;
+    border-color: #555 !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode nav {
+    background: #222 !important;
+    color: #f1f1f1 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+}
+
+.dark-mode nav a {
+    color: #f1f1f1 !important;
+}
+
+.dark-mode nav a.active {
+    color: #ffb380 !important;
+    border-bottom-color: #ffb380 !important;
+}
+
+.dark-mode nav a:hover {
+    color: #ffb380 !important;
+}
+
+.dark-mode footer {
+    background: #222 !important;
+    color: #f1f1f1 !important;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.3) !important;
+    border-top-color: #444 !important;
+}
+
+.dark-mode footer a {
+    color: #ffb380 !important;
+}
+
+.dark-mode footer i {
+    color: #ffb380 !important;
+}
+
+/* Botón de modo oscuro */
+#darkModeToggle {
+    position: absolute;
+    right: 30px;
+    bottom: 7px;
+    z-index: 9999;
+    background: #d2691e !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 16px !important;
+    border-radius: 25px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3) !important;
+}
+
+#darkModeToggle:hover {
+    background: #a0522d !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(210, 105, 30, 0.4) !important;
+}
+
+.dark-mode #darkModeToggle {
+    background: #ffb380 !important;
+    color: #222 !important;
+}
+
+.dark-mode #darkModeToggle:hover {
+    background: #ff9f4a !important;
+}
+
+/* Navegación común */
+nav {
+    background: #ffe4e1;
+    padding: 12px 0;
+    box-shadow: 0 2px 8px rgba(255,192,203,0.15);
+    display: flex;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+nav li {
+    margin: 0;
+    padding: 0 30px;
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: 500;
+    line-height: 1.5;
+    transition: color 0.2s;
+    position: relative;
+}
+
+nav a {
+    color: #d2691e;
+    text-decoration: none;
+    margin: 0 12px;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+nav a:hover {
+    color: #a0522d;
+}
+
+nav a.active {
+    color: #a0522d;
+    border-bottom: 2px solid #a0522d;
+}
+
+/* Footer común */
+footer {
+    position: relative;
+    background: #ffe4e1;
+    color: #d2691e;
+    text-align: center;
+    padding: 18px 0 10px 0;
+    font-size: 1.1em;
+    border-top: 2px solid #ffd1cc;
+    margin-top: auto;
+    box-shadow: 0 -2px 8px rgba(255,192,203,0.10);
+    transition: all 0.3s ease;
+}
+
+footer a {
+    text-decoration: none;
+    margin: 0 8px;
+    transition: color 0.2s;
+}
+
+footer a:hover i {
+    color: #d2691e !important;
+}
+
+footer i {
+    font-size: 1.4em;
+    vertical-align: middle;
+    margin-right: 4px;
+}

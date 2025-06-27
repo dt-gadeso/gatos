@@ -1,107 +1,239 @@
+/* Estilos base consistentes */
+body {
+    background: linear-gradient(135deg, #f0f0f0 60%, #ffe4e1 100%);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+main {
+    max-width: 1200px;
+    margin: 40px auto 24px auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    animation: fadeIn 1s;
+    transition: all 0.3s ease;
+}
+
 .staff-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Arial, sans-serif;
 }
 
-
 .staff-header {
-    background-color: orange;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #d2691e, #ff8c42);
+    padding: 20px;
+    border-radius: 14px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(210, 105, 30, 0.2);
+    color: white;
+    text-align: center;
+}
+
+.staff-header h2, .staff-header h3 {
+    color: white;
+    margin: 0;
+    letter-spacing: 1px;
 }
 
 .staff-table {
     width: 100%;
     border-collapse: collapse;
-    background-color: orange;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 14px;
+    overflow: hidden;
 }
 
 .staff-table th {
-    background-color: #4a90e2;
+    background: linear-gradient(135deg, #d2691e, #ff8c42);
     color: white;
-    padding: 12px;
+    padding: 15px 12px;
     text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 .staff-table td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
+    padding: 15px 12px;
+    border-bottom: 1px solid #e9ecef;
+    transition: all 0.3s ease;
 }
 
 .staff-table tr:hover {
-    background-color: #f9f9f9;
-    color: black;
+    background-color: #ffe4e1;
+    color: #333;
+    transform: scale(1.01);
 }
-
 
 .staff-button {
-    background-color: white;
-    color: black;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.staff-delete {
-    background-color: #ff4848;
+    background: linear-gradient(135deg, #d2691e, #ff8c42);
     color: white;
-    padding: 8px 16px;
+    padding: 10px 18px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .staff-button:hover {
-    background-color: #357abd;
+    background: linear-gradient(135deg, #b8541a, #e8590c);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3);
+}
+
+.staff-delete {
+    background: linear-gradient(135deg, #dc3545, #ff4757);
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
 }
 
 .staff-delete:hover {
-    background-color: #ff5e5e;
+    background: linear-gradient(135deg, #c82333, #ff3838);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
 }
 
 .staff-form {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    padding: 24px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 24px;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
 }
 
 .form-group input {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #d2691e;
+    box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
+}
+
+/* Navegación */
+nav {
+    background: #ffe4e1;
+    padding: 12px 0;
+    box-shadow: 0 2px 8px rgba(255,192,203,0.15);
+    display: flex;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+nav li {
+    margin: 0;
+    padding: 0 30px;
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: 500;
+    line-height: 1.5;
+    transition: color 0.2s;
+    position: relative;
+}
+
+nav a {
+    color: #d2691e;
+    text-decoration: none;
+    margin: 0 12px;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+nav a:hover {
+    color: #a0522d;
+}
+
+nav a.active {
+    color: #a0522d;
+    border-bottom: 2px solid #a0522d;
+}
+
+/* Footer */
+footer {
+    position: relative;
+    background: #ffe4e1;
+    color: #d2691e;
+    text-align: center;
+    padding: 18px 0 10px 0;
+    font-size: 1.1em;
+    border-top: 2px solid #ffd1cc;
+    margin-top: auto;
+    box-shadow: 0 -2px 8px rgba(255,192,203,0.10);
+    transition: all 0.3s ease;
+}
+
+footer a {
+    text-decoration: none;
+    margin: 0 8px;
+    transition: color 0.2s;
+}
+
+footer a:hover i {
+    color: #d2691e !important;
+}
+
+footer i {
+    font-size: 1.4em;
+    vertical-align: middle;
+    margin-right: 4px;
 }
 
 /* Estilos para la sección de administración */
 .admin-section {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 14px;
     border-left: 4px solid #dc3545;
+    margin-bottom: 24px;
 }
 
 .admin-section h4 {
     color: #dc3545;
     margin-bottom: 15px;
+    font-weight: 600;
 }
 
 .admin-section .form-group {
@@ -109,21 +241,211 @@
 }
 
 .admin-section .btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
+    background: linear-gradient(135deg, #dc3545, #ff4757);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
 .admin-section .btn-danger:hover {
-    background-color: #c82333;
-    border-color: #bd2130;
+    background: linear-gradient(135deg, #c82333, #ff3838);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
 }
 
 .alert-warning {
-    background-color: #fff3cd;
-    border-color: #ffeaa7;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
     color: #856404;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
 }
 
 .text-danger {
     color: #dc3545 !important;
+}
+
+/* Modo oscuro */
+.dark-mode {
+    background: linear-gradient(135deg, #1a1a1a 60%, #2a2a2a 100%) !important;
+    color: #f0f0f0 !important;
+}
+
+.dark-mode main {
+    background: #232323 !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .staff-header {
+    background: linear-gradient(135deg, #ffb380, #ff9f4a) !important;
+    color: #222 !important;
+}
+
+.dark-mode .staff-header h2, 
+.dark-mode .staff-header h3 {
+    color: #222 !important;
+}
+
+.dark-mode .staff-table {
+    background: #2a2a2a !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .staff-table th {
+    background: linear-gradient(135deg, #ffb380, #ff9f4a) !important;
+    color: #222 !important;
+}
+
+.dark-mode .staff-table td {
+    border-bottom-color: #444 !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .staff-table tr:hover {
+    background: #333 !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .staff-form {
+    background: #2a2a2a !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .form-group label {
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .form-group input {
+    background: #333 !important;
+    color: #f1f1f1 !important;
+    border-color: #555 !important;
+}
+
+.dark-mode .form-group input:focus {
+    border-color: #ffb380 !important;
+    box-shadow: 0 0 0 3px rgba(255, 179, 128, 0.1) !important;
+}
+
+.dark-mode .admin-section {
+    background: #2a2a2a !important;
+    color: #f1f1f1 !important;
+    border-left-color: #ff4757 !important;
+}
+
+.dark-mode .admin-section h4 {
+    color: #ff4757 !important;
+}
+
+.dark-mode .alert-warning {
+    background: #3a3a3a !important;
+    color: #ffb380 !important;
+    border-color: #555 !important;
+}
+
+.dark-mode nav {
+    background: #222 !important;
+    color: #f1f1f1 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+}
+
+.dark-mode nav a {
+    color: #f1f1f1 !important;
+}
+
+.dark-mode nav a.active {
+    color: #ffb380 !important;
+    border-bottom-color: #ffb380 !important;
+}
+
+.dark-mode nav a:hover {
+    color: #ffb380 !important;
+}
+
+.dark-mode footer {
+    background: #222 !important;
+    color: #f1f1f1 !important;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.3) !important;
+    border-top-color: #444 !important;
+}
+
+.dark-mode footer a {
+    color: #ffb380 !important;
+}
+
+.dark-mode footer i {
+    color: #ffb380 !important;
+}
+
+/* Botón de modo oscuro */
+#darkModeToggle {
+    position: absolute;
+    right: 30px;
+    bottom: 7px;
+    z-index: 9999;
+    background: #d2691e !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 16px !important;
+    border-radius: 25px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3) !important;
+}
+
+#darkModeToggle:hover {
+    background: #a0522d !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(210, 105, 30, 0.4) !important;
+}
+
+.dark-mode #darkModeToggle {
+    background: #ffb380 !important;
+    color: #222 !important;
+}
+
+.dark-mode #darkModeToggle:hover {
+    background: #ff9f4a !important;
+}
+
+@media (max-width: 768px) {
+    main {
+        max-width: 98vw;
+        padding: 12px;
+    }
+    
+    .staff-container {
+        padding: 10px;
+    }
+    
+    .staff-table {
+        font-size: 14px;
+    }
+    
+    .staff-table th,
+    .staff-table td {
+        padding: 10px 8px;
+    }
+    
+    nav li {
+        padding: 0 15px;
+        font-size: 1em;
+    }
+    
+    .staff-form {
+        padding: 16px;
+    }
+    
+    .admin-section {
+        padding: 16px;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px);}
+    to { opacity: 1; transform: translateY(0);}
 }
