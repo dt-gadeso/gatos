@@ -7,13 +7,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nueva Localizacion</title>
+    <title>Nueva Visita</title>
 </head>
 <body>
-    <form method="post" enctype="multipart/form-data">
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    
+    {% if form_errors %}
+        <div class="alert alert-warning">
+            <ul>
+                {% for field, errors in form_errors.items %}
+                    {% for error in errors %}
+                        <li>{{ field }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'formNewVisit' %}">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Guardar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </body>
 </html>

@@ -3,6 +3,7 @@ from colonies.models import Municipality, Location, Council
 from users.models import User
 from cats.models import Cat
 from .models import VetCenter, Agreement, VetService, Visit, VisitService
+from decimal import Decimal
 
 class VetCenterForm(forms.ModelForm):
     class Meta:
@@ -23,28 +24,24 @@ class VetCenterForm(forms.ModelForm):
             'location': 'Ubicación'
         }
 
-class AgreementForm(forms.Form):
-    council = forms.ModelChoiceField(
-        label='Ayuntamiento',
-        queryset=Council.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    vet_center = forms.ModelChoiceField(
-        label='Centro veterinario',
-        queryset=VetCenter.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    week_days = forms.IntegerField(
-        label='Días por semana',
-        min_value=0,
-        max_value=7,
-        widget=forms.NumberInput(attrs={'class': 'form-control'})
-    )
-    week_cats = forms.IntegerField(
-        label='Gatos por semana',
-        min_value=0,
-        widget=forms.NumberInput(attrs={'class': 'form-control'})
-    )
+class AgreementForm(forms.ModelForm):
+    class Meta:
+        model = Agreement
+        fields = ['council', 'vet_center', 'week_days', 'week_cats', 'agreement_file']
+        widgets = {
+            'council': forms.Select(attrs={'class': 'form-control'}),
+            'vet_center': forms.Select(attrs={'class': 'form-control'}),
+            'week_days': forms.NumberInput(attrs={'class': 'form-control'}),
+            'week_cats': forms.NumberInput(attrs={'class': 'form-control'}),
+            'agreement_file': forms.ClearableFileInput(attrs={'class': 'form-control'})
+        }
+        labels = {
+            'council': 'Ayuntamiento',
+            'vet_center': 'Centro veterinario',
+            'week_days': 'Días por semana',
+            'week_cats': 'Gatos por semana',
+            'agreement_file': 'Archivo del acuerdo'
+        }
 
 class VetServiceForm(forms.Form):
     name = forms.CharField(
@@ -57,50 +54,69 @@ class VetServiceForm(forms.Form):
         widget=forms.Textarea(attrs={'class': 'form-control'})
     )
 
-class VisitForm(forms.Form):
-    cat = forms.ModelChoiceField(
-        label='Gato',
-        queryset=Cat.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    vet_center = forms.ModelChoiceField(
-        label='Centro veterinario',
-        queryset=VetCenter.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    price = forms.DecimalField(
-        label='Precio',
-        max_digits=10,
-        decimal_places=2,
-        min_value=0.00,
-        widget=forms.NumberInput(attrs={'class': 'form-control'})
-    )
-    report_file = forms.CharField(
-        label='Archivo del informe',
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
-    bill_file = forms.CharField(
-        label='Archivo de la factura',
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
-    user = forms.ModelChoiceField(
-        label='Usuario',
-        queryset=User.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    visit_date = forms.DateField(
-        label='Fecha de la visita',
-        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
-    )
+class VisitForm(forms.ModelForm):
+    class Meta:
+        model = Visit
+        fields = ['cat', 'vet_center', 'price', 'report_file', 'bill_file', 'user', 'follow_up', 'start_date', 'end_date']
+        widgets = {
+            'cat': forms.Select(attrs={'class': 'form-control'}),
+            'vet_center': forms.Select(attrs={'class': 'form-control'}),
+            'price': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'step': '0.01',
+                'min': '0'
+            }),
+            'report_file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'bill_file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'user': forms.Select(attrs={'class': 'form-control'}),
+            'follow_up': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3
+            }),
+            'start_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'end_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            })
+        }
+        labels = {
+            'cat': 'Gato',
+            'vet_center': 'Centro veterinario',
+            'price': 'Precio',
+            'report_file': 'Archivo del informe (opcional)',
+            'bill_file': 'Archivo de la factura (opcional)',
+            'user': 'Usuario',
+            'follow_up': 'Seguimiento',
+            'start_date': 'Fecha de inicio',
+            'end_date': 'Fecha de fin'
+        }
 
-class VisitServiceForm(forms.Form):
-    visit = forms.ModelChoiceField(
-        label='Visita',
-        queryset=Visit.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    vet_service = forms.ModelChoiceField(
-        label='Servicio veterinario',
-        queryset=VetService.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+        price = cleaned_data.get('price')
+
+        if start_date and end_date and start_date > end_date:
+            raise forms.ValidationError("La fecha de inicio no puede ser posterior a la fecha de fin.")
+
+        if price is not None and price < 0:
+            raise forms.ValidationError("El precio no puede ser negativo.")
+
+        return cleaned_data
+
+class VisitServiceForm(forms.ModelForm):
+    class Meta:
+        model = VisitService
+        fields = ['visit', 'vet_service']
+        widgets = {
+            'visit': forms.Select(attrs={'class': 'form-control'}),
+            'vet_service': forms.Select(attrs={'class': 'form-control'})
+        }
+        labels = {
+            'visit': 'Visita',
+            'vet_service': 'Servicio veterinario'
+        }

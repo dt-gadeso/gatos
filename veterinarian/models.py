@@ -27,6 +27,7 @@ class Agreement(models.Model):
         validators=[MinValueValidator(0), MaxValueValidator(7)]
     )
     week_cats = models.IntegerField(validators=[MinValueValidator(0)])
+    agreement_file = models.FileField(upload_to='veterinarian/field/agreements', null=True, blank=True) 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -53,10 +54,12 @@ class Visit(models.Model):
         decimal_places=2, 
         validators=[MinValueValidator(Decimal('0.00'))]
     )
-    report_file = models.CharField(max_length=255)
-    bill_file = models.CharField(max_length=255)
+    report_file = models.FileField(upload_to='veterinarian/field/visit', blank=True, null=True) 
+    bill_file = models.FileField(upload_to='veterinarian/field/visit', blank=True, null=True) 
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    visit_date = models.DateField(auto_now_add=True)
+    follow_up = models.TextField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

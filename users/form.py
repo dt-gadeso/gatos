@@ -23,27 +23,15 @@ class CreateNewUser(forms.Form):
         max_length=242,
         widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email'})
     )
-    avatar_file = forms.ImageField(
-        label='Foto de avatar (opcional)',
-        required=False,
-        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
-    )
+    # avatar_file = forms.ImageField(
+    #     label='Foto de avatar (opcional)',
+    #     required=False,
+    #     widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
+    # )
     carnet_gatos = forms.CharField(
         label='Carnet de Gatos (opcional)',
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
-    casa_acogida = forms.ChoiceField(
-        label='Casa de acogida',
-        choices=[('', '-- Selecciona --'), ('si', 'Sí'), ('no', 'No')],
-        required=True,
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    tiene_relevo = forms.ChoiceField(
-        label='¿Tiene relevo?',
-        choices=[('', '-- Selecciona --'), ('si', 'Sí'), ('no', 'No')],
-        required=False,
-        widget=forms.Select(attrs={'class': 'form-control'})
     )
 
 class LoginUser(forms.Form):
@@ -69,13 +57,25 @@ class CreateRole(forms.ModelForm):
         fields = ['name']  
 
 class EditUser(forms.ModelForm):
+    casa_acogida = forms.ChoiceField(
+        label='Casa de acogida',
+        choices=[('si', 'Sí'), ('no', 'No')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    tiene_relevo = forms.ChoiceField(
+        label='¿Tiene relevo?',
+        choices=[('si', 'Sí'), ('no', 'No')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
     class Meta:
         model = User
-        fields = ['username', 'email', 'avatar_file', 'carnet_gatos']
+        fields = ['username', 'email', 'carnet_gatos', 'casa_acogida', 'tiene_relevo']
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'avatar_file': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
             'carnet_gatos': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
@@ -83,6 +83,11 @@ class EditUser(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.required = False
+        
+        # Si hay una instancia, configurar los valores iniciales para los campos de elección
+        if self.instance and self.instance.pk:
+            self.fields['casa_acogida'].initial = 'si' if self.instance.casa_acogida else 'no'
+            self.fields['tiene_relevo'].initial = 'si' if self.instance.tiene_relevo else 'no'
 
 class AssignedRole(forms.ModelForm):
     role = forms.ModelChoiceField(

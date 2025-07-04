@@ -54,7 +54,6 @@ def signup(request):
                     user = User(
                         username=form.cleaned_data.get('username'),
                         email=form.cleaned_data.get('email'),
-                        avatar_file=form.cleaned_data.get('avatar_file'),
                         carnet_gatos=form.cleaned_data.get('carnet_gatos'),
                         casa_acogida=(casa_acogida_val == 'si'),
                         tiene_relevo=(tiene_relevo_val == 'si')
@@ -199,20 +198,35 @@ def delete_user(request):
 @login_required
 def areaEdit(request):
     if request.method == 'GET':
-        form = EditUser()
+        form = EditUser(instance=request.user)
         return render(request, 'areaEdit.html', {
             'user': request.user,
             'form': form
         })
     else:
         try:
-            form = EditUser(request.POST, request.FILES)
+            form = EditUser(request.POST, request.FILES, instance=request.user)
             if form.is_valid():
                 user = request.user
-                # Solo actualiza los campos que el usuario llenó
-                for field, value in form.cleaned_data.items():
+                # Actualizar campos básicos
+                for field in ['username', 'email', 'carnet_gatos']:
+                    value = form.cleaned_data.get(field)
                     if value not in [None, '', [], {}]:
                         setattr(user, field, value)
+                
+                # Manejar casa_acogida y tiene_relevo
+                casa_acogida_val = form.cleaned_data.get('casa_acogida')
+                tiene_relevo_val = form.cleaned_data.get('tiene_relevo')
+                
+                if casa_acogida_val is not None:
+                    user.casa_acogida = (casa_acogida_val == 'si')
+                
+                # Si no es casa de acogida, forzar tiene_relevo a False
+                if casa_acogida_val == 'no':
+                    user.tiene_relevo = False
+                elif tiene_relevo_val is not None:
+                    user.tiene_relevo = (tiene_relevo_val == 'si')
+                
                 user.save()
                 return redirect('areaStaff')
             else:
@@ -223,7 +237,7 @@ def areaEdit(request):
                 })
         except Exception as e:
             return render(request, 'areaEdit.html', {
-                'form': EditUser(),
+                'form': EditUser(instance=request.user),
                 'user': request.user,
                 'error': f'Error al editar el usuario: {str(e)}'
             })
@@ -279,10 +293,6 @@ def role_capturador(sender, instance, **kwargs):
 
 @require_GET
 def search_users(request):
-    """
-    Endpoint para búsqueda de usuarios por nombre o email.
-    Devuelve una lista de usuarios que coinciden con el término de búsqueda.
-    """
     query = request.GET.get('search', '').strip().lower()
     users = []
     if query:
@@ -295,10 +305,6 @@ def search_users(request):
 
 @require_GET
 def search_associations(request):
-    """
-    Endpoint para búsqueda de asociaciones por nombre.
-    Devuelve una lista de asociaciones que coinciden con el término de búsqueda.
-    """
     query = request.GET.get('search', '').strip().lower()
     associations = []
     if query:

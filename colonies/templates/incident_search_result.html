@@ -211,6 +211,12 @@
             <div class="incident-meta">
                 <span><strong>Colonia:</strong> {{ incident.colony.name }}</span>
                 <span><strong>Reportada:</strong> {{ incident.reported_at|date:"d/m/Y H:i" }}</span>
+                {% if incident.start_date %}
+                <span><strong>Fecha inicio:</strong> {{ incident.start_date|date:"d/m/Y" }}</span>
+                {% endif %}
+                {% if incident.end_date %}
+                <span><strong>Fecha fin:</strong> {{ incident.end_date|date:"d/m/Y" }}</span>
+                {% endif %}
                 <span><strong>Estado:</strong></span>
                 <div class="status-badge {% if incident.is_resolved %}status-resolved{% else %}status-pending{% endif %}">
                     {% if incident.is_resolved %}
@@ -219,6 +225,12 @@
                         ⏱ Pendiente
                     {% endif %}
                 </div>
+                {% if incident.is_resolved and incident.resolution %}
+                <div style="margin-top: 0.5rem;">
+                    <span><strong>Resolución:</strong></span>
+                    <p style="color: #bdbdbd; margin-top: 0.25rem; font-style: italic;">{{ incident.resolution|truncatewords:20 }}</p>
+                </div>
+                {% endif %}
             </div>
             
             <div class="incident-actions">

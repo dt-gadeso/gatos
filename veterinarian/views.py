@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .form import VetCenterForm, AgreementForm, VetServiceForm, VisitForm, VisitServiceForm
-from .models import VetCenter, VetService, Visit, VisitService, Agreement
-from colonies.models import Location, Municipality
+from .models import VetCenter, VetService, Agreement
+from colonies.models import Location
 
 # Create your views here.
 def veterinarian(request):
@@ -56,9 +56,9 @@ def agreement_form_view(request):
         form = AgreementForm()
         return render(request, 'formNewAgreement.html', {'form': form})
     else:
-        form = AgreementForm(request.POST)
+        form = AgreementForm(request.POST, request.FILES)
         if form.is_valid():
-            Agreement.objects.create(**form.cleaned_data)
+            form.save()
             return redirect('veterinarian')
         else:
             return render(request, 'formNewAgreement.html', {'form': form, 'error': 'Formulario inválido'})
@@ -80,12 +80,27 @@ def visit_form_view(request):
         form = VisitForm()
         return render(request, 'formNewVisit.html', {'form': form})
     else:
-        form = VisitForm(request.POST)
+        form = VisitForm(request.POST, request.FILES)
+        
         if form.is_valid():
-            Visit.objects.create(**form.cleaned_data)
-            return redirect('veterinarian')
+            try:
+                visit = form.save()
+                print(f"Visit saved successfully with ID: {visit.id}")
+                return redirect('veterinarian')
+            except Exception as e:
+                print(f"Error saving visit: {e}")
+                return render(request, 'formNewVisit.html', {
+                    'form': form, 
+                    'error': f'Error al guardar la visita: {str(e)}'
+                })
         else:
-            return render(request, 'formNewVisit.html', {'form': form, 'error': 'Formulario inválido'})
+            print(f"Form errors: {form.errors}")
+            print(f"Form non-field errors: {form.non_field_errors()}")
+            return render(request, 'formNewVisit.html', {
+                'form': form, 
+                'error': 'Formulario inválido. Por favor, revise los errores.',
+                'form_errors': form.errors
+            })
 
 def visitservice_form_view(request):
     if request.method == 'GET':
@@ -94,7 +109,7 @@ def visitservice_form_view(request):
     else:
         form = VisitServiceForm(request.POST)
         if form.is_valid():
-            VisitService.objects.create(**form.cleaned_data)
+            form.save()
             return redirect('veterinarian')
         else:
             return render(request, 'formNewVisitService.html', {'form': form, 'error': 'Formulario inválido'})

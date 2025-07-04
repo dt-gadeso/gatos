@@ -290,6 +290,9 @@ def save_incident(request):
                     title=form.cleaned_data['title'],
                     description=form.cleaned_data['description'],
                     is_resolved=form.cleaned_data['is_resolved'],
+                    resolution=form.cleaned_data['resolution'],
+                    start_date=form.cleaned_data['start_date'],
+                    end_date=form.cleaned_data['end_date'],
                     colony=form.cleaned_data['colony']
                 )
                 if is_ajax:

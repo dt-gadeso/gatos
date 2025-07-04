@@ -28,6 +28,25 @@
                         <p><strong>Carnet de Gatos:</strong> {{ user.carnet_gatos }}</p>
                         {% endif %}
                         
+                        <!-- Casa de Acogida Info -->
+                        <p><strong>Casa de Acogida:</strong>
+                            {% if user.casa_acogida %}
+                                <span class="badge badge-success">Sí</span>
+                            {% else %}
+                                <span class="badge badge-secondary">No</span>
+                            {% endif %}
+                        </p>
+                        
+                        {% if user.casa_acogida %}
+                        <p><strong>Tiene Relevo:</strong>
+                            {% if user.tiene_relevo %}
+                                <span class="badge badge-success">Sí</span>
+                            {% else %}
+                                <span class="badge badge-warning">No</span>
+                            {% endif %}
+                        </p>
+                        {% endif %}
+                        
                         {% if user.avatar_file %}
                         <div class="avatar-container mb-3">
                             <img src="{{ user.avatar_file.url }}" alt="Avatar de {{ user.username }}" 
@@ -105,6 +124,38 @@
                         </div>
                         {% endif %}
                     </div>
+                </div>
+            </div>
+            
+            <!-- Casa de Acogida Section -->
+            <div class="card staff-form casa-acogida-section mt-3">
+                <div class="card-body">
+                    <h3 class="card-title">Configuración Casa de Acogida</h3>
+                    <hr>
+                    <form method="POST" action="{% url 'areaEdit' %}" id="casa-acogida-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="casa_acogida"><strong>¿Casa de acogida?</strong></label>
+                            <select name="casa_acogida" id="casa_acogida" class="form-control">
+                                <option value="no" {% if not user.casa_acogida %}selected{% endif %}>No</option>
+                                <option value="si" {% if user.casa_acogida %}selected{% endif %}>Sí</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group" id="tiene-relevo-div" {% if not user.casa_acogida %}style="display: none;"{% endif %}>
+                            <label for="tiene_relevo"><strong>¿Tiene relevo?</strong></label>
+                            <select name="tiene_relevo" id="tiene_relevo" class="form-control">
+                                <option value="no" {% if not user.tiene_relevo %}selected{% endif %}>No</option>
+                                <option value="si" {% if user.tiene_relevo %}selected{% endif %}>Sí</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Guardar Configuración
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -258,6 +309,29 @@
         } else {
             resultDiv.innerHTML = `<div class="alert alert-danger">${data.error || 'Error al eliminar usuario'}</div>`;
         }
+    });
+</script>
+
+<!-- JavaScript para Casa de Acogida -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const casaAcogida = document.getElementById("casa_acogida");
+        const tieneRelevoDiv = document.getElementById("tiene-relevo-div");
+        const tieneRelevo = document.getElementById("tiene_relevo");
+
+        function updateRelevoField() {
+            if (casaAcogida.value === "si") {
+                tieneRelevoDiv.style.display = "block";
+            } else {
+                tieneRelevoDiv.style.display = "none";
+                tieneRelevo.value = "no";
+            }
+        }
+
+        casaAcogida.addEventListener("change", updateRelevoField);
+        
+        // Ejecutar una vez al cargar para asegurar el estado correcto
+        updateRelevoField();
     });
 </script>
 {% endif %}

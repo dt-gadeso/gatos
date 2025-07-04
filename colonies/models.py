@@ -75,6 +75,9 @@ class Incident(models.Model):
     description = models.TextField()
     reported_at = models.DateTimeField(auto_now_add=True)
     is_resolved = models.BooleanField(default=False)
+    resolution = models.TextField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
     colony = models.ForeignKey('Colony', on_delete=models.CASCADE, related_name='incidents')
 
     def __str__(self):

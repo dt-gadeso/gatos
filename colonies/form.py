@@ -189,49 +189,101 @@ class ColonyForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
-class IncidentForm(forms.Form):
-    title = forms.CharField(
-        label='Título de la incidencia',
-        max_length=200,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Ingrese el título'
-        })
-    )
+class IncidentForm(forms.ModelForm):
+    class Meta:
+        model = Incident
+        fields = ['title', 'description', 'start_date', 'end_date', 'is_resolved', 'resolution', 'colony']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese el título'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Describa la incidencia',
+                'rows': 4
+            }),
+            'start_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'end_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'is_resolved': forms.CheckboxInput(attrs={
+                'class': 'form-check-input',
+                'id': 'id_is_resolved',
+                'onchange': 'toggleResolutionField()'
+            }),
+            'resolution': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Describa cómo se resolvió la incidencia',
+                'rows': 3,
+                'id': 'id_resolution'
+            }),
+            'colony': forms.Select(attrs={
+                'class': 'form-control'
+            })
+        }
+        labels = {
+            'title': 'Título de la incidencia',
+            'description': 'Descripción',
+            'start_date': 'Fecha de inicio',
+            'end_date': 'Fecha de fin',
+            'is_resolved': '¿Está resuelta?',
+            'resolution': 'Resolución',
+            'colony': 'Colonia'
+        }
 
-    description = forms.CharField(
-        label='Descripción',
-        widget=forms.Textarea(attrs={
-            'class': 'form-control',
-            'placeholder': 'Describa la incidencia',
-            'rows': 4
-        })
-    )
-
-    is_resolved = forms.BooleanField(
-        label='¿Está resuelta?',
-        required=False,
-        widget=forms.CheckboxInput(attrs={
-            'class': 'form-check-input'
-        })
-    )
-
-    colony = forms.ModelChoiceField(
-        label='Colonia',
-        queryset=Colony.objects.all(),
-        widget=forms.Select(attrs={
-            'class': 'form-control'
-        })
-    )
+    def clean(self):
+        cleaned_data = super().clean()
+        is_resolved = cleaned_data.get('is_resolved')
+        resolution = cleaned_data.get('resolution')
+        
+        # Si está marcado como resuelto, la resolución es obligatoria
+        if is_resolved and not resolution:
+            raise forms.ValidationError('La resolución es obligatoria cuando la incidencia está marcada como resuelta.')
+        
+        return cleaned_data
 
 class EditIncident(forms.ModelForm):
     class Meta:
         model = Incident
-        fields = ['title', 'description', 'is_resolved', 'colony']
+        fields = ['title', 'description', 'start_date', 'end_date', 'is_resolved', 'resolution', 'colony']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'class': 'form-control'})
         self.fields['description'].widget.attrs.update({'class': 'form-control', 'rows': 4})
-        self.fields['is_resolved'].widget.attrs.update({'class': 'form-check-input'})
+        self.fields['start_date'].widget.attrs.update({
+            'class': 'form-control',
+            'type': 'date'
+        })
+        self.fields['end_date'].widget.attrs.update({
+            'class': 'form-control', 
+            'type': 'date'
+        })
+        self.fields['is_resolved'].widget.attrs.update({
+            'class': 'form-check-input',
+            'id': 'id_is_resolved',
+            'onchange': 'toggleResolutionField()'
+        })
+        self.fields['resolution'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Describa cómo se resolvió la incidencia',
+            'rows': 3,
+            'id': 'id_resolution'
+        })
         self.fields['colony'].widget.attrs.update({'class': 'form-control'})
+
+    def clean(self):
+        cleaned_data = super().clean()
+        is_resolved = cleaned_data.get('is_resolved')
+        resolution = cleaned_data.get('resolution')
+        
+        # Si está marcado como resuelto, la resolución es obligatoria
+        if is_resolved and not resolution:
+            raise forms.ValidationError('La resolución es obligatoria cuando la incidencia está marcada como resuelta.')
+        
+        return cleaned_data

@@ -32,7 +32,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=242, unique=True)
     email_verified_at = models.DateTimeField(null=True, blank=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
-    avatar_file = models.ImageField(upload_to='users/img/')
+    # avatar_file = models.ImageField(upload_to='users/img/')
     carnet_gatos = models.CharField(max_length=50, null=True, blank=True)
     association = models.ForeignKey(Association, null=True, blank=True, on_delete=models.SET_NULL)
     casa_acogida = models.BooleanField(default=False)

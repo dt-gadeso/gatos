@@ -1,24 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile</title>
-</head>
-<body>
-    <h1>Editar Perfil</h1>
-    <form action="/users/areaEdit/" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% if error %}
-        <p style="color:red;">{{ error }}</p>
-        {% endif %}
+{% extends 'base.html' %}
+{% load static %}
 
-        {% if success %}
-        <p style="color:green;">{{ success }}</p>
-        {% endif %}
+{% block title %}Editar Perfil{% endblock %}
 
-        {{ form.as_p }}
-        <button type="submit">Guardar Cambios</button>
-    </form>
-</body>
-</html>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/areaStaff.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="staff-container mt-4">
+    <div class="staff-header">
+        <h1 class="staff-title">Editar Perfil</h1>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card staff-form">
+                <div class="card-body">
+                    <form action="/users/areaEdit/" method="POST" enctype="multipart/form-data" id="edit-form">
+                        {% csrf_token %}
+                        {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                        {% endif %}
+
+                        {% if success %}
+                        <div class="alert alert-success">{{ success }}</div>
+                        {% endif %}
+
+                        <div class="form-group">
+                            {{ form.username.label_tag }}
+                            {{ form.username }}
+                        </div>
+                        
+                        <div class="form-group">
+                            {{ form.email.label_tag }}
+                            {{ form.email }}
+                        </div>
+                        
+                        <div class="form-group">
+                            {{ form.avatar_file.label_tag }}
+                            {{ form.avatar_file }}
+                        </div>
+                        
+                        <div class="form-group">
+                            {{ form.carnet_gatos.label_tag }}
+                            {{ form.carnet_gatos }}
+                        </div>
+                        
+                        <hr>
+                        <h4>Configuración Casa de Acogida</h4>
+                        
+                        <div class="form-group">
+                            {{ form.casa_acogida.label_tag }}
+                            {{ form.casa_acogida }}
+                        </div>
+                        
+                        <div class="form-group" id="tiene-relevo-div">
+                            {{ form.tiene_relevo.label_tag }}
+                            {{ form.tiene_relevo }}
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Guardar Cambios
+                            </button>
+                            <a href="{% url 'areaStaff' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const casaAcogida = document.getElementById("id_casa_acogida");
+        const tieneRelevoDiv = document.getElementById("tiene-relevo-div");
+        const tieneRelevo = document.getElementById("id_tiene_relevo");
+
+        function updateRelevoField() {
+            if (casaAcogida.value === "si") {
+                tieneRelevoDiv.style.display = "block";
+            } else {
+                tieneRelevoDiv.style.display = "none";
+                tieneRelevo.value = "no";
+            }
+        }
+
+        casaAcogida.addEventListener("change", updateRelevoField);
+        
+        // Ejecutar una vez al cargar para asegurar el estado correcto
+        updateRelevoField();
+    });
+</script>
+{% endblock %}
