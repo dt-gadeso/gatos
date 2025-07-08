@@ -33,12 +33,12 @@ class CreateCat(forms.Form):
     )
     sterilized = forms.ChoiceField(
         label='Esterilizado',
-        choices=[(True, 'Yes'), (False, 'No')],
+        choices=[(True, 'Sí'), (False, 'No')],
         widget=forms.Select(attrs={'class': 'form-select'})
     )
     dead = forms.ChoiceField(
-        label='Muerto',
-        choices=[(True, 'Yes'), (False, 'No')],
+        label='Estado del gato',
+        choices=[(False, 'Vivo'), (True, 'Muerto')],
         widget=forms.Select(attrs={'class': 'form-select'})
     )
     colony = forms.ModelChoiceField(
@@ -76,6 +76,27 @@ class EditCat(forms.ModelForm):
     class Meta:
         model = Cat
         fields = ['catname', 'photo_file', 'chip', 'birthday', 'sex', 'sterilized', 'dead', 'colony']
+        widgets = {
+            'catname': forms.TextInput(attrs={'class': 'form-control'}),
+            'photo_file': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'chip': forms.TextInput(attrs={'class': 'form-control'}),
+            'birthday': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'sex': forms.Select(attrs={'class': 'form-select'}),
+            'sterilized': forms.Select(attrs={'class': 'form-select'}),
+            'dead': forms.Select(attrs={'class': 'form-select'}),
+            'colony': forms.Select(attrs={'class': 'form-select'}),
+        }
+        labels = {
+            'catname': 'Nombre',
+            'photo_file': 'Foto',
+            'chip': 'Numero de chip',
+            'birthday': 'Cumpleaños',
+            'sex': 'Sexo',
+            'sterilized': 'Esterilizado',
+            'dead': 'Estado del gato',
+            'colony': 'Colonia',
+        }
+    
     def __init__(self, *args, **kwargs):
         kwargs.pop('user', None)
         super().__init__(*args, **kwargs)

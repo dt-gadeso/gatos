@@ -23,6 +23,7 @@ class VetCenter(models.Model):
 class Agreement(models.Model):
     council = models.ForeignKey('colonies.Council', on_delete=models.CASCADE)
     vet_center = models.ForeignKey(VetCenter, on_delete=models.CASCADE)
+    association = models.ForeignKey('users.Association', on_delete=models.CASCADE, null=True, blank=True)
     week_days = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(7)]
     )
@@ -34,17 +35,6 @@ class Agreement(models.Model):
     class Meta:
         db_table = 'agreements'
 
-class VetService(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    def __str__(self):
-        return self.name
-    
-    class Meta:
-        db_table = 'vet_services'
 
 class Visit(models.Model):
     cat = models.ForeignKey('cats.Cat', on_delete=models.CASCADE)
@@ -60,6 +50,7 @@ class Visit(models.Model):
     follow_up = models.TextField(null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
+    cat_survived = models.BooleanField(default=True, verbose_name="¿El gato sobrevivió?")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -68,28 +59,3 @@ class Visit(models.Model):
     
     class Meta:
         db_table = 'visits'
-
-class VisitService(models.Model):
-    visit = models.ForeignKey(Visit, on_delete=models.CASCADE)
-    vet_service = models.ForeignKey(VetService, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        db_table = 'visit_services'
-        unique_together = ['visit', 'vet_service']
-
-class AgreementService(models.Model):
-    agreement = models.ForeignKey('Agreement', on_delete=models.CASCADE)
-    vet_service = models.ForeignKey('VetService', on_delete=models.CASCADE)
-    price = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        default=Decimal('0.00'),
-        validators=[MinValueValidator(Decimal('0.00'))]
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = 'agreement_services'
-        unique_together = ['agreement', 'vet_service']

@@ -28,6 +28,7 @@
             
             <div class="card">
                 <h3>Coordenadas</h3>
+                {% if user.is_superuser or user.role.name == "manager" %}
                 <form id="coordinates-form">
                     <div class="coordinates-input">
                         <button type="button" id="load-markers" class="map-btn btn-info">Cargar Marcadores</button>
@@ -37,8 +38,10 @@
                         <button type="button" class="map-btn btn-danger" onclick="window.location.href='/colonies/formNewCouncil'">Guardar ayuntamiento</button>
                         <button type="button" class="map-btn btn-danger" onclick="window.location.href='/colonies/formNewColony'">Guardar colonia</button>
                         <button type="button" class="map-btn btn-danger" onclick="window.location.href='/colonies/formNewIncident'">Guardar incidencia</button>
+                        <button type="button" class="map-btn btn-danger" onclick="window.location.href='/colonies/incident_search_result'">Buscar incidencia</button>
                     </div>
                 </form>
+                {% endif %}
                 <div class="marker-info">
                     <p><strong>Instrucciones:</strong></p>
                     <ul>
@@ -93,28 +96,6 @@
                     <p><small><strong>📍 Datos del mapa:</strong> © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors | Powered by <a href="https://leafletjs.com" target="_blank">Leaflet</a></small></p>
                 </div>
             </div>
-
-            <!-- <form action="{% url 'searchIncidents' %}" method="get" style="display:inline;">
-                <select name="colony">
-                    <option value="">Colonia</option>
-                    {% for colony in colonies %}
-                        <option value="{{ colony.id }}" {% if colony_id == colony.id|stringformat:"s" %}selected{% endif %}>
-                            {{ colony.name }}
-                        </option>
-                    {% empty %}
-                        <option value="">No hay colonias</option>
-                    {% endfor %}
-                </select>
-
-                <select name="is_resolved">
-                    <option value="">¿Resuelto?</option>
-                    <option value="true" {% if is_resolved == 'true' %}selected{% endif %}>Sí</option>
-                    <option value="false" {% if is_resolved == 'false' %}selected{% endif %}>No</option>
-                </select> -->
-
-                <!-- <button type="submit">Buscar incidente</button> -->
-                <button type="button" class="map-btn btn-danger" onclick="window.location.href='/colonies/incident_search_result'">Buscar incidencia</button>
-            <!-- </form> -->
 
         </main>
         
