@@ -25,16 +25,11 @@ class VetCenterForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        # Extraer el usuario si se pasa como parámetro
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         
-        # Si hay un usuario con asociación, filtrar ubicaciones por las zonas de esa asociación
         if user and hasattr(user, 'association') and user.association:
             from colonies.models import Location
-            # Filtrar ubicaciones por municipio o zona específica según la asociación
-            # Puedes personalizar este filtro según tu lógica de negocio
-            # Por ejemplo, si las asociaciones tienen zonas específicas asignadas:
             association_locations = Location.objects.filter(
                 zone__municipality__in=user.association.municipalities.all()
             ) if hasattr(user.association, 'municipalities') else Location.objects.all()
@@ -70,24 +65,18 @@ class AgreementForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        # Extraer el usuario si se pasa como parámetro
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         
-        # Si hay un usuario con asociación, preseleccionar la asociación
         if user and hasattr(user, 'association') and user.association:
             self.fields['association'].initial = user.association
             
-            # Opcional: hacer que el campo asociación sea de solo lectura para usuarios con asociación
             self.fields['association'].widget.attrs['disabled'] = True
             
-            # Filtrar centros veterinarios disponibles (que no tengan acuerdo con esta asociación)
-            # o mostrar todos si se quiere permitir múltiples acuerdos
             existing_agreements = Agreement.objects.filter(
                 association=user.association
             ).values_list('vet_center', flat=True)
             
-            # Mostrar solo centros que no tengan acuerdo activo con esta asociación
             available_vet_centers = VetCenter.objects.exclude(id__in=existing_agreements)
             self.fields['vet_center'].queryset = available_vet_centers
             
@@ -95,7 +84,6 @@ class AgreementForm(forms.ModelForm):
                 self.fields['vet_center'].widget.attrs['disabled'] = True
                 self.fields['vet_center'].help_text = "No hay centros veterinarios disponibles para nuevos acuerdos."
         else:
-            # Si no hay usuario o asociación, mostrar todos los centros
             self.fields['vet_center'].queryset = VetCenter.objects.all()
 
 class VisitForm(forms.ModelForm):
@@ -141,39 +129,28 @@ class VisitForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        # Extraer el usuario si se pasa como parámetro
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         
-        # Filtrar centros veterinarios basándose en la asociación del usuario
         if user and hasattr(user, 'association') and user.association:
-            # Obtener centros veterinarios que tengan acuerdos activos con la asociación del usuario
             vet_centers_with_agreements = VetCenter.objects.filter(
                 agreement__association=user.association
             ).distinct()
             
-            # Aplicar el filtro al campo vet_center
             self.fields['vet_center'].queryset = vet_centers_with_agreements
             
-            # Preseleccionar la asociación del usuario
             self.fields['user'].initial = user
             
-            # Si solo hay un centro veterinario disponible, preseleccionarlo
             if vet_centers_with_agreements.count() == 1:
                 self.fields['vet_center'].initial = vet_centers_with_agreements.first()
             elif vet_centers_with_agreements.count() == 0:
-                # Si no hay centros disponibles, mostrar mensaje y deshabilitar el campo
                 self.fields['vet_center'].queryset = VetCenter.objects.none()
                 self.fields['vet_center'].widget.attrs['disabled'] = True
                 self.fields['vet_center'].help_text = "No hay centros veterinarios disponibles para tu asociación."
             
-            # Filtrar gatos por la asociación del usuario si es necesario
             if hasattr(user, 'association') and user.association:
-                # Aquí puedes filtrar los gatos si tienes una relación específica
-                # self.fields['cat'].queryset = Cat.objects.filter(...)
                 pass
         else:
-            # Si no hay usuario o asociación, mostrar todos los centros
             self.fields['vet_center'].queryset = VetCenter.objects.all()
 
     def clean(self):
@@ -193,7 +170,6 @@ class VisitForm(forms.ModelForm):
     def save(self, commit=True):
         visit = super().save(commit=False)
         
-        # Si el gato no sobrevivió, actualizar su estado en la tabla cats
         if not visit.cat_survived:
             cat = visit.cat
             cat.dead = True
@@ -202,5 +178,6 @@ class VisitForm(forms.ModelForm):
         
         if commit:
             visit.save()
-        
+
         return visit
+       

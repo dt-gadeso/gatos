@@ -1,15 +1,32 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .form import VetCenterForm, AgreementForm, VisitForm
-from .models import VetCenter, Agreement
+from .models import VetCenter, Agreement, Visit
 from colonies.models import Location
 
-# Create your views here.
 def veterinarian(request):
     locations = Location.objects.all()
-    vet_centers = VetCenter.objects.all()
+    
+    if request.user.is_authenticated and hasattr(request.user, 'association') and request.user.association:
+        vet_centers = VetCenter.objects.filter(
+            agreement__association=request.user.association
+        ).distinct()
+        
+        agreements = Agreement.objects.filter(association=request.user.association)
+        
+        visits = Visit.objects.filter(user__association=request.user.association)
+    else:
+        vet_centers = VetCenter.objects.all()
+        agreements = Agreement.objects.all()
+        visits = Visit.objects.all()
+    
     return render(request, 'veterinarian.html', {
         'locations': locations,
-        'vet_centers': vet_centers
+        'vet_centers': vet_centers,
+        'agreements': agreements,
+        'visits': visits,
+        'user_association': request.user.association if request.user.is_authenticated and hasattr(request.user, 'association') else None
     })
 
 def search_vet_centers(request):
@@ -39,43 +56,46 @@ def search_vet_centers(request):
 
     return render(request, 'vet_search_result.html', context)
 
+@login_required
 def vetcenter_form_view(request):
     if request.method == 'GET':
-        form = VetCenterForm()
+        form = VetCenterForm(user=request.user if request.user.is_authenticated else None)
         return render(request, 'formNewVetCenter.html', {'form': form})
     else:
-        form = VetCenterForm(request.POST, request.FILES)
+        form = VetCenterForm(request.POST, request.FILES, user=request.user if request.user.is_authenticated else None)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Centro veterinario creado exitosamente.')
             return redirect('veterinarian')
         else:
             return render(request, 'formNewVetCenter.html', {'form': form, 'error': 'Formulario inválido'})
 
+@login_required
 def agreement_form_view(request):
     if request.method == 'GET':
-        form = AgreementForm()
+        form = AgreementForm(user=request.user if request.user.is_authenticated else None)
         return render(request, 'formNewAgreement.html', {'form': form})
     else:
-        form = AgreementForm(request.POST, request.FILES)
+        form = AgreementForm(request.POST, request.FILES, user=request.user if request.user.is_authenticated else None)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Acuerdo creado exitosamente.')
             return redirect('veterinarian')
         else:
             return render(request, 'formNewAgreement.html', {'form': form, 'error': 'Formulario inválido'})
 
-
+@login_required
 def visit_form_view(request):
     if request.method == 'GET':
-        form = VisitForm()
+        form = VisitForm(user=request.user if request.user.is_authenticated else None)
         return render(request, 'formNewVisit.html', {'form': form})
     else:
-        form = VisitForm(request.POST, request.FILES)
+        form = VisitForm(request.POST, request.FILES, user=request.user if request.user.is_authenticated else None)
         
         if form.is_valid():
             try:
                 visit = form.save()
                 
-                # Si el gato no sobrevivió, actualizar el estado del gato
                 if not visit.cat_survived:
                     cat = visit.cat
                     cat.dead = True
@@ -83,6 +103,7 @@ def visit_form_view(request):
                     print(f"Cat {cat.catname} marked as dead")
                 
                 print(f"Visit saved successfully with ID: {visit.id}")
+                messages.success(request, 'Visita registrada exitosamente.')
                 return redirect('veterinarian')
             except Exception as e:
                 print(f"Error saving visit: {e}")
@@ -98,3 +119,31 @@ def visit_form_view(request):
                 'error': 'Formulario inválido. Por favor, revise los errores.',
                 'form_errors': form.errors
             })
+
+@login_required
+def visits_list_view(request):
+    if hasattr(request.user, 'association') and request.user.association:
+        visits = Visit.objects.filter(
+            user__association=request.user.association
+        ).select_related('cat', 'vet_center', 'user').order_by('-created_at')
+    else:
+        visits = Visit.objects.all().select_related('cat', 'vet_center', 'user').order_by('-created_at')
+    
+    return render(request, 'visits_list.html', {
+        'visits': visits,
+        'user_association': request.user.association if hasattr(request.user, 'association') else None
+    })
+
+@login_required
+def agreements_list_view(request):
+    if hasattr(request.user, 'association') and request.user.association:
+        agreements = Agreement.objects.filter(
+            association=request.user.association
+        ).select_related('council', 'vet_center', 'association').order_by('-created_at')
+    else:
+        agreements = Agreement.objects.all().select_related('council', 'vet_center', 'association').order_by('-created_at')
+    
+    return render(request, 'agreements_list.html', {
+        'agreements': agreements,
+        'user_association': request.user.association if hasattr(request.user, 'association') else None
+    })
