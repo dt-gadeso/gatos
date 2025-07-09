@@ -366,3 +366,95 @@ def searchIncidents(request):
     }
 
     return render(request, 'incident_search_result.html', context)
+
+@login_required
+def multi_form_view(request):
+    # Inicializar todos los formularios
+    council_form = CouncilForm()
+    colony_form = ColonyForm()
+    municipality_form = MunicipalityForm()
+    zone_form = ZoneForm()
+    location_form = LocationForm()
+    
+    success_message = None
+    error_message = None
+
+    if request.method == 'POST':
+        try:
+            if 'submit_council' in request.POST:
+                council_form = CouncilForm(request.POST, request.FILES)
+                if council_form.is_valid():
+                    # Crear el consejo manualmente ya que CouncilForm no es ModelForm
+                    Council.objects.create(
+                        name=council_form.cleaned_data['name'],
+                        email=council_form.cleaned_data['email'],
+                        phone=council_form.cleaned_data['phone'],
+                        emergency_email=council_form.cleaned_data['emergency_email'],
+                        emergency_phone=council_form.cleaned_data['emergency_phone'],
+                        logo_file=council_form.cleaned_data.get('logo_file'),
+                        location=council_form.cleaned_data['location'],
+                    )
+                    success_message = "Consejo guardado exitosamente"
+                    council_form = CouncilForm()  # Reset form after success
+                else:
+                    error_message = "Error al guardar el consejo. Por favor revisa los campos."
+
+            elif 'submit_colony' in request.POST:
+                colony_form = ColonyForm(request.POST, request.FILES)
+                if colony_form.is_valid():
+                    colony_form.save()
+                    success_message = "Colonia guardada exitosamente"
+                    colony_form = ColonyForm()  # Reset form after success
+                else:
+                    error_message = "Error al guardar la colonia. Por favor revisa los campos."
+
+            elif 'submit_municipality' in request.POST:
+                municipality_form = MunicipalityForm(request.POST)
+                if municipality_form.is_valid():
+                    municipality_form.save()
+                    success_message = "Municipio guardado exitosamente"
+                    municipality_form = MunicipalityForm()  # Reset form after success
+                else:
+                    error_message = "Error al guardar el municipio. Por favor revisa los campos."
+
+            elif 'submit_zone' in request.POST:
+                zone_form = ZoneForm(request.POST)
+                if zone_form.is_valid():
+                    # Crear la zona manualmente ya que ZoneForm no es ModelForm
+                    Zone.objects.create(
+                        name=zone_form.cleaned_data['name']
+                    )
+                    success_message = "Zona guardada exitosamente"
+                    zone_form = ZoneForm()  # Reset form after success
+                else:
+                    error_message = "Error al guardar la zona. Por favor revisa los campos."
+
+            elif 'submit_location' in request.POST:
+                location_form = LocationForm(request.POST, request.FILES)
+                if location_form.is_valid():
+                    # Crear la ubicación manualmente ya que LocationForm no es ModelForm
+                    Location.objects.create(
+                        nombre=location_form.cleaned_data.get('nombre') or 'Ubicación sin nombre',
+                        address=location_form.cleaned_data['address'],
+                        description=location_form.cleaned_data.get('description', ''),
+                        municipality=location_form.cleaned_data['municipality'],
+                        latitude=location_form.cleaned_data.get('latitude'),
+                        longitude=location_form.cleaned_data.get('longitude'),
+                    )
+                    success_message = "Ubicación guardada exitosamente"
+                    location_form = LocationForm()  # Reset form after success
+                else:
+                    error_message = "Error al guardar la ubicación. Por favor revisa los campos."
+                    
+        except Exception as e:
+            error_message = f"Error inesperado: {str(e)}"
+
+    return render(request, 'formularios_multiples.html', {
+        'council_form': council_form,
+        'colony_form': colony_form,
+        'municipality_form': municipality_form,
+        'zone_form': zone_form,
+        'location_form': location_form,
+        'success_message': success_message,
+        'error_message': error_message,
+    })

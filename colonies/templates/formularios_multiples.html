@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/formularios_multiples.css' %}">
+
+<div class="forms-container">
+    {% if success_message %}
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            {{ success_message }}
+        </div>
+    {% endif %}
+    
+    {% if error_message %}
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            {{ error_message }}
+        </div>
+    {% endif %}
+    <div class="form-section">
+        <h2>Crear Consejo</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ council_form.as_p }}
+            <button type="submit" name="submit_council" class="btn-submit">Guardar Consejo</button>
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Crear Colonia</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ colony_form.as_p }}
+            <button type="submit" name="submit_colony" class="btn-submit">Guardar Colonia</button>
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Crear Municipio</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ municipality_form.as_p }}
+            <button type="submit" name="submit_municipality" class="btn-submit">Guardar Municipio</button>
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Crear Zona</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ zone_form.as_p }}
+            <button type="submit" name="submit_zone" class="btn-submit">Guardar Zona</button>
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h2>Crear Ubicación</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ location_form.as_p }}
+            <button type="submit" name="submit_location" class="btn-submit">Guardar Ubicación</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
