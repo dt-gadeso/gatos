@@ -6,46 +6,46 @@ import datetime
 
 class CreateCat(forms.Form):
     catname = forms.CharField(
-        label='Nombre',
+        label='Nombre del gato',
         max_length=50,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter cat name'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del gato'})
     )
     photo_file = forms.ImageField(
-        label='Foto',
+        label='Foto del gato',
         required=True,
         widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
     )
     chip = forms.CharField(
-        label='Numero de chip',
+        label='Número de chip',
         max_length=50,
         required=True,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter chip number'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Número de chip'})
     )
     birthday = forms.DateField(
-        label='Cumpleaños',
+        label='Fecha de nacimiento',
         required=True,
         widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
     )
     sex = forms.ChoiceField(
         label='Sexo',
-        choices=[('M', 'Male'), ('F', 'Female')],
-        widget=forms.Select(attrs={'class': 'form-select'})
+        choices=[('M', 'Macho'), ('F', 'Hembra')],
+        widget=forms.Select(attrs={'class': 'form-control form-select'})
     )
     sterilized = forms.ChoiceField(
         label='Esterilizado',
         choices=[(True, 'Sí'), (False, 'No')],
-        widget=forms.Select(attrs={'class': 'form-select'})
+        widget=forms.Select(attrs={'class': 'form-control form-select'})
     )
     dead = forms.ChoiceField(
         label='Estado del gato',
         choices=[(False, 'Vivo'), (True, 'Muerto')],
-        widget=forms.Select(attrs={'class': 'form-select'})
+        widget=forms.Select(attrs={'class': 'form-control form-select'})
     )
     colony = forms.ModelChoiceField(
         label='Colonia',
         queryset=Colony.objects.all(),
         empty_label="Selecciona una colonia",
-        widget=forms.Select(attrs={'class': 'form-select'})
+        widget=forms.Select(attrs={'class': 'form-control form-select'})
     )
 
     def __init__(self, *args, **kwargs):
@@ -77,20 +77,20 @@ class EditCat(forms.ModelForm):
         model = Cat
         fields = ['catname', 'photo_file', 'chip', 'birthday', 'sex', 'sterilized', 'dead', 'colony']
         widgets = {
-            'catname': forms.TextInput(attrs={'class': 'form-control'}),
+            'catname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del gato'}),
             'photo_file': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
-            'chip': forms.TextInput(attrs={'class': 'form-control'}),
+            'chip': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Número de chip'}),
             'birthday': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'sex': forms.Select(attrs={'class': 'form-select'}),
-            'sterilized': forms.Select(attrs={'class': 'form-select'}),
-            'dead': forms.Select(attrs={'class': 'form-select'}),
-            'colony': forms.Select(attrs={'class': 'form-select'}),
+            'sex': forms.Select(attrs={'class': 'form-control form-select'}),
+            'sterilized': forms.Select(attrs={'class': 'form-control form-select'}),
+            'dead': forms.Select(attrs={'class': 'form-control form-select'}),
+            'colony': forms.Select(attrs={'class': 'form-control form-select'}),
         }
         labels = {
-            'catname': 'Nombre',
-            'photo_file': 'Foto',
-            'chip': 'Numero de chip',
-            'birthday': 'Cumpleaños',
+            'catname': 'Nombre del gato',
+            'photo_file': 'Foto del gato',
+            'chip': 'Número de chip',
+            'birthday': 'Fecha de nacimiento',
             'sex': 'Sexo',
             'sterilized': 'Esterilizado',
             'dead': 'Estado del gato',

@@ -126,6 +126,9 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 MEDIA_URL = '/media/' # Define la URL base para acceder a los archivos guardados en MEDIA_ROOT
 MEDIA_ROOT = BASE_DIR / 'media' # Establece la carpeta donde se guardarán los archivos subidos
 

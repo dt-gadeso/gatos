@@ -1,21 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edita Gat</title>
-</head>
-<body>
-    {% extends 'base.html' %}
-    {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'styles/cats-clean.css' %}?v=4">
+    
+    <div class="search-form-container">
+        <h3>✏️ Editar Gato</h3>
+        
         {% if cat.photo_file %}
-            <img src="{{ cat.photo_file.url }}" alt="Foto actual del gato" style="max-width:200px;max-height:200px;">
+            <div class="current-photo">
+                <label>Foto actual:</label>
+                <img src="{{ cat.photo_file.url }}" alt="Foto actual del gato" class="current-cat-photo">
+            </div>
         {% endif %}
-        <form method="post" enctype="multipart/form-data">
+        
+        <form method="post" enctype="multipart/form-data" class="search-form">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Guardar</button>
+            
+            <div class="form-group">
+                <label for="{{ form.catname.id_for_label }}">{{ form.catname.label }}</label>
+                {{ form.catname }}
+                {% if form.catname.errors %}
+                    <div class="error-message">{{ form.catname.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.chip.id_for_label }}">{{ form.chip.label }}</label>
+                {{ form.chip }}
+                {% if form.chip.errors %}
+                    <div class="error-message">{{ form.chip.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.birthday.id_for_label }}">{{ form.birthday.label }}</label>
+                {{ form.birthday }}
+                {% if form.birthday.errors %}
+                    <div class="error-message">{{ form.birthday.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.sex.id_for_label }}">{{ form.sex.label }}</label>
+                {{ form.sex }}
+                {% if form.sex.errors %}
+                    <div class="error-message">{{ form.sex.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.sterilized.id_for_label }}">{{ form.sterilized.label }}</label>
+                {{ form.sterilized }}
+                {% if form.sterilized.errors %}
+                    <div class="error-message">{{ form.sterilized.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.colony.id_for_label }}">{{ form.colony.label }}</label>
+                {{ form.colony }}
+                {% if form.colony.errors %}
+                    <div class="error-message">{{ form.colony.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.dead.id_for_label }}">{{ form.dead.label }}</label>
+                {{ form.dead }}
+                {% if form.dead.errors %}
+                    <div class="error-message">{{ form.dead.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.photo_file.id_for_label }}">{{ form.photo_file.label }}</label>
+                {{ form.photo_file }}
+                <small class="form-text">Deja en blanco si no quieres cambiar la foto</small>
+                {% if form.photo_file.errors %}
+                    <div class="error-message">{{ form.photo_file.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Guardar Cambios
+                </button>
+                <button type="button" onclick="window.history.back()" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
         </form>
-    {% endblock %}
-</body>
-</html>
+    </div>
+    
+    <script src="{% static 'js/form-fix.js' %}"></script>
+    <script src="{% static 'js/select-fix.js' %}"></script>
+{% endblock %}

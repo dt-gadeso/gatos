@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'styles/cats.css' %}">
-    {% block content %}
-        <main>
+{% block content %}
+    <link rel="stylesheet" href="{% static 'styles/cats.css' %}?v=3">
+    <main>
             <div>
                 <h2>¡Hola!</h2>
                 <p>Esta es la página principal de Mishilovers.</p>
@@ -20,38 +20,54 @@
                     <i class="fas fa-chart-bar"></i> Ver contador de esterilizaciones
                 </a>
             </div>
-            <form action="{% url 'searchEditCat' %}" method="get" style="display:inline;">
-                <input type="text" name="catname" placeholder="Nombre del gato">
-                <select name="colony">
-                    <option value="">Colonia</option>
-                    {# Mostrar todas las colonias sin filtrar por usuario #}
-                    {% for colony in colonies.all %}
-                        <option value="{{ colony.id }}">{{ colony.name }}</option>
-                    {% empty %}
-                        <option value="">No hay colonias</option>
-                    {% endfor %}
-                </select>
-
-                <select name="sex">
-                    <option value="">Sexo</option>
-                    <option value="M">Macho</option>
-                    <option value="F">Hembra</option>
-                </select>
-
-                <select name="sterilized">
-                    <option value="">¿Esterilizado?</option>
-                    <option value="true">Sí</option>
-                    <option value="false">No</option>
-                </select>
-
-                <select name="dead">
-                    <option value="">¿Muerto?</option>
-                    <option value="true">Sí</option>
-                    <option value="false">No</option>
-                </select>
-
-                <button type="submit">Buscar gato</button>
-            </form>
+            <div class="search-form-container">
+                <h3>Buscar Gatos</h3>
+                <form action="{% url 'searchEditCat' %}" method="get" class="search-form">
+                    <div class="form-group">
+                        <label for="catname">Nombre del gato</label>
+                        <input type="text" id="catname" name="catname" placeholder="Nombre del gato" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="colony">Colonia</label>
+                        <select id="colony" name="colony" class="form-control">
+                            <option value="">Seleccionar colonia</option>
+                            {# Mostrar todas las colonias sin filtrar por usuario #}
+                            {% for colony in colonies.all %}
+                                <option value="{{ colony.id }}">{{ colony.name }}</option>
+                            {% empty %}
+                                <option value="">No hay colonias</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sex">Sexo</label>
+                        <select id="sex" name="sex" class="form-control">
+                            <option value="">Seleccionar sexo</option>
+                            <option value="M">Macho</option>
+                            <option value="F">Hembra</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sterilized">¿Esterilizado?</label>
+                        <select id="sterilized" name="sterilized" class="form-control">
+                            <option value="">Seleccionar estado</option>
+                            <option value="true">Sí</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dead">Estado</label>
+                        <select id="dead" name="dead" class="form-control">
+                            <option value="">Seleccionar estado</option>
+                            <option value="false">Vivo</option>
+                            <option value="true">Fallecido</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn">Buscar gatos</button>
+                    </div>
+                </form>
+            </div>
         </main>
     {% endblock %}
 <script src="{% static 'js/cats.js' %}"></script>

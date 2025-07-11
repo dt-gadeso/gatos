@@ -14,10 +14,11 @@ urlpatterns = [
     path('users/', include('users.urls'), name='users'),
     # Catch-all pattern para URLs no encontradas
     re_path(r'^.*/$', custom_404, name='catch_all'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
 
 # Handler para error 404
 handler404 = 'home.views.custom_404'
 
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
