@@ -18,3 +18,5 @@ urlpatterns = [
     path('incident_search_result/', views.searchIncidents, name='incident_search_result'),
     path('formularios_multiples/', views.multi_form_view, name='multi_forms'),
 ]
+
+handler404 = 'colonies.views.mi_error_404'

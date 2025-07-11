@@ -5,6 +5,23 @@ import json
 from .models import Municipality, Location, Zone, Council, Incident, Colony
 from .form import LocationForm, MunicipalityForm, ZoneForm, CouncilForm, ColonyForm, EditIncident, IncidentForm
 from django.contrib.auth.decorators import login_required
+from django.views.defaults import page_not_found
+
+def mi_error_404(request, exception):
+    path = request.path
+
+    if path.startswith('/colonies/municipality'):
+        return render(request, 'municipality.html', status=404)
+    elif path.startswith('/colonies/formularios_multiples'):
+        return render(request, 'formularios_multiples.html', status=404)
+    elif path.startswith('/colonies/formNewIncident'):
+        return render(request, 'formNewIncident.html', status=404)
+    elif path.startswith('/colonies/incident_search_result'):
+        return render(request, 'incident_search_result.html', status=404)
+    elif path.startswith('/colonies/formEditIncident'):
+        return render(request, 'formEditIncident.html', status=404)
+    else:
+        return render(request, 'municipality.html', status=404)
 
 # Vista principal que muestra las ubicaciones, municipios y zonas
 def colonies_view(request):

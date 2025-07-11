@@ -13,8 +13,12 @@
                 <p>Amamos a los gatos y compartimos fotos, historias y consejos para cuidarlos.</p>
             </section>
             <div class="actions">
-                <a href="/cats/formNewCat" class="btn btn-primary">Crear gatos</a>
-                <a href="{% url 'sterilized_counter' %}" class="btn btn-info">Ver contador de esterilizaciones</a>
+                <a href="/cats/formNewCat" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Crear gatos
+                </a>
+                <a href="{% url 'sterilized_counter' %}" class="btn btn-info">
+                    <i class="fas fa-chart-bar"></i> Ver contador de esterilizaciones
+                </a>
             </div>
             <form action="{% url 'searchEditCat' %}" method="get" style="display:inline;">
                 <input type="text" name="catname" placeholder="Nombre del gato">

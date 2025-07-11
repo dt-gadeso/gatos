@@ -1,4 +1,4 @@
- body{
+body{
     background: linear-gradient(135deg, #f0f0f0 60%, #ffe4e1 100%);
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #333;
@@ -90,14 +90,13 @@ nav ul {
 
 nav li {
     margin: 0;
-    padding: 0;
+    padding: 0 30px;
     display: inline-block;
     font-size: 1.1em;
     font-weight: 500;
     line-height: 1.5;
     transition: color 0.2s;
     position: relative;
-    padding: 0 30px;
 }
 
 nav a {
@@ -107,9 +106,11 @@ nav a {
     font-weight: bold;
     transition: color 0.2s;
 }
+
 nav a:hover {
     color: #a0522d;
 }
+
 nav a.active {
     color: #a0522d;
     border-bottom: 2px solid #a0522d;
@@ -224,6 +225,139 @@ button {
     background: #ff9f4a !important;
 }
 
+.actions {
+    margin: 40px 0;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(255, 228, 225, 0.3) 0%, rgba(255, 209, 204, 0.3) 100%);
+    border-radius: 20px;
+    border: 1px solid rgba(210, 105, 30, 0.1);
+}
+
+.btn {
+    padding: 16px 32px;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+    min-width: 200px;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn i {
+    margin-right: 10px;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.btn:hover i {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #d2691e 0%, #ff8c42 50%, #ffb380 100%);
+    color: white;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    box-shadow: 
+        0 8px 25px rgba(210, 105, 30, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #b8541a 0%, #e6732a 50%, #ff9f4a 100%);
+    color: white;
+    text-decoration: none;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 12px 35px rgba(210, 105, 30, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #20c997 50%, #6ff6d7 100%);
+    color: white;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    box-shadow: 
+        0 8px 25px rgba(23, 162, 184, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #138496 0%, #1a9f7a 50%, #4dd4ac 100%);
+    color: white;
+    text-decoration: none;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 12px 35px rgba(23, 162, 184, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-info:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* Estilos para modo oscuro de los botones */
+.dark-mode .actions {
+    background: linear-gradient(135deg, rgba(42, 42, 42, 0.4) 0%, rgba(26, 26, 26, 0.4) 100%) !important;
+    border-color: rgba(255, 179, 128, 0.2) !important;
+}
+
+.dark-mode .btn-primary {
+    background: linear-gradient(135deg, #ffb380 0%, #ff9f4a 50%, #ff8c42 100%) !important;
+    color: #222 !important;
+}
+
+.dark-mode .btn-primary:hover {
+    background: linear-gradient(135deg, #ffd1cc 0%, #ffb380 50%, #ff9f4a 100%) !important;
+    color: #222 !important;
+}
+
+.dark-mode .btn-info {
+    background: linear-gradient(135deg, #6ff6d7 0%, #20c997 50%, #17a2b8 100%) !important;
+    color: #222 !important;
+}
+
+.dark-mode .btn-info:hover {
+    background: linear-gradient(135deg, #4dd4ac 0%, #1a9f7a 50%, #138496 100%) !important;
+    color: #222 !important;
+}
+
 @media (max-width: 700px) {
     main {
         max-width: 98vw;
@@ -246,6 +380,26 @@ button {
     nav li {
         padding: 0 15px;
         font-size: 1em;
+    }
+    
+    .actions {
+        flex-direction: column;
+        gap: 16px;
+        margin: 30px 0;
+        padding: 25px 15px;
+    }
+    
+    .btn {
+        text-align: center;
+        width: 100%;
+        min-width: auto;
+        padding: 18px 25px;
+        font-size: 17px;
+    }
+    
+    .btn i {
+        margin-right: 8px;
+        font-size: 19px;
     }
     
 }

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@fg*w66*vjqj4o!x0eg8+9#fgbe!0ttdzepy(*ckxn2fm-wt(j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # Permitir todos los hosts para evitar errores 404 por host no permitido
 
 
 # Application definition
@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'mishi.middleware.Custom404Middleware',  # Middleware personalizado para 404
 ]
 
 ROOT_URLCONF = 'mishi.urls'
