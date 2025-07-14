@@ -2,88 +2,89 @@
 {% load static %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'styles/cats-clean.css' %}?v=4">
+    <link rel="stylesheet" href="{% static 'styles/cats-clean.css' %}?v=6">
     
-    <div class="search-form-container">
-        <h3>🐱 Crear Nuevo Gato</h3>
-        <form method="post" enctype="multipart/form-data" class="search-form">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="{{ form.catname.id_for_label }}">{{ form.catname.label }}</label>
-                {{ form.catname }}
-                {% if form.catname.errors %}
-                    <div class="error-message">{{ form.catname.errors }}</div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.chip.id_for_label }}">{{ form.chip.label }}</label>
-                {{ form.chip }}
-                {% if form.chip.errors %}
-                    <div class="error-message">{{ form.chip.errors }}</div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.birthday.id_for_label }}">{{ form.birthday.label }}</label>
-                {{ form.birthday }}
-                {% if form.birthday.errors %}
-                    <div class="error-message">{{ form.birthday.errors }}</div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.sex.id_for_label }}">{{ form.sex.label }}</label>
-                {{ form.sex }}
-                {% if form.sex.errors %}
-                    <div class="error-message">{{ form.sex.errors }}</div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.sterilized.id_for_label }}">{{ form.sterilized.label }}</label>
-                {{ form.sterilized }}
-                {% if form.sterilized.errors %}
-                    <div class="error-message">{{ form.sterilized.errors }}</div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.colony.id_for_label }}">{{ form.colony.label }}</label>
-                {{ form.colony }}
-                {% if form.colony.errors %}
-                    <div class="error-message">{{ form.colony.errors }}</div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.dead.id_for_label }}">{{ form.dead.label }}</label>
-                {{ form.dead }}
-                {% if form.dead.errors %}
-                    <div class="error-message">{{ form.dead.errors }}</div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.photo_file.id_for_label }}">{{ form.photo_file.label }}</label>
-                {{ form.photo_file }}
-                {% if form.photo_file.errors %}
-                    <div class="error-message">{{ form.photo_file.errors }}</div>
-                {% endif %}
-            </div>
-            
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Guardar Gato
-                </button>
-                <button type="button" onclick="window.history.back()" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Cancelar
-                </button>
-            </div>
-        </form>
-    </div>
+    <main>
+        <div class="search-form-container">
+            <h3>🐱 Crear Nuevo Gato</h3>
+            <form method="post" enctype="multipart/form-data" class="search-form">
+                {% csrf_token %}
+                
+                <div class="form-group" data-tooltip="Ingresa el nombre del gato">
+                    <label for="{{ form.catname.id_for_label }}">{{ form.catname.label }}</label>
+                    {{ form.catname }}
+                    {% if form.catname.errors %}
+                        <div class="error-message">{{ form.catname.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group" data-tooltip="Número de chip de identificación">
+                    <label for="{{ form.chip.id_for_label }}">{{ form.chip.label }}</label>
+                    {{ form.chip }}
+                    {% if form.chip.errors %}
+                        <div class="error-message">{{ form.chip.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group" data-tooltip="Fecha de nacimiento estimada">
+                    <label for="{{ form.birthday.id_for_label }}">{{ form.birthday.label }}</label>
+                    {{ form.birthday }}
+                    {% if form.birthday.errors %}
+                        <div class="error-message">{{ form.birthday.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group" data-tooltip="Selecciona el sexo del gato">
+                    <label for="{{ form.sex.id_for_label }}">{{ form.sex.label }}</label>
+                    {{ form.sex }}
+                    {% if form.sex.errors %}
+                        <div class="error-message">{{ form.sex.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group" data-tooltip="¿El gato está esterilizado?">
+                    <label for="{{ form.sterilized.id_for_label }}">{{ form.sterilized.label }}</label>
+                    {{ form.sterilized }}
+                    {% if form.sterilized.errors %}
+                        <div class="error-message">{{ form.sterilized.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group" data-tooltip="Selecciona la colonia donde vive">
+                    <label for="{{ form.colony.id_for_label }}">{{ form.colony.label }}</label>
+                    {{ form.colony }}
+                    {% if form.colony.errors %}
+                        <div class="error-message">{{ form.colony.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group" data-tooltip="Estado actual del gato">
+                    <label for="{{ form.dead.id_for_label }}">{{ form.dead.label }}</label>
+                    {{ form.dead }}
+                    {% if form.dead.errors %}
+                        <div class="error-message">{{ form.dead.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group" data-tooltip="Arrastra una foto o haz clic para seleccionar">
+                    <label for="{{ form.photo_file.id_for_label }}">{{ form.photo_file.label }}</label>
+                    {{ form.photo_file }}
+                    {% if form.photo_file.errors %}
+                        <div class="error-message">{{ form.photo_file.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Gato
+                    </button>
+                    <button type="button" onclick="window.history.back()" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
     
-    <script src="{% static 'js/form-fix.js' %}"></script>
-    <script src="{% static 'js/select-fix.js' %}"></script>
+    <script src="{% static 'js/form-enhanced.js' %}"></script>
 {% endblock %}

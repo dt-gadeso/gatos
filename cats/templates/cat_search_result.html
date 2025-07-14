@@ -1,133 +1,335 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'styles/cats-clean.css' %}">
 <style>
-    body, .dark-bg {
-        background: #181a1b;
-        color: #f1f1f1;
+    .search-results-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        min-height: 100vh;
     }
-    .cat-search-container {
-        margin: 2rem auto;
-        max-width: 700px;
-        background: #23272b;
+
+    .search-header {
+        text-align: center;
+        margin-bottom: 40px;
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e0e0e0;
+    }
+
+    .search-title {
+        color: #2c3e50;
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #d2691e 0%, #ff8c42 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .search-query {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 20px;
         border-radius: 12px;
-        box-shadow: 0 2px 16px #1118;
-        padding: 2rem;
+        border: 1px solid #dee2e6;
+        margin-bottom: 20px;
     }
-    .cat-search-title {
-        text-align: center;
-        color: #90caf9;
-        margin-bottom: 1rem;
+
+    .search-query p {
+        margin: 0;
+        color: #6c757d;
+        font-size: 1.1rem;
+        line-height: 1.6;
     }
-    .cat-search-query {
-        text-align: center;
-        color: #bdbdbd;
-        margin-bottom: 2rem;
+
+    .search-query strong {
+        color: #d2691e;
+        font-weight: 700;
     }
-    .cat-search-list {
+
+    .search-stats {
         display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
         justify-content: center;
+        gap: 20px;
+        margin-bottom: 30px;
     }
-    .cat-search-card {
-        border: 1px solid #333;
-        border-radius: 10px;
-        padding: 1rem;
-        width: 250px;
-        background: #22292f;
-        box-shadow: 0 2px 8px #0006;
-        transition: transform 0.15s;
+
+    .stat-badge {
+        background: linear-gradient(135deg, #d2691e 0%, #ff8c42 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3);
+        font-size: 1.1rem;
     }
-    .cat-search-card:hover {
-        transform: translateY(-4px) scale(1.03);
-        border-color: #90caf9;
+
+    .cats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
     }
-    .cat-search-card h3 {
-        text-align: center;
-        color: #fff;
+
+    .cat-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid #f0f0f0;
+        position: relative;
     }
-    .cat-search-card img {
-        display: block;
-        margin: 0 auto 1rem auto;
-        max-width: 180px;
-        max-height: 180px;
-        border-radius: 8px;
-        background: #111;
+
+    .cat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        border-color: #d2691e;
     }
-    .cat-search-card .no-photo {
-        width: 180px;
-        height: 180px;
-        background: #333;
+
+    .cat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #d2691e 0%, #ff8c42 50%, #ffb380 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .cat-card:hover::before {
+        opacity: 1;
+    }
+
+    .cat-image-container {
+        position: relative;
+        height: 250px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 1rem auto;
-        border-radius: 8px;
-        color: #888;
+        overflow: hidden;
     }
-    .cat-search-card p {
-        color: #bdbdbd;
+
+    .cat-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
     }
-    .cat-search-card a {
-        display: block;
+
+    .cat-card:hover .cat-image {
+        transform: scale(1.05);
+    }
+
+    .no-photo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #adb5bd;
+        font-size: 1.2rem;
+        font-weight: 600;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 2px dashed #dee2e6;
+        border-radius: 12px;
+        width: 200px;
+        height: 200px;
+        margin: 25px auto;
+    }
+
+    .cat-info {
+        padding: 25px;
+    }
+
+    .cat-name {
+        color: #2c3e50;
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 15px;
         text-align: center;
-        margin-top: 1rem;
-        background: #1976d2;
-        color: #fff;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
+    }
+
+    .cat-details {
+        color: #6c757d;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .cat-details strong {
+        color: #495057;
+    }
+
+    .cat-actions {
+        text-align: center;
+    }
+
+    .edit-btn {
+        background: linear-gradient(135deg, #d2691e 0%, #ff8c42 100%);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 25px;
         text-decoration: none;
-        transition: background 0.2s;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3);
+        display: inline-block;
+        border: none;
+        cursor: pointer;
     }
-    .cat-search-card a:hover {
-        background: #1565c0;
+
+    .edit-btn:hover {
+        background: linear-gradient(135deg, #b8561a 0%, #e67a39 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(210, 105, 30, 0.4);
+        color: white;
+        text-decoration: none;
     }
-    .cat-search-back {
+
+    .no-results {
         text-align: center;
-        margin-top: 2rem;
+        padding: 80px 20px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e0e0e0;
     }
-    .cat-search-back a {
-        color: #90caf9;
-        text-decoration: underline;
+
+    .no-results h3 {
+        color: #6c757d;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    .no-results p {
+        color: #adb5bd;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+    }
+
+    .back-actions {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .back-btn {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        color: white;
+        padding: 15px 40px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        display: inline-block;
+        font-size: 1.1rem;
+    }
+
+    .back-btn:hover {
+        background: linear-gradient(135deg, #5a6268 0%, #3d4245 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+        .cats-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .search-stats {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .search-title {
+            font-size: 2rem;
+        }
+        
+        .search-results-container {
+            padding: 15px;
+        }
     }
 </style>
-<div class="cat-search-container dark-bg">
-    <h2 class="cat-search-title">Resultados de la búsqueda</h2>
-    <!-- <p class="cat-search-query">Nombre buscado: <strong>{{ query }}</strong></p> -->
-    <p class="cat-search-query">
-        {% if query %}Nombre: <strong>{{ query }}</strong><br>{% endif %}
-        {% if colony_id %}
-            {% for col in colonies %}
-                {% if col.id|stringformat:"s" == colony_id %}
-                    <p>Colonia: <strong>{{ col.name }}</strong></p>
+<div class="search-results-container">
+    <div class="search-header">
+        <h1 class="search-title">🔍 Resultados de Búsqueda</h1>
+        
+        <div class="search-query">
+            <p>
+                {% if query %}📝 Nombre: <strong>{{ query }}</strong><br>{% endif %}
+                {% if colony_id %}
+                    {% for col in colonies %}
+                        {% if col.id|stringformat:"s" == colony_id %}
+                            🏠 Colonia: <strong>{{ col.name }}</strong><br>
+                        {% endif %}
+                    {% endfor %}
                 {% endif %}
-            {% endfor %}
-        {% endif %}
-
-        {% if sex %}Sexo: <strong>{{ sex }}</strong><br>{% endif %}
-        {% if sterilized %}Esterilizado: <strong>{{ sterilized }}</strong><br>{% endif %}
-        {% if dead %}Muerto: <strong>{{ dead }}</strong><br>{% endif %}
-    </p>
-
-    <div class="cat-search-list">
-        {% for cat in cats %}
-        <div class="cat-search-card">
-            <h3>{{ cat.catname }}</h3>
-            {% if cat.photo_file %}
-                <img src="{{ cat.photo_file.url }}" alt="Foto de {{ cat.catname }}">
-            {% else %}
-                <div class="no-photo">Sin foto</div>
-            {% endif %}
-            <p><strong>Colonia:</strong> {{ cat.colony.name }}</p>
-            <a href="{% url 'formEditCat' cat.chip %}">Editar este gato</a>
+                {% if sex %}⚥ Sexo: <strong>{% if sex == 'M' %}Macho{% else %}Hembra{% endif %}</strong><br>{% endif %}
+                {% if sterilized %}✂️ Esterilizado: <strong>{% if sterilized == 'true' %}Sí{% else %}No{% endif %}</strong><br>{% endif %}
+                {% if dead %}💔 Estado: <strong>{% if dead == 'true' %}Fallecido{% else %}Vivo{% endif %}</strong><br>{% endif %}
+            </p>
         </div>
-        {% empty %}
-        <p>No se encontraron gatos.</p>
-        {% endfor %}
+        
+        <div class="search-stats">
+            <div class="stat-badge">{{ cats|length }} gato{{ cats|length|pluralize }} encontrado{{ cats|length|pluralize }}</div>
+        </div>
     </div>
-    <div class="cat-search-back">
-        <a href="{% url 'cats' %}">Volver a la página principal</a>
+
+    {% if cats %}
+        <div class="cats-grid">
+            {% for cat in cats %}
+                <div class="cat-card">
+                    <div class="cat-image-container">
+                        {% if cat.photo_file %}
+                            <img src="{{ cat.photo_file.url }}" alt="Foto de {{ cat.catname }}" class="cat-image">
+                        {% else %}
+                            <div class="no-photo">
+                                <i class="fas fa-camera"></i>
+                                <span>Sin foto</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="cat-info">
+                        <h3 class="cat-name">{{ cat.catname }}</h3>
+                        <div class="cat-details">
+                            <p><strong>🏠 Colonia:</strong> {{ cat.colony.name }}</p>
+                            <p><strong>⚥ Sexo:</strong> {% if cat.sex == 'M' %}Macho{% else %}Hembra{% endif %}</p>
+                            <p><strong>✂️ Esterilizado:</strong> {% if cat.sterilized %}Sí{% else %}No{% endif %}</p>
+                            <p><strong>💔 Estado:</strong> {% if cat.dead %}Fallecido{% else %}Vivo{% endif %}</p>
+                        </div>
+                        
+                        <div class="cat-actions">
+                            <a href="{% url 'formEditCat' cat.chip %}" class="edit-btn">
+                                <i class="fas fa-edit"></i> Editar gato
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-results">
+            <h3>😿 No se encontraron gatos</h3>
+            <p>No hay gatos que coincidan con los criterios de búsqueda especificados.</p>
+            <p>Intenta modificar los filtros o realizar una nueva búsqueda.</p>
+        </div>
+    {% endif %}
+    
+    <div class="back-actions">
+        <a href="{% url 'cats' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Volver a búsqueda
+        </a>
     </div>
 </div>
 {% endblock %}

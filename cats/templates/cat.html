@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'styles/cats.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'styles/cats-clean.css' %}?v=6">
     <main>
             <div>
                 <h2>¡Hola!</h2>
@@ -21,13 +21,13 @@
                 </a>
             </div>
             <div class="search-form-container">
-                <h3>Buscar Gatos</h3>
+                <h3>🔍 Buscar Gatos</h3>
                 <form action="{% url 'searchEditCat' %}" method="get" class="search-form">
-                    <div class="form-group">
+                    <div class="form-group" data-tooltip="Ingresa el nombre del gato a buscar">
                         <label for="catname">Nombre del gato</label>
                         <input type="text" id="catname" name="catname" placeholder="Nombre del gato" class="form-control">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" data-tooltip="Selecciona la colonia donde buscar">
                         <label for="colony">Colonia</label>
                         <select id="colony" name="colony" class="form-control">
                             <option value="">Seleccionar colonia</option>
@@ -39,7 +39,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" data-tooltip="Filtrar por sexo del gato">
                         <label for="sex">Sexo</label>
                         <select id="sex" name="sex" class="form-control">
                             <option value="">Seleccionar sexo</option>
@@ -47,7 +47,7 @@
                             <option value="F">Hembra</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" data-tooltip="Filtrar por estado de esterilización">
                         <label for="sterilized">¿Esterilizado?</label>
                         <select id="sterilized" name="sterilized" class="form-control">
                             <option value="">Seleccionar estado</option>
@@ -55,7 +55,7 @@
                             <option value="false">No</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" data-tooltip="Filtrar por estado de vida">
                         <label for="dead">Estado</label>
                         <select id="dead" name="dead" class="form-control">
                             <option value="">Seleccionar estado</option>
@@ -64,10 +64,14 @@
                         </select>
                     </div>
                     <div class="form-actions">
-                        <button type="submit" class="btn">Buscar gatos</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Buscar gatos
+                        </button>
                     </div>
                 </form>
             </div>
         </main>
+    
+    <script src="{% static 'js/form-enhanced.js' %}"></script>
     {% endblock %}
 <script src="{% static 'js/cats.js' %}"></script>

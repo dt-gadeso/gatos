@@ -29,23 +29,23 @@ class CreateCat(forms.Form):
     sex = forms.ChoiceField(
         label='Sexo',
         choices=[('M', 'Macho'), ('F', 'Hembra')],
-        widget=forms.Select(attrs={'class': 'form-control form-select'})
+        widget=forms.Select(attrs={'class': 'form-control'})
     )
     sterilized = forms.ChoiceField(
         label='Esterilizado',
         choices=[(True, 'Sí'), (False, 'No')],
-        widget=forms.Select(attrs={'class': 'form-control form-select'})
+        widget=forms.Select(attrs={'class': 'form-control'})
     )
     dead = forms.ChoiceField(
         label='Estado del gato',
         choices=[(False, 'Vivo'), (True, 'Muerto')],
-        widget=forms.Select(attrs={'class': 'form-control form-select'})
+        widget=forms.Select(attrs={'class': 'form-control'})
     )
     colony = forms.ModelChoiceField(
         label='Colonia',
         queryset=Colony.objects.all(),
         empty_label="Selecciona una colonia",
-        widget=forms.Select(attrs={'class': 'form-control form-select'})
+        widget=forms.Select(attrs={'class': 'form-control'})
     )
 
     def __init__(self, *args, **kwargs):
