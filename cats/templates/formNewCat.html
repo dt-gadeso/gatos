@@ -7,6 +7,22 @@
     <main>
         <div class="search-form-container">
             <h3>🐱 Crear Nuevo Gato</h3>
+            
+            <!-- Mostrar errores generales -->
+            {% if error %}
+                <div class="alert alert-danger" style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; margin: 20px 0; border-radius: 4px;">
+                    <strong>Error:</strong> {{ error }}
+                </div>
+            {% endif %}
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; margin: 20px 0; border-radius: 4px;">
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
             <form method="post" enctype="multipart/form-data" class="search-form">
                 {% csrf_token %}
                 
@@ -14,7 +30,11 @@
                     <label for="{{ form.catname.id_for_label }}">{{ form.catname.label }}</label>
                     {{ form.catname }}
                     {% if form.catname.errors %}
-                        <div class="error-message">{{ form.catname.errors }}</div>
+                        <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                            {% for error in form.catname.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 
@@ -22,7 +42,11 @@
                     <label for="{{ form.chip.id_for_label }}">{{ form.chip.label }}</label>
                     {{ form.chip }}
                     {% if form.chip.errors %}
-                        <div class="error-message">{{ form.chip.errors }}</div>
+                        <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                            {% for error in form.chip.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 
@@ -30,7 +54,11 @@
                     <label for="{{ form.birthday.id_for_label }}">{{ form.birthday.label }}</label>
                     {{ form.birthday }}
                     {% if form.birthday.errors %}
-                        <div class="error-message">{{ form.birthday.errors }}</div>
+                        <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                            {% for error in form.birthday.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 
@@ -38,7 +66,11 @@
                     <label for="{{ form.sex.id_for_label }}">{{ form.sex.label }}</label>
                     {{ form.sex }}
                     {% if form.sex.errors %}
-                        <div class="error-message">{{ form.sex.errors }}</div>
+                        <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                            {% for error in form.sex.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 
@@ -46,7 +78,11 @@
                     <label for="{{ form.sterilized.id_for_label }}">{{ form.sterilized.label }}</label>
                     {{ form.sterilized }}
                     {% if form.sterilized.errors %}
-                        <div class="error-message">{{ form.sterilized.errors }}</div>
+                        <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                            {% for error in form.sterilized.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 
@@ -54,7 +90,11 @@
                     <label for="{{ form.colony.id_for_label }}">{{ form.colony.label }}</label>
                     {{ form.colony }}
                     {% if form.colony.errors %}
-                        <div class="error-message">{{ form.colony.errors }}</div>
+                        <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                            {% for error in form.colony.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 
@@ -62,7 +102,11 @@
                     <label for="{{ form.dead.id_for_label }}">{{ form.dead.label }}</label>
                     {{ form.dead }}
                     {% if form.dead.errors %}
-                        <div class="error-message">{{ form.dead.errors }}</div>
+                        <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                            {% for error in form.dead.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 
@@ -70,7 +114,11 @@
                     <label for="{{ form.photo_file.id_for_label }}">{{ form.photo_file.label }}</label>
                     {{ form.photo_file }}
                     {% if form.photo_file.errors %}
-                        <div class="error-message">{{ form.photo_file.errors }}</div>
+                        <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                            {% for error in form.photo_file.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 
@@ -86,5 +134,6 @@
         </div>
     </main>
     
-    <script src="{% static 'js/form-enhanced.js' %}"></script>
+    <!-- Script comentado temporalmente para evitar interferencia -->
+    <!-- <script src="{% static 'js/form-enhanced.js' %}"></script> -->
 {% endblock %}

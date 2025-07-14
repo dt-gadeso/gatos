@@ -33,12 +33,12 @@ class CreateCat(forms.Form):
     )
     sterilized = forms.ChoiceField(
         label='Esterilizado',
-        choices=[(True, 'Sí'), (False, 'No')],
+        choices=[('true', 'Sí'), ('false', 'No')],
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     dead = forms.ChoiceField(
         label='Estado del gato',
-        choices=[(False, 'Vivo'), (True, 'Muerto')],
+        choices=[('false', 'Vivo'), ('true', 'Muerto')],
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     colony = forms.ModelChoiceField(
@@ -47,6 +47,7 @@ class CreateCat(forms.Form):
         empty_label="Selecciona una colonia",
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+
 
     def __init__(self, *args, **kwargs):
         # Elimina el parámetro 'user' antes de llamar a super().__init__
@@ -61,6 +62,14 @@ class CreateCat(forms.Form):
             if len(catname) < 2:
                 raise ValidationError('Name must be at least 2 characters long.')
         return catname
+
+    def clean_chip(self):
+        chip = self.cleaned_data.get('chip')
+        if chip:
+            # Verificar que el chip no existe ya
+            if Cat.objects.filter(chip=chip).exists():
+                raise ValidationError('Ya existe un gato con este número de chip.')
+        return chip
 
     def clean_birthday(self):
         birthday = self.cleaned_data.get('birthday')
@@ -99,5 +108,45 @@ class EditCat(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.fields['colony'].queryset = Colony.objects.all()
+
+class SearchCatForm(forms.Form):
+    catname = forms.CharField(
+        label='Nombre del gato',
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Nombre del gato'
+        })
+    )
+    colony = forms.ModelChoiceField(
+        label='Colonia',
+        queryset=Colony.objects.all(),
+        required=False,
+        empty_label="Seleccionar colonia",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    sex = forms.ChoiceField(
+        label='Sexo',
+        choices=[('', 'Seleccionar sexo'), ('M', 'Macho'), ('F', 'Hembra')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    sterilized = forms.ChoiceField(
+        label='¿Esterilizado?',
+        choices=[('', 'Seleccionar estado'), ('true', 'Sí'), ('false', 'No')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    dead = forms.ChoiceField(
+        label='Estado',
+        choices=[('', 'Seleccionar estado'), ('false', 'Vivo'), ('true', 'Fallecido')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['colony'].queryset = Colony.objects.all()

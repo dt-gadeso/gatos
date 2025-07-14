@@ -31,8 +31,7 @@
                         <label for="colony">Colonia</label>
                         <select id="colony" name="colony" class="form-control">
                             <option value="">Seleccionar colonia</option>
-                            {# Mostrar todas las colonias sin filtrar por usuario #}
-                            {% for colony in colonies.all %}
+                            {% for colony in colonies %}
                                 <option value="{{ colony.id }}">{{ colony.name }}</option>
                             {% empty %}
                                 <option value="">No hay colonias</option>
@@ -72,6 +71,7 @@
             </div>
         </main>
     
-    <script src="{% static 'js/form-enhanced.js' %}"></script>
+    <!-- Scripts comentados temporalmente para evitar interferencia -->
+    <!-- <script src="{% static 'js/form-enhanced.js' %}"></script> -->
+    <!-- <script src="{% static 'js/cats.js' %}"></script> -->
     {% endblock %}
-<script src="{% static 'js/cats.js' %}"></script>
