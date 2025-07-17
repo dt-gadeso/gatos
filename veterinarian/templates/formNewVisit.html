@@ -2,35 +2,60 @@
 {% load static %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nueva Visita</title>
-</head>
-<body>
+<link rel="stylesheet" href="{% static 'styles/veterinarian.css' %}">
+
+<div class="form-container">
+    <h2>📅 Registrar Nueva Visita</h2>
+    
     {% if error %}
-        <div class="alert alert-danger">{{ error }}</div>
+        <div class="alert alert-error">
+            <span>⚠️</span>
+            <span>{{ error }}</span>
+        </div>
     {% endif %}
     
     {% if form_errors %}
-        <div class="alert alert-warning">
-            <ul>
-                {% for field, errors in form_errors.items %}
-                    {% for error in errors %}
-                        <li>{{ field }}: {{ error }}</li>
+        <div class="alert alert-error">
+            <span>⚠️</span>
+            <div>
+                <strong>Se encontraron los siguientes errores:</strong>
+                <ul style="margin-top: 10px;">
+                    {% for field, errors in form_errors.items %}
+                        {% for error in errors %}
+                            <li>{{ field }}: {{ error }}</li>
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
-            </ul>
+                </ul>
+            </div>
         </div>
     {% endif %}
 
     <form method="post" enctype="multipart/form-data" action="{% url 'formNewVisit' %}">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+                {% if field.help_text %}
+                    <small class="help-text">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <button type="submit" class="btn-primary">📅 Guardar Visita</button>
+            <button type="button" class="btn-management" onclick="window.location.href='/veterinarian/'" style="margin-left: 1rem;">
+                🔙 Cancelar
+            </button>
+        </div>
     </form>
-</body>
-</html>
+</div>
+
+<script src="{% static 'js/veterinarian.js' %}"></script>
 {% endblock %}

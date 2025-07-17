@@ -1,53 +1,80 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
-<style>
-    body, .dark-bg {
-        background: #181a1b;
-        color: #f1f1f1;
-    }
-    .vet-search-container {
-        margin: 2rem auto;
-        max-width: 1000px;
-        background: #23272b;
-        border-radius: 12px;
-        box-shadow: 0 2px 16px #1118;
-        padding: 2rem;
-    }
-    .vet-search-title {
-        text-align: center;
-        color: #90caf9;
-        margin-bottom: 1rem;
-    }
-    .vet-search-query {
-        text-align: center;
-        color: #bdbdbd;
-        margin-bottom: 2rem;
-    }
-    .vet-search-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-        justify-content: center;
-    }
-    .vet-search-card {
-        border: 1px solid #333;
-        border-radius: 10px;
-        padding: 1.5rem;
-        width: 300px;
-        background: #22292f;
-        box-shadow: 0 2px 8px #0006;
-        transition: transform 0.15s;
-    }
-    .vet-search-card:hover {
-        transform: translateY(-4px) scale(1.03);
-        border-color: #90caf9;
-    }
-    .vet-search-card h3 {
-        text-align: center;
-        color: #fff;
-        margin-bottom: 1rem;
-    }
+<link rel="stylesheet" href="{% static 'styles/veterinarian.css' %}">
+
+<div class="vet-search-container">
+    <h2 class="vet-search-title">🔍 Resultados de Búsqueda</h2>
+    
+    {% if search_query %}
+        <div class="vet-search-query">
+            <p><strong>Búsqueda:</strong> {{ search_query }}</p>
+        </div>
+    {% endif %}
+    
+    {% if vet_centers %}
+        <div class="vet-search-list">
+            {% for vet_center in vet_centers %}
+                <div class="vet-search-card">
+                    <h3>🏥 {{ vet_center.name }}</h3>
+                    
+                    {% if vet_center.location %}
+                        <p><strong>📍 Ubicación:</strong> 
+                            {% if vet_center.location.nombre %}
+                                {{ vet_center.location.nombre }} - {{ vet_center.location.address }}
+                            {% else %}
+                                {{ vet_center.location.address }}, {{ vet_center.location.municipality.name }}
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                    
+                    {% if vet_center.email %}
+                        <p><strong>📧 Email:</strong> {{ vet_center.email }}</p>
+                    {% endif %}
+                    
+                    {% if vet_center.phone %}
+                        <p><strong>📞 Teléfono:</strong> {{ vet_center.phone }}</p>
+                    {% endif %}
+                    
+                    {% if vet_center.description %}
+                        <p><strong>📝 Descripción:</strong> {{ vet_center.description }}</p>
+                    {% endif %}
+                    
+                    {% if vet_center.website %}
+                        <p><strong>🌐 Website:</strong> 
+                            <a href="{{ vet_center.website }}" target="_blank" style="color: #2e7d32; text-decoration: none;">
+                                Visitar sitio web
+                            </a>
+                        </p>
+                    {% endif %}
+                    
+                    {% if vet_center.specialties %}
+                        <p><strong>🩺 Especialidades:</strong> {{ vet_center.specialties }}</p>
+                    {% endif %}
+                    
+                    {% if vet_center.opening_hours %}
+                        <p><strong>🕒 Horarios:</strong> {{ vet_center.opening_hours }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <span>ℹ️</span>
+            <span>No se encontraron centros veterinarios que coincidan con tu búsqueda.</span>
+        </div>
+    {% endif %}
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <button type="button" class="btn-primary" onclick="window.location.href='/veterinarian/'">
+            🔙 Volver a la búsqueda
+        </button>
+    </div>
+</div>
+
+<script src="{% static 'js/veterinarian.js' %}"></script>
+{% endblock %}
     .vet-search-card .logo {
         display: block;
         margin: 0 auto 1rem auto;

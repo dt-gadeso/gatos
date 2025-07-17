@@ -33,8 +33,3 @@ function submitEditForm(event, catId) {
     }
     });
 }
-
-// function searchCats() {
-//     const search = document.getElementById('searchInput').value;
-//     window.location.href = `?q=${encodeURIComponent(search)}`;
-// }

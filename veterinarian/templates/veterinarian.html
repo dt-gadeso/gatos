@@ -1,14 +1,25 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-    <main>
-        <div>
-            <h2>Veterinarios</h2>
-            <p>Gestiona y busca centros veterinarios.</p>
-        </div>
-        <section>
-            <h3>Buscar Veterinarios</h3>
-            <form action="{% url 'search_vet_centers' %}" method="get" style="display:inline;">
-                <input type="text" name="name" placeholder="Nombre del centro veterinario" value="{{ request.GET.name }}">                    <select name="location">
+<link rel="stylesheet" href="{% static 'styles/veterinarian.css' %}">
+
+<div class="veterinarian-container">
+    <h2>🏥 Veterinarios</h2>
+    <p>Gestiona y busca centros veterinarios para el cuidado de nuestros felinos.</p>
+    
+    <section class="search-section">
+        <h3>🔍 Buscar Veterinarios</h3>
+        <div class="search-form-container">
+            <form action="{% url 'search_vet_centers' %}" method="get" class="search-form">
+                <div class="form-group">
+                    <label for="name">Nombre del centro veterinario</label>
+                    <input type="text" id="name" name="name" placeholder="Ingresa el nombre del centro" value="{{ request.GET.name }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">Ubicación</label>
+                    <select id="location" name="location">
                         <option value="">Seleccionar ubicación</option>
                         {% for location in locations %}
                             <option value="{{ location.id }}" {% if request.GET.location == location.id|stringformat:"s" %}selected{% endif %}>
@@ -19,19 +30,36 @@
                                 {% endif %}
                             </option>
                         {% empty %}
-                            <option value="">No hay ubicaciones</option>
+                            <option value="">No hay ubicaciones disponibles</option>
                         {% endfor %}
                     </select>
-
-                <input type="email" name="email" placeholder="Email del centro" value="{{ request.GET.email }}">
+                </div>
                 
-                <button type="submit">Buscar veterinario</button>
+                <div class="form-group">
+                    <label for="email">Email del centro</label>
+                    <input type="email" id="email" name="email" placeholder="contacto@veterinario.com" value="{{ request.GET.email }}">
+                </div>
+                
+                <button type="submit" class="btn-primary">🔍 Buscar veterinario</button>
             </form>
-            
-            <h3>Gestión</h3>
-            <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewVetCenter'">Guardar centro veterinario</button>
-            <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewAgreement'">Guardar acuerdo</button>
-            <button type="button" class="map-btn btn-danger" onclick="window.location.href='/veterinarian/formNewVisit'">Guardar visita</button>
-        </section>
-    </main>
+        </div>
+    </section>
+    
+    <section class="management-section">
+        <h3>⚙️ Gestión</h3>
+        <div class="management-buttons">
+            <button type="button" class="map-btn" onclick="window.location.href='/veterinarian/formNewVetCenter'">
+                🏥 Registrar centro veterinario
+            </button>
+            <button type="button" class="map-btn" onclick="window.location.href='/veterinarian/formNewAgreement'">
+                📋 Crear acuerdo
+            </button>
+            <button type="button" class="map-btn" onclick="window.location.href='/veterinarian/formNewVisit'">
+                📅 Registrar visita
+            </button>
+        </div>
+    </section>
+</div>
+
+<script src="{% static 'js/veterinarian.js' %}"></script>
 {% endblock %}

@@ -2,19 +2,44 @@
 {% load static %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nueva Localizacion</title>
-</head>
-<body>
+<link rel="stylesheet" href="{% static 'styles/veterinarian.css' %}">
+
+<div class="form-container">
+    <h2>🏥 Registrar Centro Veterinario</h2>
+    
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Guardar</button>
+        
+        {% if form.errors %}
+            <div class="alert alert-error">
+                <span>⚠️</span>
+                <span>Por favor corrige los errores a continuación:</span>
+            </div>
+        {% endif %}
+        
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <span class="error-message">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+                {% if field.help_text %}
+                    <small class="help-text">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <button type="submit" class="btn-primary">💾 Guardar Centro Veterinario</button>
+            <button type="button" class="btn-management" onclick="window.location.href='/veterinarian/'" style="margin-left: 1rem;">
+                🔙 Cancelar
+            </button>
+        </div>
     </form>
-</body>
-</html>
+</div>
+
+<script src="{% static 'js/veterinarian.js' %}"></script>
 {% endblock %}
