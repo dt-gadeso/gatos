@@ -1,6 +1,101 @@
 // JavaScript para mejorar la experiencia del usuario en el módulo veterinario
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Función para aplicar estilos adicionales de modo oscuro a elementos específicos
+    function applyDarkModeStyles() {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        const veterinarianContainer = document.querySelector('.veterinarian-container');
+        
+        if (!veterinarianContainer) return;
+        
+        // Aplicar estilos específicos para modo oscuro a contenedores
+        const sections = document.querySelectorAll('section');
+        const formContainers = document.querySelectorAll('.search-form-container, .form-container');
+        const cards = document.querySelectorAll('.vet-search-card');
+        const inputs = document.querySelectorAll('input, select, textarea');
+        
+        if (isDarkMode) {
+            // Contenedor principal
+            veterinarianContainer.style.background = 'linear-gradient(135deg, #1c1c1c 0%, #252525 100%)';
+            veterinarianContainer.style.boxShadow = '0 10px 40px rgba(0,0,0,0.5)';
+            veterinarianContainer.style.border = '1px solid rgba(76, 175, 80, 0.1)';
+            
+            // Secciones
+            sections.forEach(section => {
+                section.style.background = 'linear-gradient(135deg, #1c1c1c 0%, #252525 100%)';
+                section.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+                section.style.border = '1px solid rgba(76, 175, 80, 0.1)';
+            });
+            
+            // Formularios
+            formContainers.forEach(container => {
+                container.style.background = '#252525';
+                container.style.border = '1px solid #333333';
+            });
+            
+            // Tarjetas
+            cards.forEach(card => {
+                card.style.background = '#252525';
+                card.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+                card.style.border = '1px solid rgba(76, 175, 80, 0.1)';
+            });
+            
+            // Inputs y selects
+            inputs.forEach(input => {
+                input.style.background = '#2c2c2c';
+                input.style.color = '#f8f8f8';
+                input.style.borderColor = '#3d3d3d';
+            });
+        } else {
+            // Restaurar estilos en modo claro
+            veterinarianContainer.style.background = '';
+            veterinarianContainer.style.boxShadow = '';
+            veterinarianContainer.style.border = '';
+            
+            sections.forEach(section => {
+                section.style.background = '';
+                section.style.boxShadow = '';
+                section.style.border = '';
+            });
+            
+            formContainers.forEach(container => {
+                container.style.background = '';
+                container.style.border = '';
+            });
+            
+            cards.forEach(card => {
+                card.style.background = '';
+                card.style.boxShadow = '';
+                card.style.border = '';
+            });
+            
+            inputs.forEach(input => {
+                input.style.background = '';
+                input.style.color = '';
+                input.style.borderColor = '';
+            });
+        }
+    }
+    
+    // Aplicar estilos al cargar la página
+    applyDarkModeStyles();
+    
+    // Escuchar cambios en el modo oscuro
+    document.addEventListener('darkModeChange', function(e) {
+        applyDarkModeStyles();
+    });
+    
+    // También verificar periódicamente por cambios de clase en el body
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.attributeName === 'class') {
+                applyDarkModeStyles();
+            }
+        });
+    });
+    
+    observer.observe(document.body, { attributes: true });
+
     // Animación suave para los botones
     const buttons = document.querySelectorAll('.btn-primary, .map-btn, .btn-management');
     buttons.forEach(button => {
