@@ -30,11 +30,11 @@
         margin: 0.5rem 0;
     }
     .vet-search-card {
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
+        background: #ffffff;
+        border: 1px solid #e8f5e8;
         padding: 1.5rem;
         border-radius: 10px;
-        box-shadow: 0 4px 15px var(--shadow-light);
+        box-shadow: 0 4px 15px rgba(46, 125, 50, 0.08);
         transition: all 0.3s ease;
         margin-bottom: 1.5rem;
         display: flex;
@@ -42,71 +42,118 @@
         align-items: center;
         text-align: center;
     }
+    .vet-search-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 18px rgba(46, 125, 50, 0.12);
+    }
     .vet-search-card h3 {
-        color: var(--primary-color);
+        color: #2e7d32;
         margin-top: 0;
         margin-bottom: 1rem;
         padding-bottom: 0.5rem;
-        border-bottom: 2px solid var(--card-border);
+        border-bottom: 2px solid #c8e6c9;
         width: 100%;
     }
     .vet-search-card .vet-info {
-        background: var(--form-bg);
+        background: #f8f9fa;
         padding: 1.25rem;
         border-radius: 8px;
         margin-top: 1rem;
-        border: 1px solid var(--card-border);
+        border: 1px solid #e8f5e8;
         width: 100%;
         box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     }
-    .vet-search-card .vet-info strong {
+    .dark-mode .vet-search-card {
+        background: var(--card-bg);
+        border-color: var(--card-border);
+        box-shadow: 0 4px 15px var(--shadow-light);
+    }
+    .dark-mode .vet-search-card:hover {
+        box-shadow: 0 6px 18px var(--shadow-medium);
+    }
+    .dark-mode .vet-search-card h3 {
         color: var(--primary-color);
+        border-bottom-color: var(--card-border);
+    }
+    .dark-mode .vet-search-card .vet-info {
+        background: var(--form-bg);
+        border-color: var(--card-border);
+    }
+    .vet-search-card .vet-info strong {
+        color: #2e7d32;
     }
     .vet-search-card .info-row {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
         padding: 0.6rem 0;
-        border-bottom: 1px solid var(--card-border);
+        border-bottom: 1px solid #e8f5e8;
     }
     .vet-search-card .info-row:last-child {
         border-bottom: none;
     }
     .vet-search-card .info-row p {
         margin: 0;
+        color: #333;
     }
     .vet-search-card .info-row p:first-child {
         font-weight: 500;
         flex: 1;
         text-align: left;
+        color: #2e7d32;
     }
     .vet-search-card .info-row p:last-child {
         flex: 2;
         text-align: right;
+    }
+    .dark-mode .vet-search-card .vet-info strong {
+        color: var(--primary-color);
+    }
+    .dark-mode .vet-search-card .info-row {
+        border-bottom-color: var(--card-border);
+    }
+    .dark-mode .vet-search-card .info-row p {
+        color: var(--text-color);
+    }
+    .dark-mode .vet-search-card .info-row p:first-child {
+        color: var(--primary-color);
     }
     .vet-search-back {
         text-align: center;
         margin-top: 2rem;
     }
     .vet-search-back a {
-        color: var(--primary-color);
+        color: #2e7d32;
         text-decoration: underline;
     }
     .no-results {
         text-align: center;
-        color: var(--text-color);
+        color: #666;
         font-size: 1.1rem;
+        padding: 2rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 1px dashed #e8f5e8;
+    }
+    .dark-mode .vet-search-back a {
+        color: var(--primary-color);
+    }
+    .dark-mode .no-results {
+        color: var(--text-color);
+        background: var(--form-bg);
+        border-color: var(--card-border);
     }
     .vet-search-container {
-        background: var(--container-bg);
+        background: #ffffff;
         padding: 2.5rem;
         border-radius: 12px;
-        box-shadow: 0 5px 15px var(--shadow-light);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         max-width: 1200px;
         margin: 2rem auto;
+        border: 1px solid #e8f5e8;
     }
     .vet-search-title {
-        color: var(--primary-color);
+        color: #2e7d32;
         text-align: center;
         margin-bottom: 2rem;
         font-size: 1.8rem;
@@ -121,37 +168,63 @@
         transform: translateX(-50%);
         width: 100px;
         height: 3px;
-        background: var(--primary-color);
+        background: #2e7d32;
         border-radius: 2px;
     }
     .vet-search-query {
-        background: var(--form-bg);
+        background: #f8f9fa;
         padding: 1.2rem;
         border-radius: 10px;
         margin-bottom: 2.5rem;
-        border: 1px solid var(--form-border);
-        box-shadow: 0 2px 8px var(--shadow-light);
+        border: 1px solid #e8f5e8;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;
         gap: 1rem;
     }
     .vet-search-query p {
-        color: var(--text-color);
+        color: #333;
         margin: 0;
         padding: 0.5rem 1rem;
-        background: var(--card-bg);
+        background: #ffffff;
         border-radius: 6px;
-        border: 1px solid var(--card-border);
+        border: 1px solid #e8f5e8;
         flex: 1;
         min-width: 250px;
         text-align: center;
     }
     .vet-search-query strong {
-        color: var(--primary-color);
+        color: #2e7d32;
         display: block;
         margin-top: 0.3rem;
         font-size: 1.1rem;
+    }
+    
+    /* Modos oscuros */
+    .dark-mode .vet-search-container {
+        background: var(--container-bg);
+        box-shadow: 0 5px 15px var(--shadow-light);
+        border-color: var(--card-border);
+    }
+    .dark-mode .vet-search-title {
+        color: var(--primary-color);
+    }
+    .dark-mode .vet-search-title::after {
+        background: var(--primary-color);
+    }
+    .dark-mode .vet-search-query {
+        background: var(--form-bg);
+        border-color: var(--form-border);
+        box-shadow: 0 2px 8px var(--shadow-light);
+    }
+    .dark-mode .vet-search-query p {
+        color: var(--text-color);
+        background: var(--card-bg);
+        border-color: var(--card-border);
+    }
+    .dark-mode .vet-search-query strong {
+        color: var(--primary-color);
     }
     .vet-search-list {
         display: grid;
@@ -237,7 +310,7 @@
 <style>
     .btn-back {
         display: inline-block;
-        background-color: var(--primary-color);
+        background-color: #2e7d32;
         color: white !important;
         padding: 0.75rem 1.5rem;
         border-radius: 6px;
@@ -246,11 +319,19 @@
         transition: all 0.3s ease;
         border: none;
         cursor: pointer;
-        box-shadow: 0 2px 4px var(--shadow-light);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .btn-back:hover {
-        background-color: var(--primary-hover);
+        background-color: #1b5e20;
         transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    .dark-mode .btn-back {
+        background-color: var(--primary-color);
+        box-shadow: 0 2px 4px var(--shadow-light);
+    }
+    .dark-mode .btn-back:hover {
+        background-color: var(--primary-hover);
         box-shadow: 0 4px 8px var(--shadow-medium);
     }
 </style>

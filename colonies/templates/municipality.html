@@ -31,7 +31,6 @@
                 {% if user.is_superuser or user.role.name == "manager" %}
                 <form id="coordinates-form">
                     <div class="coordinates-input">
-                        <button type="button" id="load-markers" class="map-btn btn-info">Cargar Marcadores</button>
                         <button type="button" class="map-btn btn-danger" onclick="window.location.href='/colonies/formNewIncident'">Guardar incidencia</button>
                         <button type="button" class="map-btn btn-danger" onclick="window.location.href='/colonies/incident_search_result'">Buscar incidencia</button>
                         <button type="button" class="map-btn btn-danger" onclick="window.location.href='/colonies/formularios_multiples'">Crear</button>
