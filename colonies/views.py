@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .models import Municipality, Location, Zone, Council, Incident, Colony
-from .form import LocationForm, MunicipalityForm, ZoneForm, CouncilForm, ColonyForm, EditIncident, IncidentForm
+from .models import Municipality, Location, Zone, Incident, Colony
+from .form import LocationForm, MunicipalityForm, ZoneForm, ColonyForm, EditIncident, IncidentForm
 from django.contrib.auth.decorators import login_required
 from django.views.defaults import page_not_found
 
@@ -227,53 +227,6 @@ def location_detail(request, location_id):
     }
     return render(request, 'location.html', context)
 
-@csrf_exempt
-def save_council(request):
-    if request.method == 'GET':
-        return render(request, 'formNewCouncil.html', {'form': CouncilForm()})
-
-    elif request.method == 'POST':
-        is_ajax = False
-        try:
-            if request.content_type == 'application/json':
-                if not request.body:
-                    return JsonResponse({'success': False, 'error': 'Request body is empty'}, status=400)
-                data = json.loads(request.body)
-                is_ajax = True
-                files = None
-            else:
-                data = request.POST
-                files = request.FILES
-
-            form = CouncilForm(data, files)
-            if form.is_valid():
-                council = Council.objects.create(
-                    name=form.cleaned_data['name'],
-                    email=form.cleaned_data['email'],
-                    phone=form.cleaned_data['phone'],
-                    emergency_email=form.cleaned_data['emergency_email'],
-                    emergency_phone=form.cleaned_data['emergency_phone'],
-                    logo_file=form.cleaned_data['logo_file'],
-                    location=form.cleaned_data['location'],
-                )
-                if is_ajax:
-                    return JsonResponse({'success': True, 'message': 'Guardado exitosamente'})
-                return redirect('colonies')
-            else:
-                if is_ajax:
-                    return JsonResponse({'success': False, 'errors': form.errors}, status=400)
-                return render(request, 'formNewCouncil.html', {'form': form})
-
-        except json.JSONDecodeError:
-            return JsonResponse({'success': False, 'error': 'Formato JSON inválido'}, status=400)
-        except Exception as e:
-            if is_ajax:
-                return JsonResponse({'success': False, 'error': str(e)}, status=400)
-            return render(request, 'formNewCouncil.html', {'form': CouncilForm(), 'error': str(e)})
-
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
-
-
 def new_colony(request):
     if request.method == 'GET':
         form = ColonyForm()
@@ -387,7 +340,6 @@ def searchIncidents(request):
 @login_required
 def multi_form_view(request):
     # Inicializar todos los formularios
-    council_form = CouncilForm()
     colony_form = ColonyForm()
     municipality_form = MunicipalityForm()
     zone_form = ZoneForm()
@@ -398,25 +350,8 @@ def multi_form_view(request):
 
     if request.method == 'POST':
         try:
-            if 'submit_council' in request.POST:
-                council_form = CouncilForm(request.POST, request.FILES)
-                if council_form.is_valid():
-                    # Crear el consejo manualmente ya que CouncilForm no es ModelForm
-                    Council.objects.create(
-                        name=council_form.cleaned_data['name'],
-                        email=council_form.cleaned_data['email'],
-                        phone=council_form.cleaned_data['phone'],
-                        emergency_email=council_form.cleaned_data['emergency_email'],
-                        emergency_phone=council_form.cleaned_data['emergency_phone'],
-                        logo_file=council_form.cleaned_data.get('logo_file'),
-                        location=council_form.cleaned_data['location'],
-                    )
-                    success_message = "Consejo guardado exitosamente"
-                    council_form = CouncilForm()  # Reset form after success
-                else:
-                    error_message = "Error al guardar el consejo. Por favor revisa los campos."
 
-            elif 'submit_colony' in request.POST:
+            if 'submit_colony' in request.POST:
                 colony_form = ColonyForm(request.POST, request.FILES)
                 if colony_form.is_valid():
                     colony_form.save()
@@ -467,7 +402,6 @@ def multi_form_view(request):
             error_message = f"Error inesperado: {str(e)}"
 
     return render(request, 'formularios_multiples.html', {
-        'council_form': council_form,
         'colony_form': colony_form,
         'municipality_form': municipality_form,
         'zone_form': zone_form,

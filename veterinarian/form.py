@@ -1,8 +1,8 @@
 from django import forms
-from colonies.models import Municipality, Location, Council
+from colonies.models import Municipality, Location
 from users.models import User, Association
 from cats.models import Cat
-from .models import VetCenter, Agreement, Visit
+from .models import VetCenter, Visit
 from decimal import Decimal
 
 class VetCenterForm(forms.ModelForm):
@@ -42,49 +42,6 @@ class VetCenterForm(forms.ModelForm):
         else:
             from colonies.models import Location
             self.fields['location'].queryset = Location.objects.all()
-
-class AgreementForm(forms.ModelForm):
-    class Meta:
-        model = Agreement
-        fields = ['council', 'vet_center', 'association', 'week_days', 'week_cats', 'agreement_file']
-        widgets = {
-            'council': forms.Select(attrs={'class': 'form-control'}),
-            'vet_center': forms.Select(attrs={'class': 'form-control'}),
-            'association': forms.Select(attrs={'class': 'form-control'}),
-            'week_days': forms.NumberInput(attrs={'class': 'form-control'}),
-            'week_cats': forms.NumberInput(attrs={'class': 'form-control'}),
-            'agreement_file': forms.ClearableFileInput(attrs={'class': 'form-control'})
-        }
-        labels = {
-            'council': 'Ayuntamiento',
-            'vet_center': 'Centro veterinario',
-            'association': 'Asociación',
-            'week_days': 'Días por semana',
-            'week_cats': 'Gatos por semana',
-            'agreement_file': 'Archivo del acuerdo'
-        }
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
-        
-        if user and hasattr(user, 'association') and user.association:
-            self.fields['association'].initial = user.association
-            
-            self.fields['association'].widget.attrs['disabled'] = True
-            
-            existing_agreements = Agreement.objects.filter(
-                association=user.association
-            ).values_list('vet_center', flat=True)
-            
-            available_vet_centers = VetCenter.objects.exclude(id__in=existing_agreements)
-            self.fields['vet_center'].queryset = available_vet_centers
-            
-            if available_vet_centers.count() == 0:
-                self.fields['vet_center'].widget.attrs['disabled'] = True
-                self.fields['vet_center'].help_text = "No hay centros veterinarios disponibles para nuevos acuerdos."
-        else:
-            self.fields['vet_center'].queryset = VetCenter.objects.all()
 
 class VisitForm(forms.ModelForm):
     class Meta:
@@ -133,20 +90,17 @@ class VisitForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         if user and hasattr(user, 'association') and user.association:
-            vet_centers_with_agreements = VetCenter.objects.filter(
-                agreement__association=user.association
-            ).distinct()
+            # Ya no usamos agreements, así que mostramos todos los centros veterinarios
+            vet_centers = VetCenter.objects.all()
             
-            self.fields['vet_center'].queryset = vet_centers_with_agreements
+            self.fields['vet_center'].queryset = vet_centers
             
             self.fields['user'].initial = user
             
-            if vet_centers_with_agreements.count() == 1:
-                self.fields['vet_center'].initial = vet_centers_with_agreements.first()
-            elif vet_centers_with_agreements.count() == 0:
+            if vet_centers.count() == 0:
                 self.fields['vet_center'].queryset = VetCenter.objects.none()
                 self.fields['vet_center'].widget.attrs['disabled'] = True
-                self.fields['vet_center'].help_text = "No hay centros veterinarios disponibles para tu asociación."
+                self.fields['vet_center'].help_text = "No hay centros veterinarios disponibles."
             
             if hasattr(user, 'association') and user.association:
                 pass

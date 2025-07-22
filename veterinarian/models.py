@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
-from colonies.models import Municipality, Location, Council
+from colonies.models import Municipality, Location
 from users.models import Manager
 
 
@@ -19,21 +19,6 @@ class VetCenter(models.Model):
     
     class Meta:
         db_table = 'vet_centers'
-
-class Agreement(models.Model):
-    council = models.ForeignKey('colonies.Council', on_delete=models.CASCADE)
-    vet_center = models.ForeignKey(VetCenter, on_delete=models.CASCADE)
-    association = models.ForeignKey('users.Association', on_delete=models.CASCADE, null=True, blank=True)
-    week_days = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(7)]
-    )
-    week_cats = models.IntegerField(validators=[MinValueValidator(0)])
-    agreement_file = models.FileField(upload_to='veterinarian/field/agreements', null=True, blank=True) 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        db_table = 'agreements'
 
 
 class Visit(models.Model):

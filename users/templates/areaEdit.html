@@ -9,62 +9,269 @@
 
 {% block content %}
 <main class="staff-container mt-4">
-    <div class="staff-header">
-        <h1 class="staff-title">Editar Perfil</h1>
+    <div class="staff-header" style="text-align: center; margin-bottom: 2rem;">
+        <h1 class="staff-title" style="font-size: 2.2rem; color: var(--main-color, #d2691e); text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Editar Perfil</h1>
+        <div class="subtitle-divider" style="width: 80px; height: 3px; background: linear-gradient(to right, var(--main-color, #d2691e), var(--light-main-color, #ffe4e1)); margin: 12px auto;"></div>
     </div>
     
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card staff-form">
-                <div class="card-body">
+        <div class="col-md-10">
+            <div class="card staff-form" style="border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); border: none; background-color: var(--card-bg, #fff); color: var(--text-color, #333);">
+                <div class="card-body" style="padding: 30px;">
                     <form action="/users/areaEdit/" method="POST" enctype="multipart/form-data" id="edit-form">
                         {% csrf_token %}
                         {% if error %}
-                        <div class="alert alert-danger">{{ error }}</div>
+                        <div class="alert alert-danger" style="border-radius: 10px; border-left: 4px solid #721c24; background-color: var(--alert-danger-bg, #f8d7da); color: var(--alert-danger-text, #721c24);">{{ error }}</div>
                         {% endif %}
 
                         {% if success %}
-                        <div class="alert alert-success">{{ success }}</div>
+                        <div class="alert alert-success" style="border-radius: 10px; border-left: 4px solid #155724; background-color: var(--alert-success-bg, #d4edda); color: var(--alert-success-text, #155724);">{{ success }}</div>
                         {% endif %}
+                        
+                        <div style="background-color: var(--section-bg, #f9f9f9); border-radius: 12px; padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--main-color, #d2691e);">
+                            <h4 style="color: var(--main-color, #d2691e); margin-bottom: 20px; font-weight: 600;">Información Personal</h4>
 
                         <div class="form-group">
                             {{ form.username.label_tag }}
-                            {{ form.username }}
+                            {{ form.username|safe }}
+                            <style>
+                                #id_username {
+                                    width: 100%;
+                                    padding: 12px 15px;
+                                    border: 2px solid var(--input-border, #e9ecef);
+                                    border-radius: 10px;
+                                    font-size: 15px;
+                                    transition: all 0.3s;
+                                    background-color: var(--input-bg, #fff);
+                                    color: var(--input-text, #333);
+                                }
+                                #id_username:focus {
+                                    border-color: var(--main-color, #d2691e);
+                                    box-shadow: 0 0 0 3px var(--main-color-shadow, rgba(210, 105, 30, 0.2));
+                                    outline: none;
+                                }
+                                .dark-mode #id_username {
+                                    background-color: #333;
+                                    color: #f1f1f1;
+                                    border-color: #444;
+                                }
+                            </style>
                         </div>
                         
                         <div class="form-group">
                             {{ form.email.label_tag }}
-                            {{ form.email }}
+                            {{ form.email|safe }}
+                            <style>
+                                #id_email {
+                                    width: 100%;
+                                    padding: 12px 15px;
+                                    border: 2px solid var(--input-border, #e9ecef);
+                                    border-radius: 10px;
+                                    font-size: 15px;
+                                    transition: all 0.3s;
+                                    background-color: var(--input-bg, #fff);
+                                    color: var(--input-text, #333);
+                                }
+                                #id_email:focus {
+                                    border-color: var(--main-color, #d2691e);
+                                    box-shadow: 0 0 0 3px var(--main-color-shadow, rgba(210, 105, 30, 0.2));
+                                    outline: none;
+                                }
+                                .dark-mode #id_email {
+                                    background-color: #333;
+                                    color: #f1f1f1;
+                                    border-color: #444;
+                                }
+                            </style>
                         </div>
                         
                         <div class="form-group">
-                            {{ form.avatar_file.label_tag }}
-                            {{ form.avatar_file }}
+                            <label for="{{ form.avatar_file.id_for_label }}" style="display: block; margin-bottom: 8px; font-weight: 600;">Imagen de perfil</label>
+                            <div class="custom-file-upload" style="position: relative; display: inline-block;">
+                                {{ form.avatar_file|safe }}
+                                <style>
+                                    #id_avatar_file {
+                                        padding: 12px 15px;
+                                        border: 2px solid var(--input-border, #e9ecef);
+                                        border-radius: 10px;
+                                        font-size: 14px;
+                                        width: 100%;
+                                        background-color: var(--input-bg-light, #f8f9fa);
+                                        color: var(--input-text, #333);
+                                        transition: all 0.3s;
+                                    }
+                                    #id_avatar_file:hover {
+                                        background-color: var(--input-bg-hover, #f1f3f5);
+                                        border-color: var(--main-color, #d2691e);
+                                    }
+                                    .dark-mode #id_avatar_file {
+                                        background-color: #333;
+                                        color: #f1f1f1;
+                                        border-color: #444;
+                                    }
+                                    .dark-mode #id_avatar_file:hover {
+                                        background-color: #444;
+                                    }
+                                </style>
+                            </div>
                         </div>
                         
                         <div class="form-group">
                             {{ form.carnet_gatos.label_tag }}
-                            {{ form.carnet_gatos }}
+                            {{ form.carnet_gatos|safe }}
+                            <style>
+                                #id_carnet_gatos {
+                                    width: 100%;
+                                    padding: 12px 15px;
+                                    border: 2px solid var(--input-border, #e9ecef);
+                                    border-radius: 10px;
+                                    font-size: 15px;
+                                    transition: all 0.3s;
+                                    background-color: var(--input-bg, #fff);
+                                    color: var(--input-text, #333);
+                                }
+                                #id_carnet_gatos:focus {
+                                    border-color: var(--main-color, #d2691e);
+                                    box-shadow: 0 0 0 3px var(--main-color-shadow, rgba(210, 105, 30, 0.2));
+                                    outline: none;
+                                }
+                                .dark-mode #id_carnet_gatos {
+                                    background-color: #333;
+                                    color: #f1f1f1;
+                                    border-color: #444;
+                                }
+                            </style>
+                        </div>
                         </div>
                         
-                        <hr>
-                        <h4>Configuración Casa de Acogida</h4>
-                        
-                        <div class="form-group">
-                            {{ form.casa_acogida.label_tag }}
-                            {{ form.casa_acogida }}
+                        <!-- Tu Rol -->
+                        <div style="background-color: var(--section-bg, #f5f5f5); border-radius: 12px; padding: 20px; margin: 30px 0; border-left: 4px solid var(--secondary-color, #4a86e8);">
+                        <h4 style="color: var(--secondary-color, #4a86e8); margin-bottom: 20px; font-weight: 600;">Tu Rol</h4>
+                        {% if user.is_superuser %}
+                        <div class="admin-actions mb-4" style="text-align: center;">
+                            <a href="{% url 'assign_role' %}" class="btn btn-primary" style="background: linear-gradient(135deg, var(--secondary-color, #4a86e8), var(--secondary-color-dark, #2a56b8)); border: none; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 8px var(--secondary-color-shadow, rgba(74, 134, 232, 0.3)); transition: all 0.3s; color: var(--btn-text, white);">
+                                <i class="fas fa-user-cog"></i> Panel De Control Roles
+                            </a>
+                        </div>
+                        {% endif %}
+                        <div class="current-roles mb-4">
+                            <h5 style="color: var(--heading-color, #555); font-weight: 500; font-size: 1.1rem; margin-bottom: 15px;">Mis Roles Actuales</h5>
+                            {% if user.role %}
+                            <div class="role-badges" style="text-align: center;">
+                                <span class="badge badge-primary role-badge" style="background: linear-gradient(135deg, var(--secondary-color, #4a86e8), var(--secondary-color-dark, #2a56b8)); padding: 8px 16px; border-radius: 50px; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); color: white;">{{ user.role.name }}</span>
+                            </div>
+                            {% else %}
+                            <p class="text-muted" style="font-style: italic; padding: 10px; background-color: var(--muted-bg, #f9f9f9); border-radius: 8px; color: var(--muted-text, #6c757d);">No tienes roles asignados.</p>
+                            {% endif %}
                         </div>
                         
-                        <div class="form-group" id="tiene-relevo-div">
-                            {{ form.tiene_relevo.label_tag }}
-                            {{ form.tiene_relevo }}
+                        <!-- All Roles Table -->
+                        <div class="all-roles">
+                            <h5 style="color: var(--heading-color, #555); font-weight: 500; font-size: 1.1rem; margin-bottom: 10px;">Todos los Roles Existentes</h5>
+                            <p style="margin-bottom: 15px;"><strong>Roles encontrados:</strong> <span style="background-color: var(--badge-bg, #e9ecef); padding: 3px 8px; border-radius: 50px; font-size: 14px; color: var(--badge-text, inherit);">{{ roles|length }}</span></p>
+                            {% if roles %}
+                                <div class="table-responsive">
+                                    <table class="table" style="border-collapse: separate; border-spacing: 0; width: 100%; box-shadow: 0 2px 15px var(--shadow-color, rgba(0,0,0,0.05)); border-radius: 12px; overflow: hidden;">
+                                        <thead style="background: linear-gradient(135deg, var(--secondary-color, #4a86e8), var(--secondary-color-dark, #2a56b8)); color: white;">
+                                            <tr>
+                                                <th style="padding: 15px; font-weight: 500;">Nombre del Rol</th>
+                                                <th style="padding: 15px; font-weight: 500;">Usuarios Asignados</th>
+                                                <th style="padding: 15px; font-weight: 500; text-align: center;">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for role in roles %}
+                                            <tr style="transition: background 0.3s; {% cycle '' 'background-color: var(--row-alt-bg, #f9f9f9);' %}">
+                                                <td style="padding: 15px; border-top: 1px solid var(--border-color, #eee);">
+                                                    <strong style="color: var(--secondary-color, #4a86e8); font-size: 15px;">{{ role.name }}</strong>
+                                                    {% if role.user_set.exists %}
+                                                        <br><small class="text-muted" style="font-style: italic; color: var(--muted-text, #6c757d);">
+                                                            {{ role.user_set.count }} usuario{{ role.user_set.count|pluralize }}
+                                                        </small>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="padding: 15px; border-top: 1px solid var(--border-color, #eee);">
+                                                    {% if role.user_set.exists %}
+                                                        {% for user in role.user_set.all %}
+                                                            <span class="user-tag" style="display: inline-block; margin: 2px; padding: 5px 10px; background-color: var(--tag-bg, #e9ecef); border-radius: 15px; font-size: 13px; color: var(--tag-text, inherit);">{{ user.username }}</span>
+                                                            {% if not forloop.last %}<br>{% endif %}
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <span class="text-muted" style="font-style: italic; color: var(--muted-text, #6c757d);">Sin usuarios asignados</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="padding: 15px; border-top: 1px solid var(--border-color, #eee); text-align: center;">
+                                                    <span class="badge badge-info" style="background-color: var(--secondary-color, #4a86e8); color: white; padding: 6px 12px; border-radius: 50px; font-weight: normal; font-size: 14px;">{{ role.user_set.count }}</span>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info" style="background-color: var(--alert-info-bg, #e1f5fe); color: var(--alert-info-text, #0288d1); border: none; border-radius: 10px; padding: 15px; border-left: 4px solid var(--alert-info-border, #0288d1);">
+                                    <i class="fas fa-info-circle"></i>
+                                    No hay roles disponibles en el sistema.
+                                </div>
+                            {% endif %}
+                        </div>
                         </div>
                         
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">
+                        <!-- Mis Asociaciones -->
+                        <div style="background-color: var(--section-bg, #f5f5f5); border-radius: 12px; padding: 20px; margin: 30px 0; border-left: 4px solid var(--tertiary-color, #28a745);">
+                        <h4 style="color: var(--tertiary-color, #28a745); margin-bottom: 20px; font-weight: 600;">Mis Asociaciones</h4>
+                        {% if user.is_superuser %}
+                        <div class="admin-actions mb-4" style="text-align: center;">
+                            <a href="{% url 'association_create' %}" class="btn btn-primary" style="background: linear-gradient(135deg, var(--tertiary-color, #28a745), var(--tertiary-color-dark, #218838)); border: none; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 8px var(--tertiary-color-shadow, rgba(40, 167, 69, 0.3)); transition: all 0.3s; color: var(--btn-text, white);">
+                                <i class="fas fa-user-cog"></i> Crear nueva Asociación
+                            </a>
+                        </div>
+                        {% endif %}
+                        
+                        {% if user.association %}
+                            <div class="association-badges" style="text-align: center; margin: 20px 0;">
+                                <span class="badge badge-primary association-badge" style="background: linear-gradient(135deg, var(--tertiary-color, #28a745), var(--tertiary-color-dark, #218838)); padding: 8px 16px; border-radius: 50px; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); color: white;">{{ user.association.name }}</span>
+                            </div>
+                        {% else %}
+                            <p class="text-muted" style="font-style: italic; padding: 10px; background-color: var(--muted-bg, #f9f9f9); border-radius: 8px; text-align: center; color: var(--muted-text, #6c757d);">No tienes asociaciones asignadas.</p>
+                        {% endif %}
+                        
+                        <div class="all-associations mt-4">
+                            <h5 style="color: var(--heading-color, #555); font-weight: 500; font-size: 1.1rem; margin-bottom: 10px;">Todas las Asociaciones Existentes</h5>
+                            <p style="margin-bottom: 15px;"><strong>Asociaciones encontradas:</strong> <span style="background-color: var(--badge-bg, #e9ecef); padding: 3px 8px; border-radius: 50px; font-size: 14px; color: var(--badge-text, inherit);">{{ associations|length }}</span></p>
+                            {% if associations %}
+                            <div class="table-responsive">
+                                <table class="table" style="border-collapse: separate; border-spacing: 0; width: 100%; box-shadow: 0 2px 15px var(--shadow-color, rgba(0,0,0,0.05)); border-radius: 12px; overflow: hidden;">
+                                    <thead style="background: linear-gradient(135deg, var(--tertiary-color, #28a745), var(--tertiary-color-dark, #218838)); color: white;">
+                                        <tr>
+                                            <th style="padding: 15px; font-weight: 500; text-align: center;">Nombre de la Asociación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for association in associations %}
+                                        <tr style="transition: background 0.3s; {% cycle '' 'background-color: var(--row-alt-bg, #f9f9f9);' %}">
+                                            <td class="text-center" style="padding: 15px; border-top: 1px solid var(--border-color, #eee);">
+                                                <strong style="color: var(--tertiary-color, #28a745); font-size: 15px;">{{ association.name }}</strong>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-info" style="background-color: var(--alert-info-bg, #e1f5fe); color: var(--alert-info-text, #0288d1); border: none; border-radius: 10px; padding: 15px; border-left: 4px solid var(--alert-info-border, #0288d1);">
+                                <i class="fas fa-info-circle"></i>
+                                No hay asociaciones disponibles en el sistema.
+                            </div>
+                            {% endif %}
+                        </div>
+                        </div>
+                        
+                        <div class="form-actions" style="margin-top: 30px; text-align: center;">
+                            <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, var(--main-color, #d2691e), var(--main-color-dark, #a0522d)); border: none; padding: 12px 30px; border-radius: 50px; font-size: 16px; font-weight: 500; margin: 10px; box-shadow: 0 4px 10px var(--main-color-shadow, rgba(210, 105, 30, 0.3)); transition: all 0.3s; color: var(--btn-text, white);">
                                 <i class="fas fa-save"></i> Guardar Cambios
                             </button>
-                            <a href="{% url 'areaStaff' %}" class="btn btn-secondary">
+                            <a href="{% url 'areaStaff' %}" class="btn btn-secondary" style="background: var(--btn-secondary-bg, #f8f9fa); color: var(--btn-secondary-text, #555); border: none; padding: 12px 25px; border-radius: 50px; font-size: 16px; font-weight: 500; margin: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); transition: all 0.3s;">
                                 <i class="fas fa-arrow-left"></i> Volver
                             </a>
                         </div>
@@ -75,25 +282,181 @@
     </div>
 </main>
 
+<style>
+    /* Variables CSS para tema claro y oscuro */
+    :root {
+        --main-color: #d2691e;
+        --main-color-dark: #a0522d;
+        --light-main-color: #ffe4e1;
+        --main-color-shadow: rgba(210, 105, 30, 0.3);
+        --secondary-color: #4a86e8;
+        --secondary-color-dark: #2a56b8;
+        --secondary-color-shadow: rgba(74, 134, 232, 0.3);
+        --tertiary-color: #28a745;
+        --tertiary-color-dark: #218838;
+        --tertiary-color-shadow: rgba(40, 167, 69, 0.3);
+        --card-bg: #ffffff;
+        --section-bg: #f5f5f5;
+        --muted-bg: #f9f9f9;
+        --row-alt-bg: #f9f9f9;
+        --text-color: #333333;
+        --muted-text: #6c757d;
+        --heading-color: #555555;
+        --input-bg: #ffffff;
+        --input-bg-light: #f8f9fa;
+        --input-bg-hover: #f1f3f5;
+        --input-text: #333333;
+        --input-border: #e9ecef;
+        --border-color: #eeeeee;
+        --tag-bg: #e9ecef;
+        --tag-text: #333333;
+        --badge-bg: #e9ecef;
+        --badge-text: #333333;
+        --alert-info-bg: #e1f5fe;
+        --alert-info-text: #0288d1;
+        --alert-info-border: #0288d1;
+        --alert-success-bg: #d4edda;
+        --alert-success-text: #155724;
+        --alert-danger-bg: #f8d7da;
+        --alert-danger-text: #721c24;
+        --btn-text: white;
+        --btn-secondary-bg: #f8f9fa;
+        --btn-secondary-text: #555555;
+        --shadow-color: rgba(0,0,0,0.05);
+    }
+
+    /* Variables para modo oscuro */
+    .dark-mode {
+        --main-color: #ff7f50;
+        --main-color-dark: #e25822;
+        --light-main-color: #ff9472;
+        --main-color-shadow: rgba(255, 127, 80, 0.3);
+        --secondary-color: #64b5f6;
+        --secondary-color-dark: #1976d2;
+        --secondary-color-shadow: rgba(100, 181, 246, 0.3);
+        --tertiary-color: #4caf50;
+        --tertiary-color-dark: #388e3c;
+        --tertiary-color-shadow: rgba(76, 175, 80, 0.3);
+        --card-bg: #2d2d2d;
+        --section-bg: #363636;
+        --muted-bg: #404040;
+        --row-alt-bg: #383838;
+        --text-color: #f1f1f1;
+        --muted-text: #b0b0b0;
+        --heading-color: #e0e0e0;
+        --input-bg: #333333;
+        --input-bg-light: #404040;
+        --input-bg-hover: #484848;
+        --input-text: #f1f1f1;
+        --input-border: #555555;
+        --border-color: #444444;
+        --tag-bg: #505050;
+        --tag-text: #e0e0e0;
+        --badge-bg: #505050;
+        --badge-text: #e0e0e0;
+        --alert-info-bg: #0d47a1;
+        --alert-info-text: #bbdefb;
+        --alert-info-border: #2196f3;
+        --alert-success-bg: #1b5e20;
+        --alert-success-text: #c8e6c9;
+        --alert-danger-bg: #b71c1c;
+        --alert-danger-text: #ffcdd2;
+        --btn-text: white;
+        --btn-secondary-bg: #424242;
+        --btn-secondary-text: #e0e0e0;
+        --shadow-color: rgba(0,0,0,0.2);
+    }
+
+    .dark-mode .table {
+        color: var(--text-color);
+    }
+
+    .dark-mode label {
+        color: var(--text-color);
+    }
+</style>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Detectar si el usuario está en modo oscuro
+        function detectDarkMode() {
+            // Comprueba si hay una preferencia guardada
+            const darkModeSetting = localStorage.getItem('darkMode');
+            if (darkModeSetting === 'enabled') {
+                document.body.classList.add('dark-mode');
+                return true;
+            }
+            
+            // O si el usuario tiene preferencia por el modo oscuro en el sistema
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+                return true;
+            }
+            
+            return false;
+        }
+        
+        detectDarkMode();
+        
+        // Animación al cargar la página
+        const mainContent = document.querySelector('.staff-container');
+        mainContent.style.opacity = '0';
+        mainContent.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            mainContent.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            mainContent.style.opacity = '1';
+            mainContent.style.transform = 'translateY(0)';
+        }, 200);
+        
+        // Aplicar hover effects a los botones
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('mouseover', function() {
+                this.style.transform = 'translateY(-3px)';
+            });
+            button.addEventListener('mouseout', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Aplicar efecto hover a las filas de las tablas adaptado al tema
+        const tableRows = document.querySelectorAll('tbody tr');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        
+        tableRows.forEach(row => {
+            row.addEventListener('mouseover', function() {
+                if (isDarkMode) {
+                    this.style.backgroundColor = '#444444';
+                } else {
+                    this.style.backgroundColor = '#f0f0f0';
+                }
+            });
+            row.addEventListener('mouseout', function() {
+                this.style.backgroundColor = '';
+            });
+        });
+
+        // Código original para casa de acogida
         const casaAcogida = document.getElementById("id_casa_acogida");
         const tieneRelevoDiv = document.getElementById("tiene-relevo-div");
         const tieneRelevo = document.getElementById("id_tiene_relevo");
 
         function updateRelevoField() {
-            if (casaAcogida.value === "si") {
+            if (casaAcogida && casaAcogida.value === "si" && tieneRelevoDiv) {
                 tieneRelevoDiv.style.display = "block";
-            } else {
+            } else if (tieneRelevoDiv && tieneRelevo) {
                 tieneRelevoDiv.style.display = "none";
                 tieneRelevo.value = "no";
             }
         }
 
-        casaAcogida.addEventListener("change", updateRelevoField);
-        
-        // Ejecutar una vez al cargar para asegurar el estado correcto
-        updateRelevoField();
+        if (casaAcogida) {
+            casaAcogida.addEventListener("change", updateRelevoField);
+            // Ejecutar una vez al cargar para asegurar el estado correcto
+            updateRelevoField();
+        }
     });
 </script>
 {% endblock %}

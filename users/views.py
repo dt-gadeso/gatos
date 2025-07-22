@@ -199,9 +199,13 @@ def delete_user(request):
 def areaEdit(request):
     if request.method == 'GET':
         form = EditUser(instance=request.user)
+        roles = Role.objects.all()
+        associations = Association.objects.all()
         return render(request, 'areaEdit.html', {
             'user': request.user,
-            'form': form
+            'form': form,
+            'roles': roles,
+            'associations': associations
         })
     else:
         try:
@@ -230,15 +234,23 @@ def areaEdit(request):
                 user.save()
                 return redirect('areaStaff')
             else:
+                roles = Role.objects.all()
+                associations = Association.objects.all()
                 return render(request, 'areaEdit.html', {
                     'form': form,
                     'user': request.user,
+                    'roles': roles,
+                    'associations': associations,
                     'error': 'Formulario inválido'
                 })
         except Exception as e:
+            roles = Role.objects.all()
+            associations = Association.objects.all()
             return render(request, 'areaEdit.html', {
                 'form': EditUser(instance=request.user),
                 'user': request.user,
+                'roles': roles,
+                'associations': associations,
                 'error': f'Error al editar el usuario: {str(e)}'
             })
 

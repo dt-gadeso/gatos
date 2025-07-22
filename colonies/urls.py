@@ -10,7 +10,6 @@ urlpatterns = [
     path('location/<int:location_id>/', views.location_detail, name='location_detail'),
     path('formNewMunicipality/', views.save_municipality, name='save_municipality'),
     path('formNewZone/', views.save_zone, name='save_zone'),
-    path('formNewCouncil/', views.save_council, name='save_council'),
     path('formNewColony/', views.new_colony, name='new_colony'),
     path('formNewIncident/', views.save_incident, name='save_incident'),
     path('formEditIncident/<int:incident_id>/', views.editIncident, name='editIncident'),

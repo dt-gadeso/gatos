@@ -44,23 +44,6 @@ class Colony(models.Model):
         db_table = 'colonies'
         verbose_name_plural = 'colonies'
 
-class Council(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone = models.CharField(max_length=15)
-    emergency_email = models.EmailField()
-    emergency_phone = models.CharField(max_length=15)
-    logo_file = models.ImageField(upload_to='municipality/img/') 
-    location = models.ForeignKey('colonies.Location', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    def __str__(self):
-        return self.name
-    
-    class Meta:
-        db_table = 'councils'
-
 class Zone(models.Model):
     name = models.CharField(max_length=50)
     

@@ -1,30 +1,23 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .form import VetCenterForm, AgreementForm, VisitForm
-from .models import VetCenter, Agreement, Visit
+from .form import VetCenterForm, VisitForm
+from .models import VetCenter, Visit
 from colonies.models import Location
 
 def veterinarian(request):
     locations = Location.objects.all()
     
     if request.user.is_authenticated and hasattr(request.user, 'association') and request.user.association:
-        vet_centers = VetCenter.objects.filter(
-            agreement__association=request.user.association
-        ).distinct()
-        
-        agreements = Agreement.objects.filter(association=request.user.association)
-        
+        vet_centers = VetCenter.objects.all()
         visits = Visit.objects.filter(user__association=request.user.association)
     else:
         vet_centers = VetCenter.objects.all()
-        agreements = Agreement.objects.all()
         visits = Visit.objects.all()
     
     return render(request, 'veterinarian.html', {
         'locations': locations,
         'vet_centers': vet_centers,
-        'agreements': agreements,
         'visits': visits,
         'user_association': request.user.association if request.user.is_authenticated and hasattr(request.user, 'association') else None
     })
@@ -70,19 +63,7 @@ def vetcenter_form_view(request):
         else:
             return render(request, 'formNewVetCenter.html', {'form': form, 'error': 'Formulario inválido'})
 
-@login_required
-def agreement_form_view(request):
-    if request.method == 'GET':
-        form = AgreementForm(user=request.user if request.user.is_authenticated else None)
-        return render(request, 'formNewAgreement.html', {'form': form})
-    else:
-        form = AgreementForm(request.POST, request.FILES, user=request.user if request.user.is_authenticated else None)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Acuerdo creado exitosamente.')
-            return redirect('veterinarian')
-        else:
-            return render(request, 'formNewAgreement.html', {'form': form, 'error': 'Formulario inválido'})
+# Esta función fue eliminada por ser parte de la funcionalidad de ayuntamientos
 
 @login_required
 def visit_form_view(request):
@@ -134,16 +115,4 @@ def visits_list_view(request):
         'user_association': request.user.association if hasattr(request.user, 'association') else None
     })
 
-@login_required
-def agreements_list_view(request):
-    if hasattr(request.user, 'association') and request.user.association:
-        agreements = Agreement.objects.filter(
-            association=request.user.association
-        ).select_related('council', 'vet_center', 'association').order_by('-created_at')
-    else:
-        agreements = Agreement.objects.all().select_related('council', 'vet_center', 'association').order_by('-created_at')
-    
-    return render(request, 'agreements_list.html', {
-        'agreements': agreements,
-        'user_association': request.user.association if hasattr(request.user, 'association') else None
-    })
+# Esta función fue eliminada por ser parte de la funcionalidad de ayuntamientos
