@@ -8,8 +8,9 @@ class Cat(models.Model):
     ]
     
     STATUS_CHOICES = [
-        (False, 'Vivo'),
-        (True, 'Muerto'),
+        ('V', 'Vivo'),
+        ('E', 'Enfermo'),
+        ('M', 'Muerto'),
     ]
     
     catname = models.CharField(max_length=50)
@@ -18,15 +19,20 @@ class Cat(models.Model):
     birthday = models.DateField(null=False)
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     sterilized = models.BooleanField(default=False)
-    dead = models.BooleanField(default=False, choices=STATUS_CHOICES, verbose_name="Estado del gato")
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='V', verbose_name="Estado del gato")
     colony = models.ForeignKey('colonies.Colony', on_delete=models.CASCADE)
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     @property
-    def dead_status(self):
-        return "Sí" if self.dead else "No"
+    def status_display(self):
+        return dict(self.STATUS_CHOICES)[self.status]
+    
+    @property
+    def dead(self):
+        # Para mantener compatibilidad con el código antiguo
+        return self.status == 'M'
     
     def __str__(self):
         return self.catname

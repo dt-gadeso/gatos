@@ -46,13 +46,13 @@ def newCat(request):
                     birthday=form.cleaned_data.get('birthday'),
                     sex=form.cleaned_data.get('sex'),
                     sterilized=form.cleaned_data.get('sterilized') == 'true',
-                    dead=form.cleaned_data.get('dead') == 'true',
+                    status=form.cleaned_data.get('status'),
                     colony=form.cleaned_data.get('colony'),
                     user=request.user
                 )
                 
                 # Debug: verificar los datos del gato antes de guardar
-                print(f"Cat data before save: catname={cat.catname}, chip={cat.chip}, sterilized={cat.sterilized}, dead={cat.dead}")
+                print(f"Cat data before save: catname={cat.catname}, chip={cat.chip}, sterilized={cat.sterilized}, status={cat.status}")
                 
                 cat.save()
                 
@@ -85,7 +85,7 @@ def searchEditCat(request):
     colony_id = request.GET.get('colony')
     sex = request.GET.get('sex')
     sterilized = request.GET.get('sterilized')
-    dead = request.GET.get('dead')
+    status = request.GET.get('status')
 
     # Aplicar filtros
     if catname and catname.strip():
@@ -103,8 +103,8 @@ def searchEditCat(request):
     if sterilized in ['true', 'false']:
         filters['sterilized'] = sterilized == 'true'
     
-    if dead in ['true', 'false']:
-        filters['dead'] = dead == 'true'
+    if status in ['V', 'E', 'M']:
+        filters['status'] = status
 
     try:
         cats = Cat.objects.filter(**filters)
@@ -120,7 +120,7 @@ def searchEditCat(request):
         'colony_id': colony_id or '',
         'sex': sex or '',
         'sterilized': sterilized or '',
-        'dead': dead or '',
+        'status': status or '',
         'colonies': colonies,
         'search_form': search_form
     }
@@ -197,7 +197,7 @@ class CatUpdateView(UpdateView):
             'birthday': self.object.birthday.strftime('%Y-%m-%d'),
             'sex': self.object.sex,
             'sterilized': self.object.sterilized,
-            'dead': self.object.dead,
+            'status': self.object.status,
             'colony': self.object.colony.id if self.object.colony else None,
         }
         return JsonResponse(data)
@@ -207,7 +207,6 @@ class CatUpdateView(UpdateView):
 
 @login_required
 def sterilized_counter(request):
-    """Vista para mostrar contador de gatos esterilizados por colonia"""
     user = request.user
     
     # Verificar si el usuario es admin
@@ -261,8 +260,6 @@ def sterilized_counter(request):
 
 @login_required
 def test_search(request):
-    """Vista simple para probar que el formulario funciona"""
-    print("=== TEST SEARCH VIEW ===")
     print(f"Request method: {request.method}")
     print(f"Request GET: {request.GET}")
     print(f"Request POST: {request.POST}")

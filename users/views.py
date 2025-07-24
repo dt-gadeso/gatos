@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .form import CreateNewUser, LoginUser,EditUser, AssociationForm
-from .models import User, Role, Member, Manager, Association, Capturador, Free
+from .models import User, Role, Member, Manager, Association
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.db.models.signals import post_save
@@ -48,12 +48,12 @@ def signup(request):
                     print("Cleaned data:", form.cleaned_data)
                     casa_acogida_val = request.POST.get('casa_acogida')
                     tiene_relevo_val = request.POST.get('tiene_relevo')
-                    # Si no es casa de acogida, forzar tiene_relevo a False
                     if casa_acogida_val != 'si':
                         tiene_relevo_val = 'no'
                     user = User(
                         username=form.cleaned_data.get('username'),
                         email=form.cleaned_data.get('email'),
+                        phone=form.cleaned_data.get('phone'),
                         carnet_gatos=form.cleaned_data.get('carnet_gatos'),
                         casa_acogida=(casa_acogida_val == 'si'),
                         tiene_relevo=(tiene_relevo_val == 'si')
@@ -123,8 +123,8 @@ def assign_role(request):
     if selected_role_id:
         try:
             role = Role.objects.get(id=selected_role_id)
-            show_association = role.name.lower() in ['manager', 'member']
-            show_trampa = role.name.lower() == 'capturador'
+            show_association = role.name.lower() in ['presidente/a', 'miembro']
+            show_trampa = False
         except Role.DoesNotExist:
             error = "Rol inválido"
 
@@ -141,20 +141,22 @@ def assign_role(request):
             if show_association and selected_association_id:
                 association = get_object_or_404(Association, id=selected_association_id)
 
-            # Limpiar y asignar
             Manager.objects.filter(user=user).delete()
             Member.objects.filter(user=user).delete()
-            Capturador.objects.filter(user=user).delete()
 
-            if role.name.lower() == 'manager':
+            user.es_capturador = False
+            user.es_free = False
+            user.tiene_trampa = False
+
+            if role.name.lower() == 'presidente/a':
                 Manager.objects.update_or_create(user=user, defaults={'association': association})
-            elif role.name.lower() == 'member':
+            elif role.name.lower() == 'miembro':
                 Member.objects.update_or_create(user=user, defaults={'association': association})
             elif role.name.lower() == 'capturador':
-                Capturador.objects.update_or_create(
-                    user=user,
-                    defaults={'tiene_trampa': (tiene_trampa == 'si')}
-                )
+                user.es_capturador = True
+                user.tiene_trampa = (tiene_trampa == 'si')
+            elif role.name.lower() == 'free':
+                user.es_free = True
 
             user.role = role
             user.association = association if show_association else None
@@ -182,10 +184,8 @@ def delete_user(request):
         if not user_id:
             return JsonResponse({"error": "No se especificó usuario a borrar"}, status=400)
 
-        # Obtener el usuario a borrar
         user_to_delete = get_object_or_404(User, id=user_id)
 
-        # Evitar que el admin se borre a sí mismo
         if user_to_delete == request.user:
             return JsonResponse({"error": "No puedes borrar tu propia cuenta desde aquí"}, status=400)
 
@@ -212,24 +212,33 @@ def areaEdit(request):
             form = EditUser(request.POST, request.FILES, instance=request.user)
             if form.is_valid():
                 user = request.user
-                # Actualizar campos básicos
-                for field in ['username', 'email', 'carnet_gatos']:
+                for field in ['username', 'email', 'phone', 'carnet_gatos']:
                     value = form.cleaned_data.get(field)
                     if value not in [None, '', [], {}]:
                         setattr(user, field, value)
                 
-                # Manejar casa_acogida y tiene_relevo
                 casa_acogida_val = form.cleaned_data.get('casa_acogida')
                 tiene_relevo_val = form.cleaned_data.get('tiene_relevo')
                 
                 if casa_acogida_val is not None:
                     user.casa_acogida = (casa_acogida_val == 'si')
                 
-                # Si no es casa de acogida, forzar tiene_relevo a False
                 if casa_acogida_val == 'no':
                     user.tiene_relevo = False
                 elif tiene_relevo_val is not None:
                     user.tiene_relevo = (tiene_relevo_val == 'si')
+                
+                es_capturador_val = form.cleaned_data.get('es_capturador')
+                if es_capturador_val is not None:
+                    user.es_capturador = (es_capturador_val == 'si')
+                
+                tiene_trampa_val = form.cleaned_data.get('tiene_trampa')
+                if tiene_trampa_val is not None:
+                    user.tiene_trampa = (tiene_trampa_val == 'si')
+                
+                es_free_val = form.cleaned_data.get('es_free')
+                if es_free_val is not None:
+                    user.es_free = (es_free_val == 'si')
                 
                 user.save()
                 return redirect('areaStaff')
@@ -254,7 +263,6 @@ def areaEdit(request):
                 'error': f'Error al editar el usuario: {str(e)}'
             })
 
-# --- Asociación fusionada aquí ---
 @login_required
 def association_list(request):
     associations = Association.objects.all()
@@ -272,36 +280,17 @@ def association_create(request):
     else:
         form = AssociationForm()
     return render(request, 'asignar.html', {'form': form})
-
-
 @receiver(post_save, sender=User)
 def role_manager(sender, instance, **kwargs):
-    # Verifica si el usuario tiene un rol y si ese rol es "manager"
-    if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'manager':
-        # Crea o actualiza el registro en la tabla Manager con el user_id
+    if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'presidente/a':
         Manager.objects.update_or_create(user_id=instance.id, defaults={})
        
         
 @receiver(post_save, sender=User)
 def role_member(sender, instance, **kwargs):
-    # Verifica si el usuario tiene un rol y si ese rol es "member"
-    if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'member':
-        # Crea o actualiza el registro en la tabla Member con el user_id
+    if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'miembro':
         Member.objects.update_or_create(user_id=instance.id, defaults={})
 
-@receiver(post_save, sender=User)
-def role_free(sender, instance, **kwargs):
-    # Verifica si el usuario tiene un rol y si ese rol es "free"
-    if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'free':
-        # Crea o actualiza el registro en la tabla Free con el user_id
-        Free.objects.update_or_create(user_id=instance.id, defaults={})
-
-@receiver(post_save, sender=User)
-def role_capturador(sender, instance, **kwargs):
-    # Verifica si el usuario tiene un rol y si ese rol es "capturador"
-    if hasattr(instance, 'role') and instance.role and instance.role.name.lower() == 'capturador':
-        # Crea o actualiza el registro en la tabla Capturador con el user_id
-        Capturador.objects.update_or_create(user_id=instance.id, defaults={})
 
 @require_GET
 def search_users(request):

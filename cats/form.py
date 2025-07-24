@@ -36,9 +36,9 @@ class CreateCat(forms.Form):
         choices=[('true', 'Sí'), ('false', 'No')],
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-    dead = forms.ChoiceField(
+    status = forms.ChoiceField(
         label='Estado del gato',
-        choices=[('false', 'Vivo'), ('true', 'Muerto')],
+        choices=[('V', 'Vivo'), ('E', 'Enfermo'), ('M', 'Muerto')],
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     colony = forms.ModelChoiceField(
@@ -50,7 +50,6 @@ class CreateCat(forms.Form):
 
 
     def __init__(self, *args, **kwargs):
-        # Elimina el parámetro 'user' antes de llamar a super().__init__
         kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         self.fields['colony'].queryset = Colony.objects.all()
@@ -66,7 +65,6 @@ class CreateCat(forms.Form):
     def clean_chip(self):
         chip = self.cleaned_data.get('chip')
         if chip:
-            # Verificar que el chip no existe ya
             if Cat.objects.filter(chip=chip).exists():
                 raise ValidationError('Ya existe un gato con este número de chip.')
         return chip
@@ -84,7 +82,7 @@ class CreateCat(forms.Form):
 class EditCat(forms.ModelForm):
     class Meta:
         model = Cat
-        fields = ['catname', 'photo_file', 'chip', 'birthday', 'sex', 'sterilized', 'dead', 'colony']
+        fields = ['catname', 'photo_file', 'chip', 'birthday', 'sex', 'sterilized', 'status', 'colony']
         widgets = {
             'catname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del gato'}),
             'photo_file': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
@@ -92,7 +90,7 @@ class EditCat(forms.ModelForm):
             'birthday': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'sex': forms.Select(attrs={'class': 'form-control form-select'}),
             'sterilized': forms.Select(attrs={'class': 'form-control form-select'}),
-            'dead': forms.Select(attrs={'class': 'form-control form-select'}),
+            'status': forms.Select(attrs={'class': 'form-control form-select'}),
             'colony': forms.Select(attrs={'class': 'form-control form-select'}),
         }
         labels = {
@@ -102,7 +100,7 @@ class EditCat(forms.ModelForm):
             'birthday': 'Fecha de nacimiento',
             'sex': 'Sexo',
             'sterilized': 'Esterilizado',
-            'dead': 'Estado del gato',
+            'status': 'Estado del gato',
             'colony': 'Colonia',
         }
     
@@ -140,9 +138,9 @@ class SearchCatForm(forms.Form):
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-    dead = forms.ChoiceField(
+    status = forms.ChoiceField(
         label='Estado',
-        choices=[('', 'Seleccionar estado'), ('false', 'Vivo'), ('true', 'Fallecido')],
+        choices=[('', 'Seleccionar estado'), ('V', 'Vivo'), ('E', 'Enfermo'), ('M', 'Fallecido')],
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )

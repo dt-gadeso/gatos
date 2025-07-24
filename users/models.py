@@ -32,12 +32,15 @@ class User(AbstractUser):
     email = models.EmailField(max_length=242, unique=True)
     email_verified_at = models.DateTimeField(null=True, blank=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
-    # avatar_file = models.ImageField(upload_to='users/img/')
     carnet_gatos = models.CharField(max_length=50, null=True, blank=True)
+    phone = models.CharField(max_length=20, null=True, blank=True)  # Campo de teléfono
     association = models.ForeignKey(Association, null=True, blank=True, on_delete=models.SET_NULL)
     casa_acogida = models.BooleanField(default=False)
     tiene_relevo = models.BooleanField(default=False)
     activo = models.BooleanField(default=True)
+    es_capturador = models.BooleanField(default=False)
+    es_free = models.BooleanField(default=False)
+    tiene_trampa = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -95,29 +98,12 @@ class Manager(models.Model):
         db_table = 'managers'
         unique_together = ['user']
 
-class Capturador(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    tiene_trampa = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        db_table = 'capturadores'
-        unique_together = ['user']
 
-class Free(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        db_table = 'free'
-        unique_together = ['user']
 
 
 @receiver(post_migrate)
 def create_default_roles(sender, **kwargs):
-    _ = kwargs  # Mark kwargs as used to avoid unused variable warning
+    _ = kwargs
     if sender.name == 'users':
-        Role.objects.get_or_create(name='member')
-        Role.objects.get_or_create(name='manager')
-        Role.objects.get_or_create(name='capturador')
-        Role.objects.get_or_create(name='free')
+        Role.objects.get_or_create(name='miembro')
+        Role.objects.get_or_create(name='presidente/a')

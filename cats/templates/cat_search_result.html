@@ -276,7 +276,7 @@
                 {% endif %}
                 {% if sex %}⚥ Sexo: <strong>{% if sex == 'M' %}Macho{% else %}Hembra{% endif %}</strong><br>{% endif %}
                 {% if sterilized %}✂️ Esterilizado: <strong>{% if sterilized == 'true' %}Sí{% else %}No{% endif %}</strong><br>{% endif %}
-                {% if dead %}💔 Estado: <strong>{% if dead == 'true' %}Fallecido{% else %}Vivo{% endif %}</strong><br>{% endif %}
+                {% if status %}💔 Estado: <strong>{% if status == 'V' %}Vivo{% elif status == 'E' %}Enfermo{% else %}Fallecido{% endif %}</strong><br>{% endif %}
             </p>
         </div>
         
@@ -306,7 +306,7 @@
                             <p><strong>🏠 Colonia:</strong> {{ cat.colony.name }}</p>
                             <p><strong>⚥ Sexo:</strong> {% if cat.sex == 'M' %}Macho{% else %}Hembra{% endif %}</p>
                             <p><strong>✂️ Esterilizado:</strong> {% if cat.sterilized %}Sí{% else %}No{% endif %}</p>
-                            <p><strong>💔 Estado:</strong> {% if cat.dead %}Fallecido{% else %}Vivo{% endif %}</p>
+                            <p><strong>💔 Estado:</strong> {% if cat.status == 'V' %}Vivo{% elif cat.status == 'E' %}Enfermo{% else %}Fallecido{% endif %}</p>
                         </div>
                         
                         <div class="cat-actions">

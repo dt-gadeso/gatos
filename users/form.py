@@ -23,11 +23,12 @@ class CreateNewUser(forms.Form):
         max_length=242,
         widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email'})
     )
-    # avatar_file = forms.ImageField(
-    #     label='Foto de avatar (opcional)',
-    #     required=False,
-    #     widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
-    # )
+    phone = forms.CharField(
+        label='Número de teléfono',
+        max_length=20,
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su número de teléfono'})
+    )
     carnet_gatos = forms.CharField(
         label='Carnet de Gatos (opcional)',
         required=False,
@@ -69,13 +70,32 @@ class EditUser(forms.ModelForm):
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+    es_capturador = forms.ChoiceField(
+        label='¿Es capturador?',
+        choices=[('si', 'Sí'), ('no', 'No')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    tiene_trampa = forms.ChoiceField(
+        label='¿Tiene trampa?',
+        choices=[('si', 'Sí'), ('no', 'No')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    es_free = forms.ChoiceField(
+        label='¿Es free?',
+        choices=[('si', 'Sí'), ('no', 'No')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
     
     class Meta:
         model = User
-        fields = ['username', 'email', 'carnet_gatos', 'casa_acogida', 'tiene_relevo']
+        fields = ['username', 'email', 'phone', 'carnet_gatos', 'casa_acogida', 'tiene_relevo', 'es_capturador', 'tiene_trampa', 'es_free']
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'carnet_gatos': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
@@ -88,6 +108,9 @@ class EditUser(forms.ModelForm):
         if self.instance and self.instance.pk:
             self.fields['casa_acogida'].initial = 'si' if self.instance.casa_acogida else 'no'
             self.fields['tiene_relevo'].initial = 'si' if self.instance.tiene_relevo else 'no'
+            self.fields['es_capturador'].initial = 'si' if self.instance.es_capturador else 'no'
+            self.fields['tiene_trampa'].initial = 'si' if self.instance.tiene_trampa else 'no'
+            self.fields['es_free'].initial = 'si' if self.instance.es_free else 'no'
 
 class AssignedRole(forms.ModelForm):
     role = forms.ModelChoiceField(

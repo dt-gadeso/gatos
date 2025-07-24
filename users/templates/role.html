@@ -67,16 +67,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateFields() {
         const selectedRole = roleSelect.options[roleSelect.selectedIndex]?.text?.toLowerCase();
-        if (selectedRole === 'manager' || selectedRole === 'member') {
+        if (selectedRole === 'presidente/a' || selectedRole === 'miembro') {
             associationDiv.style.display = 'block';
             associationSelect.required = true;
             trampaDiv.style.display = 'none';
             trampaSelect.required = false;
-        } else if (selectedRole === 'capturador') {
-            associationDiv.style.display = 'none';
-            associationSelect.required = false;
-            trampaDiv.style.display = 'block';
-            trampaSelect.required = true;
         } else {
             associationDiv.style.display = 'none';
             associationSelect.required = false;
@@ -86,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     roleSelect.addEventListener('change', updateFields);
-    updateFields(); // inicializa los campos según el rol seleccionado
+    updateFields();
 
     userSearch.addEventListener('input', function () {
         const query = userSearch.value.trim().toLowerCase();

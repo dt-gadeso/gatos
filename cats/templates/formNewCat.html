@@ -99,11 +99,11 @@
                 </div>
                 
                 <div class="form-group" data-tooltip="Estado actual del gato">
-                    <label for="{{ form.dead.id_for_label }}">{{ form.dead.label }}</label>
-                    {{ form.dead }}
-                    {% if form.dead.errors %}
+                    <label for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+                    {{ form.status }}
+                    {% if form.status.errors %}
                         <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
-                            {% for error in form.dead.errors %}
+                            {% for error in form.status.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
                         </div>
