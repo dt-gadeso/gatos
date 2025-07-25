@@ -151,7 +151,7 @@ class ColonyForm(forms.ModelForm):
 class IncidentForm(forms.ModelForm):
     class Meta:
         model = Incident
-        fields = ['title', 'description', 'start_date', 'end_date', 'is_resolved', 'resolution', 'colony']
+        fields = ['title', 'description', 'start_date', 'end_date', 'is_resolved', 'resolution', 'colony', 'cat']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -183,6 +183,9 @@ class IncidentForm(forms.ModelForm):
             }),
             'colony': forms.Select(attrs={
                 'class': 'form-control'
+            }),
+            'cat': forms.Select(attrs={
+                'class': 'form-control'
             })
         }
         labels = {
@@ -192,7 +195,8 @@ class IncidentForm(forms.ModelForm):
             'end_date': 'Fecha de fin',
             'is_resolved': '¿Está resuelta?',
             'resolution': 'Resolución',
-            'colony': 'Colonia'
+            'colony': 'Colonia',
+            'cat': 'Gato'
         }
 
     def clean(self):
@@ -235,6 +239,7 @@ class EditIncident(forms.ModelForm):
             'id': 'id_resolution'
         })
         self.fields['colony'].widget.attrs.update({'class': 'form-control'})
+        self.fields['cat'].widget.attrs.update({'class': 'form-control'})
 
     def clean(self):
         cleaned_data = super().clean()

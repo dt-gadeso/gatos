@@ -28,7 +28,6 @@
             
             <div class="card">
                 <h3>Coordenadas</h3>
-                {% if user.is_superuser or user.role.name == "manager" %}
                 <form id="coordinates-form">
                     <div class="coordinates-input">
                         <button type="button" class="map-btn btn-danger" onclick="window.location.href='/colonies/formNewIncident'">Guardar incidencia</button>
@@ -36,7 +35,6 @@
                         <button type="button" class="map-btn btn-danger" onclick="window.location.href='/colonies/formularios_multiples'">Crear</button>
                     </div>
                 </form>
-                {% endif %}
                 <div class="marker-info">
                     <p><strong>Instrucciones:</strong></p>
                     <ul>

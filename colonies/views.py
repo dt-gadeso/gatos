@@ -263,7 +263,8 @@ def save_incident(request):
                     resolution=form.cleaned_data['resolution'],
                     start_date=form.cleaned_data['start_date'],
                     end_date=form.cleaned_data['end_date'],
-                    colony=form.cleaned_data['colony']
+                    colony=form.cleaned_data['colony'],
+                    cat=form.cleaned_data['cat']
                 )
                 if is_ajax:
                     return JsonResponse({'success': True, 'message': 'Incidencia guardada exitosamente', 'id': incident.id})

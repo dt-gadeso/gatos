@@ -19,7 +19,7 @@
             <span>⚠️</span>
             <div>
                 <strong>Se encontraron los siguientes errores:</strong>
-                <ul style="margin-top: 10px;">
+                <ul class="form-error-list">
                     {% for field, errors in form_errors.items %}
                         {% for error in errors %}
                             <li>{{ field }}: {{ error }}</li>
@@ -48,9 +48,9 @@
             </div>
         {% endfor %}
         
-        <div style="text-align: center; margin-top: 2rem;">
+        <div class="form-buttons">
             <button type="submit" class="btn-primary">📅 Guardar Visita</button>
-            <button type="button" class="btn-management" onclick="window.location.href='/veterinarian/'" style="margin-left: 1rem;">
+            <button type="button" class="btn-management" onclick="window.location.href='/veterinarian/'">
                 🔙 Cancelar
             </button>
         </div>

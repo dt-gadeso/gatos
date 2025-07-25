@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'styles/users.css' %}">
+
 <h2>Asignar Rol a Usuario</h2>
 <form method="post" id="assign-role-form">
   {% csrf_token %}
@@ -22,7 +24,7 @@
     {% endfor %}
   </select>
 
-  <div id="association-div" style="display: none;">
+  <div id="association-div" class="role-association-div">
     <label for="association-search">Buscar asociación:</label>
     <input type="text" id="association-search" placeholder="Nombre de asociación...">
     <select name="association_id" id="association">
@@ -33,7 +35,7 @@
     </select>
   </div>
 
-  <div id="trampa-div" style="display: none;">
+  <div id="trampa-div" class="role-trampa-div">
     <label for="tiene_trampa">¿Tiene trampa?</label>
     <select name="tiene_trampa" id="tiene_trampa">
       <option value="">-- Selecciona --</option>

@@ -1,43 +1,45 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<main style="max-width: 500px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 32px;">
-    <h1 style="text-align:center; color:#d2691e; margin-bottom: 24px;">Registrar-se</h1>
+<link rel="stylesheet" href="{% static 'styles/users.css' %}">
+
+<main class="signup-main">
+    <h1 class="signup-title">Registrar-se</h1>
     <form action="/users/signup/" method="POST" enctype="multipart/form-data" id="signup-form">
         {% csrf_token %}
         {% if error %}
-        <p style="color:red; text-align:center;">{{ error }}</p>
+        <p class="signup-error">{{ error }}</p>
         {% endif %}
 
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="signup-form-group">
             {{ form.username.label_tag }}<br>{{ form.username }}
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="signup-form-group">
             {{ form.password.label_tag }}<br>{{ form.password }}
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="signup-form-group">
             {{ form.confirm_password.label_tag }}<br>{{ form.confirm_password }}
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="signup-form-group">
             {{ form.email.label_tag }}<br>{{ form.email }}
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="signup-form-group">
             {{ form.phone.label_tag }}<br>{{ form.phone }}
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="signup-form-group">
             {{ form.avatar_file.label_tag }}<br>{{ form.avatar_file }}
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="signup-form-group">
             {{ form.carnet_gatos.label_tag }}<br>{{ form.carnet_gatos }}
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="signup-form-group">
             {{ form.casa_acogida.label_tag }}<br>{{ form.casa_acogida }}
         </div>
-        <div class="form-group" id="tiene-relevo-div" style="margin-bottom: 16px; display:none;">
+        <div class="signup-form-group signup-tiene-relevo" id="tiene-relevo-div">
             {{ form.tiene_relevo.label_tag }}<br>{{ form.tiene_relevo }}
         </div>
-        <div style="text-align:center;">
-            <button type="submit" style="background:#d2691e; color:#fff; border:none; border-radius:6px; padding:10px 32px; font-size:1.1em; cursor:pointer;">Crear Cuenta</button>
+        <div class="signup-button-container">
+            <button type="submit" class="signup-button">Crear Cuenta</button>
         </div>
     </form>
 </main>

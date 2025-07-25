@@ -1,0 +1,442 @@
+/* Estilos base consistentes */
+body {
+    background: linear-gradient(135deg, #f0f0f0 60%, #ffe4e1 100%);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+main {
+    margin: 40px auto;
+    max-width: 900px;
+    padding: 24px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    animation: fadeIn 1s;
+    transition: all 0.3s ease;
+}
+
+/* Card styles */
+.card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    padding: 0;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+}
+
+.card-body {
+    padding: 30px;
+}
+
+.card-title {
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: #d2691e;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+/* Section titles */
+h3, h4 {
+    color: #d2691e;
+    margin-bottom: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Association badges */
+.association-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.association-badge {
+    background: linear-gradient(135deg, #d2691e, #ff8c42);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(210, 105, 30, 0.2);
+    transition: all 0.3s ease;
+}
+
+.association-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3);
+}
+
+/* Table styles */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 15px;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 16px 20px;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+th {
+    background: linear-gradient(135deg, #d2691e, #ff8c42);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: white;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    letter-spacing: 0.5px;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:nth-child(even) {
+    background: #ffe4e1;
+}
+
+tr:hover {
+    background: #ffd1cc;
+    transform: scale(1.01);
+}
+
+td {
+    font-size: 1.05rem;
+    color: #333;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: #666 !important;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    color: #0d47a1;
+    border: 1px solid #90caf9;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 20px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #d2691e, #ff8c42);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #b8541a, #e8590c);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3);
+    text-decoration: none;
+    color: white;
+}
+
+.mb-3 {
+    margin-bottom: 1rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+/* Navegación */
+nav {
+    background: #ffe4e1;
+    padding: 12px 0;
+    box-shadow: 0 2px 8px rgba(255,192,203,0.15);
+    display: flex;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+nav li {
+    margin: 0;
+    padding: 0 30px;
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: 500;
+    line-height: 1.5;
+    transition: color 0.2s;
+    position: relative;
+}
+
+nav a {
+    color: #d2691e;
+    text-decoration: none;
+    margin: 0 12px;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+nav a:hover {
+    color: #a0522d;
+}
+
+nav a.active {
+    color: #a0522d;
+    border-bottom: 2px solid #a0522d;
+}
+
+/* Footer */
+footer {
+    position: relative;
+    background: #ffe4e1;
+    color: #d2691e;
+    text-align: center;
+    padding: 18px 0 10px 0;
+    font-size: 1.1em;
+    border-top: 2px solid #ffd1cc;
+    margin-top: auto;
+    box-shadow: 0 -2px 8px rgba(255,192,203,0.10);
+    transition: all 0.3s ease;
+}
+
+footer a {
+    text-decoration: none;
+    margin: 0 8px;
+    transition: color 0.2s;
+}
+
+footer a:hover i {
+    color: #d2691e !important;
+}
+
+footer i {
+    font-size: 1.4em;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+/* Modo oscuro */
+.dark-mode {
+    background: linear-gradient(135deg, #1a1a1a 60%, #2a2a2a 100%) !important;
+    color: #f0f0f0 !important;
+}
+
+.dark-mode main {
+    background: #232323 !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode .card {
+    background: #2a2a2a !important;
+    color: #f1f1f1 !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4) !important;
+}
+
+.dark-mode .card-title {
+    color: #ffb380 !important;
+}
+
+.dark-mode h3, 
+.dark-mode h4 {
+    color: #ffb380 !important;
+}
+
+.dark-mode .association-badge {
+    background: linear-gradient(135deg, #ffb380, #ff9f4a) !important;
+    color: #222 !important;
+}
+
+.dark-mode table {
+    background: #2a2a2a !important;
+    color: #f1f1f1 !important;
+}
+
+.dark-mode th {
+    background: linear-gradient(135deg, #ffb380, #ff9f4a) !important;
+    color: #222 !important;
+}
+
+.dark-mode td {
+    color: #f1f1f1 !important;
+    border-bottom-color: #444 !important;
+}
+
+.dark-mode tr:nth-child(even) {
+    background: #333 !important;
+}
+
+.dark-mode tr:hover {
+    background: #3a3a3a !important;
+}
+
+.dark-mode .text-muted {
+    color: #aaa !important;
+}
+
+.dark-mode .alert-info {
+    background: linear-gradient(135deg, #2a2a2a, #333) !important;
+    color: #ffb380 !important;
+    border-color: #555 !important;
+}
+
+.dark-mode .btn {
+    background: linear-gradient(135deg, #ffb380, #ff9f4a) !important;
+    color: #222 !important;
+}
+
+.dark-mode .btn:hover {
+    background: linear-gradient(135deg, #ff9f4a, #ff8c42) !important;
+    color: #222 !important;
+}
+
+.dark-mode nav {
+    background: #222 !important;
+    color: #f1f1f1 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+}
+
+.dark-mode nav a {
+    color: #f1f1f1 !important;
+}
+
+.dark-mode nav a.active {
+    color: #ffb380 !important;
+    border-bottom-color: #ffb380 !important;
+}
+
+.dark-mode nav a:hover {
+    color: #ffb380 !important;
+}
+
+.dark-mode footer {
+    background: #222 !important;
+    color: #f1f1f1 !important;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.3) !important;
+    border-top-color: #444 !important;
+}
+
+.dark-mode footer a {
+    color: #ffb380 !important;
+}
+
+.dark-mode footer i {
+    color: #ffb380 !important;
+}
+
+/* Botón de modo oscuro */
+#darkModeToggle {
+    position: absolute;
+    right: 30px;
+    bottom: 7px;
+    z-index: 9999;
+    background: #d2691e !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 16px !important;
+    border-radius: 25px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3) !important;
+}
+
+#darkModeToggle:hover {
+    background: #a0522d !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(210, 105, 30, 0.4) !important;
+}
+
+.dark-mode #darkModeToggle {
+    background: #ffb380 !important;
+    color: #222 !important;
+}
+
+.dark-mode #darkModeToggle:hover {
+    background: #ff9f4a !important;
+}
+
+@media (max-width: 768px) {
+    main {
+        max-width: 98vw;
+        padding: 12px;
+        margin: 20px auto;
+    }
+    
+    .card-body {
+        padding: 20px;
+    }
+    
+    .card-title {
+        font-size: 1.4rem;
+    }
+    
+    th, td {
+        padding: 12px 8px;
+        font-size: 0.9rem;
+    }
+    
+    .association-badges {
+        justify-content: center;
+    }
+    
+    .association-badge {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    nav li {
+        padding: 0 15px;
+        font-size: 1em;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px);}
+    to { opacity: 1; transform: translateY(0);}
+}

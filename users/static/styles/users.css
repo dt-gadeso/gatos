@@ -1,0 +1,948 @@
+/* Variables CSS para Users */
+:root {
+    /* Colores principales */
+    --main-color: #d2691e;
+    --main-color-dark: #a0522d;
+    --light-main-color: #ffe4e1;
+    --main-color-shadow: rgba(210, 105, 30, 0.3);
+    
+    /* Colores secundarios */
+    --secondary-color: #4a86e8;
+    --secondary-color-dark: #2a56b8;
+    --secondary-color-shadow: rgba(74, 134, 232, 0.3);
+    --tertiary-color: #28a745;
+    --tertiary-color-dark: #218838;
+    --tertiary-color-shadow: rgba(40, 167, 69, 0.3);
+    
+    /* Colores de fondo */
+    --card-bg: #fff;
+    --input-bg: #fff;
+    --section-bg: #f5f5f5;
+    --muted-bg: #f9f9f9;
+    --row-alt-bg: #f9f9f9;
+    
+    /* Colores de texto */
+    --text-color: #333;
+    --input-text: #333;
+    --muted-text: #6c757d;
+    --heading-color: #555;
+    
+    /* Colores de borde */
+    --input-border: #e9ecef;
+    --border-color: #eee;
+    
+    /* Tags y badges */
+    --tag-bg: #e9ecef;
+    --tag-text: #333;
+    --badge-bg: #e9ecef;
+    --badge-text: #333;
+    
+    /* Alertas */
+    --alert-danger-bg: #f8d7da;
+    --alert-danger-text: #721c24;
+    --alert-success-bg: #d4edda;
+    --alert-success-text: #155724;
+    --alert-info-bg: #e1f5fe;
+    --alert-info-text: #0288d1;
+    --alert-info-border: #0288d1;
+    
+    /* Botones */
+    --btn-text: white;
+    --btn-secondary-bg: #f8f9fa;
+    --btn-secondary-text: #555;
+    
+    /* Sombras */
+    --shadow-color: rgba(0,0,0,0.05);
+    
+    /* Inputs específicos */
+    --input-bg-light: #f8f9fa;
+    --input-bg-hover: #f1f3f5;
+}
+
+/* Modo oscuro */
+.dark-mode {
+    --main-color: #ff7f50;
+    --main-color-dark: #e25822;
+    --light-main-color: #ff9472;
+    --main-color-shadow: rgba(255, 127, 80, 0.3);
+    --secondary-color: #64b5f6;
+    --secondary-color-dark: #1976d2;
+    --secondary-color-shadow: rgba(100, 181, 246, 0.3);
+    --tertiary-color: #4caf50;
+    --tertiary-color-dark: #388e3c;
+    --tertiary-color-shadow: rgba(76, 175, 80, 0.3);
+    --card-bg: #2d2d2d;
+    --input-bg: #333;
+    --section-bg: #363636;
+    --muted-bg: #404040;
+    --row-alt-bg: #383838;
+    --text-color: #f1f1f1;
+    --input-text: #f1f1f1;
+    --muted-text: #b0b0b0;
+    --heading-color: #e0e0e0;
+    --input-border: #555;
+    --border-color: #444;
+    --tag-bg: #505050;
+    --tag-text: #e0e0e0;
+    --badge-bg: #505050;
+    --badge-text: #e0e0e0;
+    --alert-danger-bg: #b71c1c;
+    --alert-danger-text: #ffcdd2;
+    --alert-success-bg: #1b5e20;
+    --alert-success-text: #c8e6c9;
+    --alert-info-bg: #0d47a1;
+    --alert-info-text: #bbdefb;
+    --alert-info-border: #2196f3;
+    --btn-secondary-bg: #424242;
+    --btn-secondary-text: #e0e0e0;
+    --shadow-color: rgba(0,0,0,0.2);
+    --input-bg-light: #404040;
+    --input-bg-hover: #484848;
+}
+
+/* Signup Form Styles */
+.signup-main {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 32px;
+}
+
+.signup-title {
+    text-align: center;
+    color: #d2691e;
+    margin-bottom: 24px;
+}
+
+.signup-form-group {
+    margin-bottom: 16px;
+}
+
+.signup-error {
+    color: red;
+    text-align: center;
+}
+
+.signup-button-container {
+    text-align: center;
+}
+
+.signup-button {
+    background: #d2691e;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 32px;
+    font-size: 1.1em;
+    cursor: pointer;
+}
+
+.signup-tiene-relevo {
+    margin-bottom: 16px;
+    display: none;
+}
+
+/* Login Form Styles */
+.login-error {
+    color: red;
+}
+
+/* Area Edit Styles */
+.area-edit-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.area-edit-title {
+    font-size: 2.2rem;
+    color: var(--main-color, #d2691e);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.subtitle-divider {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(to right, var(--main-color, #d2691e), var(--light-main-color, #ffe4e1));
+    margin: 12px auto;
+}
+
+.area-edit-card {
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    border: none;
+    background-color: var(--card-bg, #fff);
+    color: var(--text-color, #333);
+}
+
+.area-edit-card-body {
+    padding: 30px;
+}
+
+.area-edit-alert-danger {
+    border-radius: 10px;
+    border-left: 4px solid #721c24;
+    background-color: var(--alert-danger-bg, #f8d7da);
+    color: var(--alert-danger-text, #721c24);
+}
+
+.area-edit-alert-success {
+    border-radius: 10px;
+    border-left: 4px solid #155724;
+    background-color: var(--alert-success-bg, #d4edda);
+    color: var(--alert-success-text, #155724);
+}
+
+.area-edit-section {
+    background-color: var(--section-bg, #f9f9f9) !important;
+    border-radius: 12px !important;
+    padding: 25px !important;
+    margin-bottom: 25px !important;
+    border-left: 4px solid var(--main-color, #d2691e) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+
+.area-edit-section-title {
+    color: var(--main-color, #d2691e) !important;
+    margin-bottom: 25px !important;
+    font-weight: 600 !important;
+    font-size: 1.3rem !important;
+    border-bottom: 2px solid var(--main-color, #d2691e) !important;
+    padding-bottom: 8px !important;
+}
+
+.area-edit-form-container {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    gap: 20px !important;
+    align-items: start !important;
+}
+
+.area-edit-form-group {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-bottom: 0 !important;
+}
+
+/* Form Input Styles with higher specificity */
+.area-edit-label,
+.area-edit-form-group label,
+label[for*="id_"] {
+    display: block !important;
+    margin-bottom: 8px !important;
+    font-weight: 600 !important;
+    color: var(--text-color, #333) !important;
+    font-size: 0.95rem !important;
+}
+
+.area-edit-input,
+#id_username,
+#id_email,
+#id_phone,
+#id_carnet_gatos,
+#id_casa_acogida,
+#id_tiene_relevo,
+#id_avatar_file,
+#id_es_capturador,
+#id_tiene_trampa,
+#id_es_free,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select,
+input[type="file"] {
+    width: 100% !important;
+    padding: 12px 15px !important;
+    border: 2px solid var(--input-border, #e9ecef) !important;
+    border-radius: 8px !important;
+    font-size: 15px !important;
+    transition: all 0.3s ease !important;
+    background-color: var(--input-bg, #fff) !important;
+    color: var(--input-text, #333) !important;
+    box-sizing: border-box !important;
+}
+
+#id_avatar_file {
+    padding: 10px !important;
+    background-color: var(--input-bg, #f8f9fa) !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+}
+
+#id_avatar_file:hover {
+    background-color: var(--input-bg-hover, #f1f3f5) !important;
+}
+
+.area-edit-input:focus,
+#id_username:focus,
+#id_email:focus,
+#id_phone:focus,
+#id_carnet_gatos:focus,
+#id_casa_acogida:focus,
+#id_tiene_relevo:focus,
+#id_avatar_file:focus,
+#id_es_capturador:focus,
+#id_tiene_trampa:focus,
+#id_es_free:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+select:focus,
+input[type="file"]:focus {
+    border-color: var(--main-color, #d2691e) !important;
+    box-shadow: 0 0 0 3px var(--main-color-shadow, rgba(210, 105, 30, 0.2)) !important;
+    outline: none !important;
+    transform: translateY(-1px) !important;
+}
+
+.dark-mode .area-edit-input,
+.dark-mode #id_username,
+.dark-mode #id_email,
+.dark-mode #id_phone,
+.dark-mode #id_carnet_gatos,
+.dark-mode #id_casa_acogida,
+.dark-mode #id_tiene_relevo,
+.dark-mode #id_avatar_file,
+.dark-mode #id_es_capturador,
+.dark-mode #id_tiene_trampa,
+.dark-mode #id_es_free,
+.dark-mode input[type="text"],
+.dark-mode input[type="email"],
+.dark-mode input[type="tel"],
+.dark-mode select,
+.dark-mode input[type="file"] {
+    background-color: var(--input-bg, #333) !important;
+    color: var(--input-text, #f1f1f1) !important;
+    border-color: var(--input-border, #444) !important;
+}
+
+.dark-mode .area-edit-label,
+.dark-mode .area-edit-form-group label,
+.dark-mode label[for*="id_"] {
+    color: var(--text-color, #f1f1f1) !important;
+}
+
+/* Role Assignment Styles */
+.role-association-div {
+    display: none;
+}
+
+.role-trampa-div {
+    display: none;
+}
+
+/* Hidden/Show divs with smooth transitions */
+#tiene-relevo-div,
+#tiene-trampa-div {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+#tiene-relevo-div.hidden,
+#tiene-trampa-div.hidden {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Custom file upload styles */
+.custom-file-upload {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.custom-file-upload input[type="file"] {
+    border: 2px dashed var(--input-border, #e9ecef);
+    background-color: var(--input-bg, #f8f9fa);
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.custom-file-upload input[type="file"]:hover {
+    border-color: var(--main-color, #d2691e);
+    background-color: var(--input-bg-hover, #f1f3f5);
+}
+
+.area-edit-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-color, #333);
+    font-size: 0.95rem;
+}
+
+/* Additional form group styles for area edit */
+.area-edit-form-group-flex {
+    flex: 1 1 300px;
+    padding: 0 10px;
+}
+
+/* Responsive utility classes */
+@media (max-width: 768px) {
+    .area-edit-form-group-flex {
+        flex: 1 1 100%;
+        padding: 0;
+    }
+    
+    .signup-main {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .area-edit-form-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .area-edit-section {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .area-edit-section-title {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .area-edit-card-body {
+        padding: 20px;
+    }
+    
+    .area-edit-title {
+        font-size: 1.8rem;
+    }
+}
+
+/* Additional utility classes for common inline styles */
+.text-center {
+    text-align: center;
+}
+
+.mb-16 {
+    margin-bottom: 16px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.show {
+    display: block !important;
+}
+
+/* Form animations */
+.area-edit-form-group {
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ESTILOS ESPECÍFICOS PARA EL FORMULARIO AREA EDIT */
+.area-edit-section {
+    background-color: var(--section-bg) !important;
+    border-radius: 15px !important;
+    padding: 30px !important;
+    margin-bottom: 30px !important;
+    border-left: 5px solid var(--main-color) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+.area-edit-section-title {
+    color: var(--main-color) !important;
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 25px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 3px solid var(--main-color) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+}
+
+.area-edit-form-container {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+    gap: 25px !important;
+    align-items: start !important;
+}
+
+.area-edit-form-group {
+    background: white !important;
+    padding: 20px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
+    border: 1px solid #e9ecef !important;
+    transition: all 0.3s ease !important;
+}
+
+.area-edit-form-group:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+}
+
+.area-edit-form-group label {
+    display: block !important;
+    font-weight: 600 !important;
+    color: var(--main-color) !important;
+    margin-bottom: 10px !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+.area-edit-form-group input,
+.area-edit-form-group select,
+.area-edit-form-group textarea {
+    width: 100% !important;
+    padding: 15px !important;
+    border: 2px solid #e9ecef !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    background-color: #f8f9fa !important;
+    color: #333 !important;
+    transition: all 0.3s ease !important;
+    box-sizing: border-box !important;
+}
+
+.area-edit-form-group input:focus,
+.area-edit-form-group select:focus,
+.area-edit-form-group textarea:focus {
+    border-color: var(--main-color) !important;
+    box-shadow: 0 0 0 3px var(--main-color-shadow) !important;
+    outline: none !important;
+    background-color: white !important;
+    transform: scale(1.02) !important;
+}
+
+/* Estilos específicos para el campo de archivo */
+.custom-file-upload input[type="file"] {
+    border: 2px dashed var(--main-color) !important;
+    background-color: var(--light-main-color) !important;
+    padding: 20px !important;
+    text-align: center !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+}
+
+.custom-file-upload input[type="file"]:hover {
+    background-color: var(--main-color-shadow) !important;
+}
+
+/* Modo oscuro para formularios */
+.dark-mode .area-edit-section {
+    background-color: var(--section-bg) !important;
+    border-left-color: var(--main-color) !important;
+}
+
+.dark-mode .area-edit-section-title {
+    color: var(--main-color) !important;
+    border-bottom-color: var(--main-color) !important;
+}
+
+.dark-mode .area-edit-form-group {
+    background-color: #2a2a2a !important;
+    border-color: #444 !important;
+}
+
+.dark-mode .area-edit-form-group label {
+    color: var(--main-color) !important;
+}
+
+.dark-mode .area-edit-form-group input,
+.dark-mode .area-edit-form-group select,
+.dark-mode .area-edit-form-group textarea {
+    background-color: #333 !important;
+    color: #f1f1f1 !important;
+    border-color: #555 !important;
+}
+
+.dark-mode .area-edit-form-group input:focus,
+.dark-mode .area-edit-form-group select:focus,
+.dark-mode .area-edit-form-group textarea:focus {
+    background-color: #404040 !important;
+    border-color: var(--main-color) !important;
+}
+
+/* Estilos para tablas en modo oscuro */
+.dark-mode .table {
+    color: var(--text-color);
+}
+
+.dark-mode label {
+    color: var(--text-color);
+}
+
+/* Responsive para área de edición */
+@media (max-width: 768px) {
+    .area-edit-form-container {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+    
+    .area-edit-section {
+        padding: 20px !important;
+    }
+    
+    .area-edit-form-group {
+        padding: 15px !important;
+    }
+}
+
+/* Enhanced form group styles for improved visual appeal */
+.enhanced-form-group {
+    transform: translateY(0);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.enhanced-form-group:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important;
+}
+
+/* Enhanced input styling */
+.enhanced-form-group input,
+.enhanced-form-group select {
+    border: 2px solid transparent !important;
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    font-size: 16px !important;
+    padding: 15px 20px !important;
+}
+
+.enhanced-form-group input:focus,
+.enhanced-form-group select:focus {
+    background: linear-gradient(135deg, #fff 0%, #fff 100%) !important;
+    border-color: var(--main-color, #d2691e) !important;
+    box-shadow: 0 0 0 4px var(--main-color-shadow, rgba(210, 105, 30, 0.15)), 
+                0 8px 25px rgba(0,0,0,0.1) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Enhanced label styling */
+.enhanced-form-group label {
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin: 0 !important;
+}
+
+/* File upload enhanced styling */
+.custom-file-upload input[type="file"] {
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    top: 0 !important;
+    left: 0 !important;
+    cursor: pointer !important;
+}
+
+.custom-file-upload {
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Dark mode enhancements */
+.dark-mode .enhanced-form-group {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%) !important;
+    border-color: #555 !important;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3) !important;
+}
+
+.dark-mode .enhanced-form-group:hover {
+    background: linear-gradient(135deg, #222 0%, #333 100%) !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4) !important;
+}
+
+.dark-mode .enhanced-form-group input,
+.dark-mode .enhanced-form-group select {
+    background: linear-gradient(135deg, #2a2a2a 0%, #333 100%) !important;
+    color: #f1f1f1 !important;
+    border-color: #666 !important;
+}
+
+.dark-mode .enhanced-form-group input:focus,
+.dark-mode .enhanced-form-group select:focus {
+    background: linear-gradient(135deg, #333 0%, #404040 100%) !important;
+    border-color: var(--main-color, #ff7f50) !important;
+    box-shadow: 0 0 0 4px rgba(255, 127, 80, 0.3), 
+                0 8px 25px rgba(0,0,0,0.3) !important;
+}
+
+/* Dark mode section backgrounds */
+.dark-mode .area-edit-section[style*="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, var(--light-main-color, #ffe4e1) 100%)"] {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d1a0f 100%) !important;
+    border-color: var(--main-color, #ff7f50) !important;
+}
+
+.dark-mode .area-edit-section[style*="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #e3f2fd 100%)"] {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0f1a2d 100%) !important;
+    border-color: var(--secondary-color, #64b5f6) !important;
+}
+
+/* Dark mode file upload styling */
+.dark-mode .custom-file-upload div[style*="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)"] {
+    background: linear-gradient(135deg, #cc5555 0%, #bb4444 100%) !important;
+}
+
+/* Dark mode labels */
+.dark-mode .enhanced-form-group label {
+    color: #e0e0e0 !important;
+}
+
+/* Dark mode icons keep their colors but with slight opacity for dark theme */
+.dark-mode .enhanced-form-group i {
+    opacity: 0.9;
+}
+
+/* Dark mode specific section titles */
+.dark-mode .area-edit-section-title {
+    color: #e0e0e0 !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5) !important;
+}
+
+/* Dark mode icon containers */
+.dark-mode div[style*="background: linear-gradient(135deg, var(--main-color, #d2691e), var(--main-color-dark, #a0522d))"] {
+    background: linear-gradient(135deg, #ff7f50, #cc5528) !important;
+    box-shadow: 0 4px 15px rgba(255, 127, 80, 0.4) !important;
+}
+
+.dark-mode div[style*="background: linear-gradient(135deg, var(--secondary-color, #4a86e8), var(--secondary-color-dark, #2a56b8))"] {
+    background: linear-gradient(135deg, #64b5f6, #42a5f5) !important;
+    box-shadow: 0 4px 15px rgba(100, 181, 246, 0.4) !important;
+}
+
+/* Dark mode border bottoms */
+.dark-mode div[style*="border-bottom: 3px solid var(--main-color, #d2691e)"] {
+    border-bottom-color: #ff7f50 !important;
+}
+
+.dark-mode div[style*="border-bottom: 3px solid var(--secondary-color, #4a86e8)"] {
+    border-bottom-color: #64b5f6 !important;
+}
+
+/* Dark mode card backgrounds */
+.dark-mode .area-edit-card {
+    background-color: #1a1a1a !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4) !important;
+}
+
+.dark-mode .area-edit-card-body {
+    background-color: #1a1a1a !important;
+}
+
+/* Dark mode main container */
+.dark-mode .staff-container {
+    background-color: #121212 !important;
+}
+
+/* Dark mode title styling */
+.dark-mode .area-edit-title {
+    color: #ff7f50 !important;
+}
+
+/* Dark mode alert styling */
+.dark-mode .area-edit-alert-danger {
+    background-color: #d32f2f !important;
+    color: #ffcdd2 !important;
+    border-left-color: #b71c1c !important;
+}
+
+.dark-mode .area-edit-alert-success {
+    background-color: #388e3c !important;
+    color: #c8e6c9 !important;
+    border-left-color: #2e7d32 !important;
+}
+
+/* Dark mode form field borders with color accent */
+.dark-mode .enhanced-form-group[style*="background: linear-gradient(to bottom, var(--main-color, #d2691e), var(--main-color-dark, #a0522d))"] {
+    background: linear-gradient(to bottom, #ff7f50, #cc5528) !important;
+}
+
+.dark-mode .enhanced-form-group[style*="background: linear-gradient(to bottom, var(--secondary-color, #4a86e8), var(--secondary-color-dark, #2a56b8))"] {
+    background: linear-gradient(to bottom, #64b5f6, #42a5f5) !important;
+}
+
+.dark-mode .enhanced-form-group[style*="background: linear-gradient(to bottom, var(--tertiary-color, #28a745), var(--tertiary-color-dark, #218838))"] {
+    background: linear-gradient(to bottom, #4caf50, #388e3c) !important;
+}
+
+.dark-mode .enhanced-form-group[style*="background: linear-gradient(to bottom, #ff6b6b, #ee5a52)"] {
+    background: linear-gradient(to bottom, #ff5252, #d32f2f) !important;
+}
+
+.dark-mode .enhanced-form-group[style*="background: linear-gradient(to bottom, #9c27b0, #7b1fa2)"] {
+    background: linear-gradient(to bottom, #ab47bc, #8e24aa) !important;
+}
+
+.dark-mode .enhanced-form-group[style*="background: linear-gradient(to bottom, #ff9800, #f57c00)"] {
+    background: linear-gradient(to bottom, #ffa726, #fb8c00) !important;
+}
+
+.dark-mode .enhanced-form-group[style*="background: linear-gradient(to bottom, #00bcd4, #0097a7)"] {
+    background: linear-gradient(to bottom, #26c6da, #00acc1) !important;
+}
+
+.dark-mode .enhanced-form-group[style*="background: linear-gradient(to bottom, #2196f3, #1976d2)"] {
+    background: linear-gradient(to bottom, #42a5f5, #1e88e5) !important;
+}
+
+.dark-mode .enhanced-form-group[style*="background: linear-gradient(to bottom, #ff5722, #d84315)"] {
+    background: linear-gradient(to bottom, #ff7043, #f4511e) !important;
+}
+
+.dark-mode .enhanced-form-group[style*="background: linear-gradient(to bottom, #4caf50, #388e3c)"] {
+    background: linear-gradient(to bottom, #66bb6a, #4caf50) !important;
+}
+
+/* Dark mode label color adjustments to maintain theme colors */
+.dark-mode label[style*="color: var(--main-color, #d2691e)"] {
+    color: #ff7f50 !important;
+}
+
+.dark-mode label[style*="color: var(--secondary-color, #4a86e8)"] {
+    color: #64b5f6 !important;
+}
+
+.dark-mode label[style*="color: var(--tertiary-color, #28a745)"] {
+    color: #4caf50 !important;
+}
+
+.dark-mode label[style*="color: #9c27b0"] {
+    color: #ab47bc !important;
+}
+
+.dark-mode label[style*="color: #ff9800"] {
+    color: #ffa726 !important;
+}
+
+.dark-mode label[style*="color: #00bcd4"] {
+    color: #26c6da !important;
+}
+
+.dark-mode label[style*="color: #2196f3"] {
+    color: #42a5f5 !important;
+}
+
+.dark-mode label[style*="color: #ff5722"] {
+    color: #ff7043 !important;
+}
+
+.dark-mode label[style*="color: #4caf50"] {
+    color: #66bb6a !important;
+}
+
+/* Animation for section appearance */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.area-edit-section {
+    animation: slideInUp 0.6s ease-out;
+}
+
+/* Responsive enhancements */
+@media (max-width: 768px) {
+    .enhanced-form-group {
+        padding: 20px !important;
+    }
+    
+    .area-edit-form-container {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+}
+
+/* Override inline styles for specific sections - MUST be at the end */
+div[style*="background-color: var(--section-bg"] {
+    background-color: var(--section-bg, #f9f9f9) !important;
+    border-radius: 12px !important;
+    padding: 25px !important;
+    margin: 25px 0 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+
+/* Force CSS Grid layout */
+.area-edit-form-container {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    gap: 20px !important;
+    align-items: start !important;
+}
+
+/* Make sure form controls are properly styled */
+.area-edit-card .form-group {
+    margin-bottom: 20px !important;
+}
+
+.area-edit-card .form-group label {
+    display: block !important;
+    margin-bottom: 8px !important;
+    font-weight: 600 !important;
+    color: var(--text-color, #333) !important;
+}
+
+/* Ensure dark mode compatibility for all sections */
+.dark-mode .area-edit-section {
+    background-color: var(--section-bg, #363636) !important;
+    color: var(--text-color, #f1f1f1) !important;
+}
+
+.dark-mode .area-edit-section-title {
+    color: var(--main-color, #ff7f50) !important;
+    border-bottom-color: var(--main-color, #ff7f50) !important;
+}
+
+.dark-mode .area-edit-card {
+    background-color: var(--card-bg, #2d2d2d) !important;
+    color: var(--text-color, #f1f1f1) !important;
+}
+
+/* Fix section titles and ensure proper styling */
+h4.area-edit-section-title {
+    color: var(--main-color, #d2691e) !important;
+    margin-bottom: 25px !important;
+    font-weight: 600 !important;
+    font-size: 1.3rem !important;
+    border-bottom: 2px solid var(--main-color, #d2691e) !important;
+    padding-bottom: 8px !important;
+}
+
+/* Force proper input styling */
+input[type="text"], input[type="email"], input[type="tel"], select, input[type="file"] {
+    width: 100% !important;
+    padding: 12px 15px !important;
+    border: 2px solid var(--input-border, #e9ecef) !important;
+    border-radius: 8px !important;
+    font-size: 15px !important;
+    transition: all 0.3s ease !important;
+    background-color: var(--input-bg, #fff) !important;
+    color: var(--input-text, #333) !important;
+    box-sizing: border-box !important;
+}
