@@ -54,6 +54,15 @@ main {
     box-shadow: 0 6px 20px rgba(255,192,203,0.25);
 }
 
+/* Disable hover effects for edit form cards */
+.area-edit-card:hover, 
+.area-edit-card.card:hover,
+.staff-form:hover,
+.staff-form.card:hover {
+    transform: none !important;
+    box-shadow: initial !important;
+}
+
 /* Tipografías consistentes */
 h1, h2, h3, h4, h5, h6 {
     color: #d2691e;

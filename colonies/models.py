@@ -62,10 +62,20 @@ class Incident(models.Model):
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     colony = models.ForeignKey('Colony', on_delete=models.CASCADE, related_name='incidents')
-    cat = models.ForeignKey('cats.Cat', on_delete=models.CASCADE)
+    cat = models.ForeignKey('cats.Cat', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f"{self.title} - {'Resuelta' if self.is_resolved else 'Pendiente'}"
     
     class Meta:
         db_table = 'incidents'
+
+class Relief(models.Model):
+    description = models.TextField()
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'relief'

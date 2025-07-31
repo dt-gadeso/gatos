@@ -1,0 +1,459 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    body, .dark-bg {
+        background: #181a1b;
+        color: #f1f1f1;
+    }
+    .relief-search-container {
+        margin: 2rem auto;
+        max-width: 1200px;
+        background: #23272b;
+        border-radius: 12px;
+        box-shadow: 0 2px 16px #1118;
+        padding: 2rem;
+    }
+    .relief-search-title {
+        text-align: center;
+        color: #90caf9;
+        margin-bottom: 2rem;
+        font-size: 2rem;
+    }
+    .search-form {
+        background: #1a1f23;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: end;
+    }
+    .form-group {
+        flex: 1;
+        min-width: 200px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #90caf9;
+        font-weight: bold;
+    }
+    .form-group select,
+    .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #333;
+        border-radius: 5px;
+        background: #22292f;
+        color: #f1f1f1;
+        font-size: 1rem;
+    }
+    .search-btn {
+        background: #1976d2;
+        color: #fff;
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.2s;
+        height: fit-content;
+    }
+    .search-btn:hover {
+        background: #1565c0;
+    }
+    .reliefs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .relief-card {
+        background: #22292f;
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 1.5rem;
+        transition: transform 0.15s, border-color 0.15s;
+    }
+    .relief-card:hover {
+        transform: translateY(-2px);
+        border-color: #90caf9;
+    }
+    .relief-title {
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    .relief-description {
+        color: #bdbdbd;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+    .relief-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .relief-meta span {
+        color: #90caf9;
+        font-size: 0.9rem;
+    }
+    .relief-meta strong {
+        color: #f1f1f1;
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-top: 0.5rem;
+    }
+    .status-active {
+        background: #4caf50;
+        color: #fff;
+    }
+    .status-completed {
+        background: #2196f3;
+        color: #fff;
+    }
+    .status-upcoming {
+        background: #ff9800;
+        color: #fff;
+    }
+    .relief-actions {
+        margin-top: 1rem;
+        text-align: center;
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .edit-btn {
+        background: #f57c00;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.2s;
+        font-size: 0.9rem;
+    }
+    .edit-btn:hover {
+        background: #e65100;
+        text-decoration: none;
+        color: #fff;
+    }
+    .view-btn {
+        background: #1976d2;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.2s;
+        font-size: 0.9rem;
+    }
+    .view-btn:hover {
+        background: #1565c0;
+        text-decoration: none;
+        color: #fff;
+    }
+    .delete-btn {
+        background: #d32f2f;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.2s;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+    .delete-btn:hover {
+        background: #c62828;
+        text-decoration: none;
+        color: #fff;
+    }
+    .duplicate-btn {
+        background: #388e3c;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.2s;
+        font-size: 0.9rem;
+    }
+    .duplicate-btn:hover {
+        background: #2e7d32;
+        text-decoration: none;
+        color: #fff;
+    }
+    .no-results {
+        text-align: center;
+        color: #bdbdbd;
+        font-size: 1.1rem;
+        padding: 3rem;
+        background: #1a1f23;
+        border-radius: 8px;
+    }
+    .back-link {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    .back-link a {
+        color: #90caf9;
+        text-decoration: underline;
+        font-size: 1rem;
+    }
+    .results-count {
+        color: #bdbdbd;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    .floating-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 4px 16px rgba(40, 167, 69, 0.3);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .floating-btn:hover {
+        background: #218838;
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        color: #fff;
+        text-decoration: none;
+    }
+    .floating-btn:active {
+        transform: scale(0.95);
+    }
+</style>
+
+<div class="relief-search-container dark-bg">
+    <h1 class="relief-search-title">Búsqueda de relevos</h1>
+    
+    <!-- Formulario de búsqueda -->
+    <form class="search-form" method="get">
+        <div class="form-group">
+            <label for="description">Descripción:</label>
+            <input type="text" name="description" id="description" class="form-control" 
+                   value="{{ filters.description }}" placeholder="Buscar por descripción">
+        </div>
+        
+        <div class="form-group">
+            <label for="start_date">Fecha de inicio desde:</label>
+            <input type="date" name="start_date" id="start_date" class="form-control" 
+                   value="{{ filters.start_date }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="end_date">Fecha de fin hasta:</label>
+            <input type="date" name="end_date" id="end_date" class="form-control" 
+                   value="{{ filters.end_date }}">
+        </div>
+        
+        <button type="submit" class="search-btn">Buscar</button>
+    </form>
+    
+    <!-- Contador de resultados -->
+    {% if reliefs %}
+        <div class="results-count">
+            Se encontraron {{ reliefs.count }} relevo{{ reliefs.count|pluralize }}
+        </div>
+    {% endif %}
+    
+    <!-- Grid de relevos -->
+    <div class="reliefs-grid">
+        {% for relief in reliefs %}
+        <div class="relief-card">
+            <h3 class="relief-title">Relevo #{{ relief.id }}</h3>
+            <p class="relief-description">{{ relief.description|truncatewords:30 }}</p>
+            
+            <div class="relief-meta">
+                <span><strong>Creado:</strong> {{ relief.created_at|date:"d/m/Y H:i" }}</span>
+                {% if relief.start_date %}
+                <span><strong>Fecha inicio:</strong> {{ relief.start_date|date:"d/m/Y" }}</span>
+                {% endif %}
+                {% if relief.end_date %}
+                <span><strong>Fecha fin:</strong> {{ relief.end_date|date:"d/m/Y" }}</span>
+                {% endif %}
+                <span><strong>Última actualización:</strong> {{ relief.updated_at|date:"d/m/Y H:i" }}</span>
+                
+                <!-- Estado del relevo basado en fechas -->
+                {% now "Y-m-d" as today %}
+                {% if relief.start_date and relief.end_date %}
+                    {% if relief.start_date|date:"Y-m-d" > today %}
+                        <div class="status-badge status-upcoming">
+                            📅 Próximo
+                        </div>
+                    {% elif relief.end_date|date:"Y-m-d" < today %}
+                        <div class="status-badge status-completed">
+                            ✓ Completado
+                        </div>
+                    {% else %}
+                        <div class="status-badge status-active">
+                            🔄 En progreso
+                        </div>
+                    {% endif %}
+                {% elif relief.start_date %}
+                    {% if relief.start_date|date:"Y-m-d" > today %}
+                        <div class="status-badge status-upcoming">
+                            📅 Próximo
+                        </div>
+                    {% else %}
+                        <div class="status-badge status-active">
+                            🔄 Activo
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="status-badge status-active">
+                        📝 Sin fechas definidas
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="relief-actions">
+                <a href="{% url 'editRelief' relief.id %}" class="edit-btn">
+                    ✏ Editar
+                </a>
+                <button onclick="viewReliefDetails({{ relief.id }})" class="view-btn">
+                    👁 Ver detalles
+                </button>
+                <button onclick="duplicateRelief({{ relief.id }})" class="duplicate-btn">
+                    📋 Duplicar
+                </button>
+                <button onclick="confirmDeleteRelief({{ relief.id }})" class="delete-btn">
+                    🗑 Eliminar
+                </button>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-results">
+            <h3>No se encontraron relevos</h3>
+            <p>No hay relevos que coincidan con los criterios de búsqueda especificados.</p>
+            {% if filters.description or filters.start_date or filters.end_date %}
+                <p><a href="{% url 'searchReliefs' %}" style="color: #90caf9;">Mostrar todos los relevos</a></p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Enlaces de navegación -->
+    <div class="back-link">
+        <a href="{% url 'colonies' %}">← Volver a colonias</a>
+        <span style="margin: 0 1rem;">|</span>
+        <a href="{% url 'save_relief' %}">+ Nuevo relevo</a>
+    </div>
+</div>
+
+<!-- Botón flotante para crear nuevo relevo -->
+<a href="{% url 'save_relief' %}" class="floating-btn" title="Crear nuevo relevo">
+    ➕
+</a>
+
+<script>
+// Función para ver detalles del relevo
+function viewReliefDetails(reliefId) {
+    // Crear modal o redireccionar a página de detalles
+    alert(`Ver detalles del Relevo #${reliefId}\n\nEsta funcionalidad se puede implementar con un modal o página separada.`);
+}
+
+// Función para duplicar relevo
+function duplicateRelief(reliefId) {
+    if (confirm('¿Estás seguro de que deseas duplicar este relevo?')) {
+        // Aquí puedes hacer una petición AJAX o redireccionar
+        fetch(`/colonies/duplicate_relief/${reliefId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Relevo duplicado exitosamente');
+                location.reload();
+            } else {
+                alert('Error al duplicar el relevo: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al duplicar el relevo');
+        });
+    }
+}
+
+// Función para confirmar eliminación
+function confirmDeleteRelief(reliefId) {
+    if (confirm('¿Estás seguro de que deseas eliminar este relevo?\n\nEsta acción no se puede deshacer.')) {
+        deleteRelief(reliefId);
+    }
+}
+
+// Función para eliminar relevo
+function deleteRelief(reliefId) {
+    fetch(`/colonies/delete_relief/${reliefId}/`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Relevo eliminado exitosamente');
+            location.reload();
+        } else {
+            alert('Error al eliminar el relevo: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al eliminar el relevo');
+    });
+}
+
+// Función para obtener el token CSRF
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+
+{% endblock %}

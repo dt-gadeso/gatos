@@ -823,6 +823,22 @@ h3 { font-size: 1.5rem; margin-bottom: 15px; }
     background: #c82333 !important;
 }
 
+.btn-success {
+    background: #28a745 !important;
+    color: #fff !important;
+}
+.btn-success:hover {
+    background: #218838 !important;
+}
+
+.btn-primary {
+    background: #007bff !important;
+    color: #fff !important;
+}
+.btn-primary:hover {
+    background: #0056b3 !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     main {

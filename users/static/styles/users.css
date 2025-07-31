@@ -293,7 +293,7 @@ input[type="file"]:focus {
     border-color: var(--main-color, #d2691e) !important;
     box-shadow: 0 0 0 3px var(--main-color-shadow, rgba(210, 105, 30, 0.2)) !important;
     outline: none !important;
-    transform: translateY(-1px) !important;
+    /* Removed transform to prevent movement */
 }
 
 .dark-mode .area-edit-input,
@@ -493,10 +493,7 @@ input[type="file"]:focus {
     transition: all 0.3s ease !important;
 }
 
-.area-edit-form-group:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
-}
+/* Removed hover effects to prevent form element movement */
 
 .area-edit-form-group label {
     display: block !important;
@@ -529,7 +526,7 @@ input[type="file"]:focus {
     box-shadow: 0 0 0 3px var(--main-color-shadow) !important;
     outline: none !important;
     background-color: white !important;
-    transform: scale(1.02) !important;
+    /* Removed transform to prevent scaling */
 }
 
 /* Estilos específicos para el campo de archivo */
@@ -612,10 +609,7 @@ input[type="file"]:focus {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-.enhanced-form-group:hover {
-    transform: translateY(-5px) !important;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important;
-}
+/* Removed hover effects to prevent form element movement */
 
 /* Enhanced input styling */
 .enhanced-form-group input,
@@ -633,7 +627,7 @@ input[type="file"]:focus {
     border-color: var(--main-color, #d2691e) !important;
     box-shadow: 0 0 0 4px var(--main-color-shadow, rgba(210, 105, 30, 0.15)), 
                 0 8px 25px rgba(0,0,0,0.1) !important;
-    transform: translateY(-2px) !important;
+    /* Removed transform to prevent movement */
 }
 
 /* Enhanced label styling */
@@ -668,10 +662,7 @@ input[type="file"]:focus {
     box-shadow: 0 5px 20px rgba(0,0,0,0.3) !important;
 }
 
-.dark-mode .enhanced-form-group:hover {
-    background: linear-gradient(135deg, #222 0%, #333 100%) !important;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4) !important;
-}
+/* Removed dark mode hover effects to prevent form element movement */
 
 .dark-mode .enhanced-form-group input,
 .dark-mode .enhanced-form-group select {
@@ -945,4 +936,17 @@ input[type="text"], input[type="email"], input[type="tel"], select, input[type="
     background-color: var(--input-bg, #fff) !important;
     color: var(--input-text, #333) !important;
     box-sizing: border-box !important;
+}
+
+/* DISABLE ALL HOVER EFFECTS FOR EDIT FORM */
+#edit-form:hover,
+#edit-form.card:hover,
+.area-edit-card:hover,
+.area-edit-card.card:hover,
+.staff-form:hover,
+.staff-form.card:hover,
+.area-edit-section:hover,
+.personal-info-section:hover {
+    transform: none !important;
+    box-shadow: inherit !important;
 }

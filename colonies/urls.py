@@ -15,6 +15,12 @@ urlpatterns = [
     path('formEditIncident/<int:incident_id>/', views.editIncident, name='editIncident'),
     path('incidents/search/', views.searchIncidents, name='searchIncidents'),
     path('incident_search_result/', views.searchIncidents, name='incident_search_result'),
+    path('formNewRelief/', views.save_relief, name='save_relief'),
+    path('formEditRelief/<int:relief_id>/', views.editRelief, name='editRelief'),
+    path('reliefs/search/', views.searchReliefs, name='searchReliefs'),
+    path('relief_search_result/', views.searchReliefs, name='relief_search_result'),
+    path('duplicate_relief/<int:relief_id>/', views.duplicateRelief, name='duplicateRelief'),
+    path('delete_relief/<int:relief_id>/', views.deleteRelief, name='deleteRelief'),
     path('formularios_multiples/', views.multi_form_view, name='multi_forms'),
 ]
 

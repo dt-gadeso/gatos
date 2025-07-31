@@ -4,9 +4,7 @@
 {% block title %}Editar Perfil{% endblock %}
 
 {% block extra_css %}
-<l                        <div class="area-edit-section role-options-section" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, var(--light-secondary-color, #e6f3ff) 100%); border: 2px solid var(--secondary-color, #4a90e2); border-radius: 20px; padding: 35px; margin-bottom: 35px; box-shadow: 0 10px 30px rgba(74, 144, 226, 0.15), 0 0 0 1px rgba(74, 144, 226, 0.1); position: relative; overflow: hidden;">
-                            <!-- Decorative element -->
-                            <div class="decorative-role" style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: radial-gradient(circle, var(--secondary-color, #4a90e2) 0%, transparent 70%); opacity: 0.1; border-radius: 50%;"></div> rel="stylesheet" href="{% static 'styles/areaStaff.css' %}?v=4">
+<link rel="stylesheet" href="{% static 'styles/areaStaff.css' %}?v=4">
 <link rel="stylesheet" href="{% static 'styles/users.css' %}?v=4">
 {% endblock %}
 
@@ -43,7 +41,7 @@
                             </div>
                             
                             <div class="area-edit-form-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; align-items: start;">
-                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); transition: all 0.3s ease; position: relative;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--main-color, #d2691e), var(--main-color-dark, #a0522d)); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                         <i class="fas fa-user-circle" style="color: var(--main-color, #d2691e); margin-right: 8px; font-size: 18px;"></i>
@@ -52,7 +50,7 @@
                                     {{ form.username|safe }}
                                 </div>
                             
-                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); transition: all 0.3s ease; position: relative;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--secondary-color, #4a86e8), var(--secondary-color-dark, #2a56b8)); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                         <i class="fas fa-envelope" style="color: var(--secondary-color, #4a86e8); margin-right: 8px; font-size: 18px;"></i>
@@ -61,7 +59,7 @@
                                     {{ form.email|safe }}
                                 </div>
                             
-                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); transition: all 0.3s ease; position: relative;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--tertiary-color, #28a745), var(--tertiary-color-dark, #218838)); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                         <i class="fas fa-phone" style="color: var(--tertiary-color, #28a745); margin-right: 8px; font-size: 18px;"></i>
@@ -70,7 +68,7 @@
                                     {{ form.phone|safe }}
                                 </div>
                         
-                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); transition: all 0.3s ease; position: relative; grid-column: span 1;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative; grid-column: span 1;">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #ff6b6b, #ee5a52); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                         <i class="fas fa-camera" style="color: #ff6b6b; margin-right: 8px; font-size: 18px;"></i>
@@ -85,7 +83,7 @@
                                     </div>
                                 </div>
                         
-                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); transition: all 0.3s ease; position: relative;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #9c27b0, #7b1fa2); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                         <i class="fas fa-id-card" style="color: #9c27b0; margin-right: 8px; font-size: 18px;"></i>
@@ -94,7 +92,7 @@
                                     {{ form.carnet_gatos|safe }}
                                 </div>
 
-                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); transition: all 0.3s ease; position: relative;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #ff9800, #f57c00); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                         <i class="fas fa-home" style="color: #ff9800; margin-right: 8px; font-size: 18px;"></i>
@@ -103,7 +101,7 @@
                                     {{ form.casa_acogida|safe }}
                                 </div>
 
-                                <div class="form-group area-edit-form-group enhanced-form-group" id="tiene-relevo-div" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); transition: all 0.3s ease; position: relative;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" id="tiene-relevo-div" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #00bcd4, #0097a7); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                         <i class="fas fa-user-friends" style="color: #00bcd4; margin-right: 8px; font-size: 18px;"></i>
@@ -127,7 +125,7 @@
                             </div>
                             
                             <div class="area-edit-form-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; align-items: start;">
-                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); transition: all 0.3s ease; position: relative;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #2196f3, #1976d2); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                         <i class="fas fa-user-shield" style="color: #2196f3; margin-right: 8px; font-size: 18px;"></i>
@@ -136,7 +134,7 @@
                                     {{ form.es_capturador|safe }}
                                 </div>
 
-                                <div class="form-group area-edit-form-group enhanced-form-group" id="tiene-trampa-div" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); transition: all 0.3s ease; position: relative;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" id="tiene-trampa-div" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #ff5722, #d84315); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                         <i class="fas fa-mouse-pointer" style="color: #ff5722; margin-right: 8px; font-size: 18px;"></i>
@@ -145,7 +143,7 @@
                                     {{ form.tiene_trampa|safe }}
                                 </div>
 
-                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); transition: all 0.3s ease; position: relative;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #4caf50, #388e3c); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                         <i class="fas fa-star" style="color: #4caf50; margin-right: 8px; font-size: 18px;"></i>
@@ -161,7 +159,7 @@
                         <h4 style="color: var(--secondary-color, #4a86e8); margin-bottom: 20px; font-weight: 600;">Tu Rol</h4>
                         {% if user.is_superuser %}
                         <div class="admin-actions mb-4" style="text-align: center;">
-                            <a href="{% url 'assign_role' %}" class="btn btn-primary" style="background: linear-gradient(135deg, var(--secondary-color, #4a86e8), var(--secondary-color-dark, #2a56b8)); border: none; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 8px var(--secondary-color-shadow, rgba(74, 134, 232, 0.3)); transition: all 0.3s; color: var(--btn-text, white);">
+                            <a href="{% url 'assign_role' %}" class="btn btn-primary" style="background: linear-gradient(135deg, var(--secondary-color, #4a86e8), var(--secondary-color-dark, #2a56b8)); border: none; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 8px var(--secondary-color-shadow, rgba(74, 134, 232, 0.3)); color: var(--btn-text, white);">
                                 <i class="fas fa-user-cog"></i> Panel De Control Roles
                             </a>
                         </div>
@@ -234,7 +232,7 @@
                         <h4 style="color: var(--tertiary-color, #28a745); margin-bottom: 20px; font-weight: 600;">Mis Asociaciones</h4>
                         {% if user.is_superuser %}
                         <div class="admin-actions mb-4" style="text-align: center;">
-                            <a href="{% url 'association_create' %}" class="btn btn-primary" style="background: linear-gradient(135deg, var(--tertiary-color, #28a745), var(--tertiary-color-dark, #218838)); border: none; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 8px var(--tertiary-color-shadow, rgba(40, 167, 69, 0.3)); transition: all 0.3s; color: var(--btn-text, white);">
+                            <a href="{% url 'association_create' %}" class="btn btn-primary" style="background: linear-gradient(135deg, var(--tertiary-color, #28a745), var(--tertiary-color-dark, #218838)); border: none; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 8px var(--tertiary-color-shadow, rgba(40, 167, 69, 0.3)); color: var(--btn-text, white);">
                                 <i class="fas fa-user-cog"></i> Crear nueva Asociación
                             </a>
                         </div>
@@ -280,10 +278,10 @@
                         </div>
                         
                         <div class="form-actions" style="margin-top: 30px; text-align: center;">
-                            <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, var(--main-color, #d2691e), var(--main-color-dark, #a0522d)); border: none; padding: 12px 30px; border-radius: 50px; font-size: 16px; font-weight: 500; margin: 10px; box-shadow: 0 4px 10px var(--main-color-shadow, rgba(210, 105, 30, 0.3)); transition: all 0.3s; color: var(--btn-text, white);">
+                            <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, var(--main-color, #d2691e), var(--main-color-dark, #a0522d)); border: none; padding: 12px 30px; border-radius: 50px; font-size: 16px; font-weight: 500; margin: 10px; box-shadow: 0 4px 10px var(--main-color-shadow, rgba(210, 105, 30, 0.3)); color: var(--btn-text, white);">
                                 <i class="fas fa-save"></i> Guardar Cambios
                             </button>
-                            <a href="{% url 'areaStaff' %}" class="btn btn-secondary" style="background: var(--btn-secondary-bg, #f8f9fa); color: var(--btn-secondary-text, #555); border: none; padding: 12px 25px; border-radius: 50px; font-size: 16px; font-weight: 500; margin: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); transition: all 0.3s;">
+                            <a href="{% url 'areaStaff' %}" class="btn btn-secondary" style="background: var(--btn-secondary-bg, #f8f9fa); color: var(--btn-secondary-text, #555); border: none; padding: 12px 25px; border-radius: 50px; font-size: 16px; font-weight: 500; margin: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
                                 <i class="fas fa-arrow-left"></i> Volver
                             </a>
                         </div>
