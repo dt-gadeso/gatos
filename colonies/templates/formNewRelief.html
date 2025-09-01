@@ -2,15 +2,10 @@
 {% load static %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevo Relevo</title>
-</head>
-<body>
-    <div class="form-container">
+<link rel="stylesheet" href="{% static 'css/formularios_multiples.css' %}">
+
+<div class="forms-container">
+    <div class="form-section">
         <h2>Nuevo Relevo</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -18,6 +13,5 @@
             <button type="submit" class="btn-submit">Guardar</button>
         </form>
     </div>
-</body>
-</html>
+</div>
 {% endblock %}

@@ -50,7 +50,7 @@ class DarkModeManager {
     }
 
     toggle() {
-        const isDark = document.body.classList.contains('dark-mode');
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         if (isDark) {
             this.disable();
         } else {
@@ -59,7 +59,7 @@ class DarkModeManager {
     }
 
     enable() {
-        document.body.classList.add('dark-mode');
+        document.documentElement.setAttribute('data-theme', 'dark');
         localStorage.setItem(this.darkModeKey, 'true');
         this.updateButtonIcon(true);
         
@@ -68,7 +68,7 @@ class DarkModeManager {
     }
 
     disable() {
-        document.body.classList.remove('dark-mode');
+        document.documentElement.removeAttribute('data-theme');
         localStorage.setItem(this.darkModeKey, 'false');
         this.updateButtonIcon(false);
         
@@ -80,10 +80,10 @@ class DarkModeManager {
         const isDark = localStorage.getItem(this.darkModeKey) === 'true';
         
         if (isDark) {
-            document.body.classList.add('dark-mode');
+            document.documentElement.setAttribute('data-theme', 'dark');
             this.updateButtonIcon(true);
         } else {
-            document.body.classList.remove('dark-mode');
+            document.documentElement.removeAttribute('data-theme');
             this.updateButtonIcon(false);
         }
     }
@@ -105,7 +105,7 @@ class DarkModeManager {
 
     // Método público para obtener el estado actual
     isDarkMode() {
-        return document.body.classList.contains('dark-mode');
+        return document.documentElement.getAttribute('data-theme') === 'dark';
     }
 
     // Método para detectar preferencia del sistema

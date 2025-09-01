@@ -1,8 +1,6 @@
 /* Variables CSS para colores normales */
 :root {
-    /* Colores modo claro */
-    --bg-gradient-start: #f0f8ff;
-    --bg-gradient-end: #e0f2f1;
+    background: linear-gradient(135deg, #f5f5f5 60%, #ffe8e5 100%);
     --text-color: #333;
     --container-bg: #ffffff;
     --container-bg-gradient: linear-gradient(135deg, #ffffff 0%, #fdfcfc 100%);
