@@ -50,16 +50,16 @@ class DarkModeManager {
     }
 
     toggle() {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        if (isDark) {
-            this.disable();
-        } else {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        if (isLight) {
             this.enable();
+        } else {
+            this.disable();
         }
     }
 
     enable() {
-        document.documentElement.setAttribute('data-theme', 'dark');
+        document.documentElement.removeAttribute('data-theme');
         localStorage.setItem(this.darkModeKey, 'true');
         this.updateButtonIcon(true);
         
@@ -68,7 +68,7 @@ class DarkModeManager {
     }
 
     disable() {
-        document.documentElement.removeAttribute('data-theme');
+        document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem(this.darkModeKey, 'false');
         this.updateButtonIcon(false);
         
@@ -80,10 +80,10 @@ class DarkModeManager {
         const isDark = localStorage.getItem(this.darkModeKey) === 'true';
         
         if (isDark) {
-            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.removeAttribute('data-theme');
             this.updateButtonIcon(true);
         } else {
-            document.documentElement.removeAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', 'light');
             this.updateButtonIcon(false);
         }
     }
