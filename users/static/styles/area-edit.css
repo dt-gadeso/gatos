@@ -1,0 +1,116 @@
+/* Estilos específicos para el área de edición */
+.area-edit-form {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.area-edit-form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.area-edit-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.area-edit-form-group input,
+.area-edit-form-group select,
+.area-edit-form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.area-edit-form-group input:focus,
+.area-edit-form-group select:focus,
+.area-edit-form-group textarea:focus {
+    border-color: var(--main-color);
+    box-shadow: 0 0 0 3px var(--main-color-shadow);
+    outline: none;
+}
+
+.area-edit-form-group input::placeholder {
+    color: var(--muted-text);
+}
+
+.area-edit-button {
+    background: var(--main-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.area-edit-button:hover {
+    background: var(--main-hover-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--main-color-shadow);
+}
+
+.area-edit-section {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    transition: all 0.3s ease;
+}
+
+/* Estilos para modo oscuro */
+.dark-mode .area-edit-form-group label {
+    color: var(--text-color);
+}
+
+.dark-mode .area-edit-form-group input,
+.dark-mode .area-edit-form-group select,
+.dark-mode .area-edit-form-group textarea {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+    color: var(--input-text);
+}
+
+.dark-mode .area-edit-form-group input:focus,
+.dark-mode .area-edit-form-group select:focus,
+.dark-mode .area-edit-form-group textarea:focus {
+    border-color: var(--main-color);
+    box-shadow: 0 0 0 3px var(--main-color-shadow);
+}
+
+.dark-mode .area-edit-button {
+    background: var(--main-color);
+}
+
+.dark-mode .area-edit-button:hover {
+    background: var(--main-hover-color);
+}
+
+.dark-mode .area-edit-section {
+    background: var(--card-bg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .area-edit-section {
+        padding: 1.5rem;
+    }
+    
+    .area-edit-form-group input,
+    .area-edit-form-group select,
+    .area-edit-form-group textarea {
+        font-size: 16px; /* Prevent zoom on mobile */
+    }
+}
