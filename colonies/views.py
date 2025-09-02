@@ -24,7 +24,6 @@ def mi_error_404(request, exception):
     else:
         return render(request, 'municipality.html', status=404)
 
-# Vista principal que muestra las ubicaciones, municipios y zonas
 def colonies_view(request):
     locations = Location.objects.filter(latitude__isnull=False, longitude__isnull=False)
     municipalities = Municipality.objects.all()
@@ -37,7 +36,6 @@ def colonies_view(request):
     }
     return render(request, 'municipality.html', context)
 
-# Devuelve las ubicaciones en formato JSON para uso en el frontend
 def get_locations_json(request):
     locations = Location.objects.filter(latitude__isnull=False, longitude__isnull=False)
     
@@ -58,7 +56,6 @@ def get_locations_json(request):
 
 
 @csrf_exempt
-# Guarda una nueva ubicación, acepta datos por POST o JSON
 def save_location(request):
     if request.method == 'GET':
         return render(request, 'location.html', {'form': LocationForm()})
@@ -149,7 +146,6 @@ def save_municipality(request):
 
 
 @csrf_exempt
-# Guarda una nueva zona, acepta datos por POST o JSON
 def save_zone(request):
     if request.method == 'GET':
         return render(request, 'formNewZone.html', {'form': ZoneForm()})
@@ -189,7 +185,6 @@ def save_zone(request):
 
 
 @csrf_exempt
-# Crea rápidamente una ubicación desde una petición AJAX/JSON
 def create_quick_location(request):
     if request.method == 'POST':
         try:
@@ -341,7 +336,6 @@ def searchIncidents(request):
 
 @login_required
 def multi_form_view(request):
-    # Inicializar todos los formularios
     colony_form = ColonyForm()
     municipality_form = MunicipalityForm()
     zone_form = ZoneForm()
@@ -374,7 +368,6 @@ def multi_form_view(request):
             elif 'submit_zone' in request.POST:
                 zone_form = ZoneForm(request.POST)
                 if zone_form.is_valid():
-                    # Crear la zona manualmente ya que ZoneForm no es ModelForm
                     Zone.objects.create(
                         name=zone_form.cleaned_data['name']
                     )
@@ -386,7 +379,6 @@ def multi_form_view(request):
             elif 'submit_location' in request.POST:
                 location_form = LocationForm(request.POST, request.FILES)
                 if location_form.is_valid():
-                    # Crear la ubicación manualmente ya que LocationForm no es ModelForm
                     Location.objects.create(
                         nombre=location_form.cleaned_data.get('nombre') or 'Ubicación sin nombre',
                         address=location_form.cleaned_data['address'],
@@ -467,7 +459,7 @@ def editRelief(request, relief_id):
             'relief': relief
         })
 
-    else:  # POST
+    else:
         form = EditReliefForm(request.POST, instance=relief)
         if form.is_valid():
             try:

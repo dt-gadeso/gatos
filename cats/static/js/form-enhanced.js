@@ -1,7 +1,5 @@
-// Mejoras avanzadas para el formulario de cats
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Función para animar la aparición de elementos
     function animateElements() {
         const formGroups = document.querySelectorAll('.form-group');
         formGroups.forEach((group, index) => {
@@ -16,22 +14,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Función para manejar el estado de los campos
     function handleFieldStates() {
         const fields = document.querySelectorAll('.search-form-container input, .search-form-container select, .search-form-container textarea');
         
         fields.forEach(field => {
-            // Agregar efecto de onda al hacer clic
             field.addEventListener('click', function(e) {
                 createRipple(e, this);
             });
             
-            // Manejar el estado de validación en tiempo real
             field.addEventListener('input', function() {
                 validateField(this);
             });
-            
-            // Efectos de focus mejorados
             field.addEventListener('focus', function() {
                 this.parentElement.classList.add('focused');
                 addGlowEffect(this);
@@ -44,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Crear efecto de onda al hacer clic
     function createRipple(event, element) {
         const ripple = document.createElement('span');
         const rect = element.getBoundingClientRect();
@@ -64,17 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 600);
     }
     
-    // Validación en tiempo real
     function validateField(field) {
         const formGroup = field.parentElement;
         const errorMessage = formGroup.querySelector('.error-message');
-        
-        // Remover mensajes de error anteriores
         if (errorMessage) {
             errorMessage.remove();
         }
         
-        // Validaciones específicas
         let isValid = true;
         let errorText = '';
         
@@ -89,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
             errorText = 'El chip debe tener un formato válido';
         }
         
-        // Aplicar estilos de validación
         if (!isValid) {
             field.style.borderColor = '#dc2626';
             field.style.boxShadow = '0 0 0 4px rgba(220, 38, 38, 0.1)';
@@ -100,19 +87,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Validar email
     function isValidEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
     }
     
-    // Validar chip
     function isValidChip(chip) {
-        // Asumiendo que el chip debe tener al menos 10 caracteres
         return chip.length >= 10;
     }
-    
-    // Mostrar error
     function showError(formGroup, message) {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
@@ -120,18 +102,14 @@ document.addEventListener('DOMContentLoaded', function() {
         formGroup.appendChild(errorDiv);
     }
     
-    // Agregar efecto de brillo
     function addGlowEffect(element) {
         element.style.filter = 'brightness(1.05)';
         element.style.boxShadow = '0 0 20px rgba(210, 105, 30, 0.2)';
     }
     
-    // Remover efecto de brillo
     function removeGlowEffect(element) {
         element.style.filter = 'brightness(1)';
     }
-    
-    // Mejorar la experiencia del campo de archivo
     function enhanceFileInput() {
         const fileInput = document.querySelector('input[type="file"]');
         if (fileInput) {
@@ -174,7 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Crear preview de imagen
     function createImagePreview(file, input) {
         if (file && file.type.startsWith('image/')) {
             const reader = new FileReader();
@@ -202,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Mostrar información del archivo
     function showFileInfo(file, input) {
         let fileInfo = document.querySelector('.file-info');
         if (!fileInfo) {
@@ -228,12 +204,10 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
     
-    // Mejorar botones
     function enhanceButtons() {
         const buttons = document.querySelectorAll('.btn');
         buttons.forEach(btn => {
             btn.addEventListener('click', function(e) {
-                // Efecto de carga
                 if (this.type === 'submit') {
                     this.classList.add('loading');
                     this.disabled = true;
@@ -251,7 +225,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Crear partículas al hacer clic en botones
     function createParticles(event, button) {
         const rect = button.getBoundingClientRect();
         const particles = 6;
@@ -287,13 +260,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Inicializar todas las mejoras
     animateElements();
     handleFieldStates();
     enhanceFileInput();
     enhanceButtons();
-    
-    // Agregar estilos CSS para las mejoras
     const style = document.createElement('style');
     style.textContent = `
         .ripple {

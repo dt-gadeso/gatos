@@ -29,10 +29,10 @@ class CreateNewUser(forms.Form):
         required=True,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su número de teléfono'})
     )
-    carnet_gatos = forms.CharField(
+    carnet_gatos = forms.ImageField(
         label='Carnet de Gatos (opcional)',
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
     )
 
 class LoginUser(forms.Form):

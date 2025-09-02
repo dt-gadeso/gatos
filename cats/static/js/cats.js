@@ -27,7 +27,7 @@ function submitEditForm(event, catId) {
     if(data.success){
         alert('Gato actualizado');
         closeModal();
-        location.reload(); // Para simplificar, recargamos la lista
+        location.reload();
     } else {
         alert('Errores: ' + JSON.stringify(data.errors));
     }

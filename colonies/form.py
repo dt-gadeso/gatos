@@ -142,11 +142,19 @@ class ColonyForm(forms.ModelForm):
     )
 
     manager = forms.ModelChoiceField(
-        label='Encargado',
+        label='Gestor',
         queryset=Manager.objects.all(),
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+
+    users_colony = forms.CharField(
+        label='Voluntarios',
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese una descripción', 'rows': 15})
+    )
+
+
 
 class IncidentForm(forms.ModelForm):
     class Meta:

@@ -90,7 +90,6 @@ class VisitForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         if user and hasattr(user, 'association') and user.association:
-            # Ya no usamos agreements, así que mostramos todos los centros veterinarios
             vet_centers = VetCenter.objects.all()
             
             self.fields['vet_center'].queryset = vet_centers
