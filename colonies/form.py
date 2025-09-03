@@ -5,21 +5,21 @@ from users.models import User
 class NewLocation(forms.ModelForm):
     class Meta:
         model = Location
-        fields = ['nombre', 'address', 'description', 'municipality', 'latitude', 'longitude']
+        fields = ['address', 'municipality', 'latitude', 'longitude']
         widgets = {
-            'nombre': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Nombre del lugar'
-            }),
+            # 'nombre': forms.TextInput(attrs={
+            #     'class': 'form-control',
+            #     'placeholder': 'Nombre del lugar'
+            # }),
             'address': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Dirección completa'
             }),
-            'description': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 4,
-                'placeholder': 'Descripción del lugar'
-            }),
+            # 'description': forms.Textarea(attrs={
+            #     'class': 'form-control',
+            #     'rows': 4,
+            #     'placeholder': 'Descripción del lugar'
+            # }),
             'municipality': forms.Select(attrs={
                 'class': 'form-control'
             }),
@@ -59,18 +59,18 @@ class LocationForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
-    nombre = forms.CharField(
-        label='Nombre del lugar',
-        max_length=100,
-        required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el nombre'})
-    )
+    # nombre = forms.CharField(
+    #     label='Nombre del lugar',
+    #     max_length=100,
+    #     required=False,
+    #     widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el nombre'})
+    # )
 
-    description = forms.CharField(
-        label='Descripción',
-        required=False,
-        widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese una descripción', 'rows': 3})
-    )
+    # description = forms.CharField(
+    #     label='Descripción',
+    #     required=False,
+    #     widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese una descripción', 'rows': 3})
+    # )
 
     latitude = forms.DecimalField(
         label='Latitud',
@@ -141,15 +141,15 @@ class ColonyForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
-    manager = forms.ModelChoiceField(
+    user = forms.ModelChoiceField(
         label='Gestor',
-        queryset=Manager.objects.all(),
+        queryset=User.objects.all(),
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
     users_colony = forms.CharField(
-        label='Voluntarios',
+        label='Voluntarios - Telefono',
         required=False,
         widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese una descripción', 'rows': 15})
     )
@@ -159,11 +159,14 @@ class ColonyForm(forms.ModelForm):
 class IncidentForm(forms.ModelForm):
     class Meta:
         model = Incident
-        fields = ['title', 'description', 'start_date', 'end_date', 'is_resolved', 'resolution', 'colony', 'cat']
+        fields = ['title', 'incident_type', 'description', 'start_date', 'end_date', 'is_resolved', 'resolution', 'colony', 'cat']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Ingrese el título'
+            }),
+            'incident_type': forms.Select(attrs={
+                'class': 'form-control'
             }),
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
@@ -198,6 +201,7 @@ class IncidentForm(forms.ModelForm):
         }
         labels = {
             'title': 'Título de la incidencia',
+            'incident_type': 'Tipo de incidencia',
             'description': 'Descripción',
             'start_date': 'Fecha de inicio',
             'end_date': 'Fecha de fin',
@@ -221,7 +225,7 @@ class IncidentForm(forms.ModelForm):
 class EditIncident(forms.ModelForm):
     class Meta:
         model = Incident
-        fields = ['title', 'description', 'start_date', 'end_date', 'is_resolved', 'resolution', 'colony']
+        fields = ['title', 'incident_type', 'description', 'start_date', 'end_date', 'is_resolved', 'resolution', 'colony']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

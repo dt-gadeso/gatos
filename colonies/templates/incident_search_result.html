@@ -190,6 +190,18 @@
                 <option value="true" {% if is_resolved == "true" %}selected{% endif %}>Resuelta</option>
             </select>
         </div>
+
+        <div class="form-group">
+            <label for="incident_type">Tipo de incidencia:</label>
+            <select name="incident_type" id="incident_type">
+                <option value="">Todos los tipos</option>
+                {% for type_code, type_name in incident_types %}
+                    <option value="{{ type_code }}" {% if type_code == incident_type %}selected{% endif %}>
+                        {{ type_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
         
         <button type="submit" class="search-btn">Buscar</button>
     </form>
@@ -210,6 +222,7 @@
             
             <div class="incident-meta">
                 <span><strong>Colonia:</strong> {{ incident.colony.name }}</span>
+                <span><strong>Tipo:</strong> {{ incident.get_incident_type_display }}</span>
                 <span><strong>Reportada:</strong> {{ incident.reported_at|date:"d/m/Y H:i" }}</span>
                 {% if incident.start_date %}
                 <span><strong>Fecha inicio:</strong> {{ incident.start_date|date:"d/m/Y" }}</span>

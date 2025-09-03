@@ -31,6 +31,7 @@
         </div>
         <div class="signup-form-group">
             {{ form.carnet_gatos.label_tag }}<br>{{ form.carnet_gatos }}
+            <img id="carnet-preview" style="max-width: 200px; margin-top: 10px; display: none;" alt="Vista previa del carnet">
         </div>
         <div class="signup-form-group">
             {{ form.casa_acogida.label_tag }}<br>{{ form.casa_acogida }}
@@ -48,6 +49,23 @@
         const casaAcogida = document.getElementById("id_casa_acogida");
         const tieneRelevoDiv = document.getElementById("tiene-relevo-div");
         const tieneRelevo = document.getElementById("id_tiene_relevo");
+        
+        // Image preview for carnet_gatos
+        const carnetInput = document.getElementById("id_carnet_gatos");
+        const carnetPreview = document.getElementById("carnet-preview");
+        
+        carnetInput.addEventListener("change", function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    carnetPreview.src = e.target.result;
+                    carnetPreview.style.display = "block";
+                };
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                carnetPreview.style.display = "none";
+            }
+        });
 
         function updateRelevoField() {
             if (casaAcogida.value === "si") {

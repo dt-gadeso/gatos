@@ -16,8 +16,8 @@ class Municipality(models.Model):
 class Location(models.Model):
     address = models.CharField(max_length=255)
     municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=100, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    # nombre = models.CharField(max_length=100, null=True, blank=True)
+    # description = models.TextField(null=True, blank=True)
     latitude = models.DecimalField(max_digits=10, decimal_places=8, null=True, blank=True)
     longitude = models.DecimalField(max_digits=11, decimal_places=8, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -32,7 +32,6 @@ class Location(models.Model):
 class Colony(models.Model):
     name = models.CharField(max_length=100)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    manager = models.ForeignKey('users.Manager', on_delete=models.SET_NULL, null=True, blank=True)
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     users_colony = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -55,7 +54,21 @@ class Zone(models.Model):
         db_table = 'zones'
 
 class Incident(models.Model):
+    class IncidentType(models.TextChoices):
+        URGENCY = 'URG', 'Urgencia'
+        VANDALISM = 'VAN', 'Vandalismo'
+        NEIGHBOR_CONFLICT = 'CON', 'Conflicto vecinal'
+        ILLNESS = 'ENF', 'Enfermedad'
+        ABANDONMENT = 'ABD', 'Abandono'
+        BIRTH = 'PAR', 'Parto'
+        CER = 'CER', 'CER'
+
     title = models.CharField(max_length=200)
+    incident_type = models.CharField(
+        max_length=3,
+        choices=IncidentType.choices,
+        default=IncidentType.URGENCY
+    )
     description = models.TextField()
     reported_at = models.DateTimeField(auto_now_add=True)
     is_resolved = models.BooleanField(default=False)

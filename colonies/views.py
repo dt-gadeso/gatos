@@ -43,8 +43,8 @@ def get_locations_json(request):
     for location in locations:
         locations_data.append({
             'id': location.id,
-            'name': location.nombre or location.address,
-            'description': location.description or '',
+            # 'name': location.nombre or location.address,
+            # 'description': location.description or '',
             'address': location.address,
             'latitude': float(location.latitude),
             'longitude': float(location.longitude),
@@ -86,8 +86,8 @@ def save_location(request):
                     municipality = Municipality.objects.create(name="Default Municipality")
 
             location = Location.objects.create(
-                nombre=data.get('name') or data.get('nombre') or 'Ubicación sin nombre',
-                description=data.get('description', ''),
+                # nombre=data.get('name') or data.get('nombre') or 'Ubicación sin nombre',
+                # description=data.get('description', ''),
                 address=data.get('address', data.get('name', 'Dirección no especificada')),
                 latitude=data.get('latitude'),
                 longitude=data.get('longitude'),
@@ -316,19 +316,27 @@ def searchIncidents(request):
     filters = {}
     colony_id = request.GET.get('colony')
     is_resolved = request.GET.get('is_resolved')
+    incident_type = request.GET.get('incident_type')
 
     if colony_id:
         filters['colony__id'] = colony_id
     if is_resolved in ['true', 'false']:
         filters['is_resolved'] = is_resolved == 'true'
+    if incident_type:
+        filters['incident_type'] = incident_type
 
     incidents = Incident.objects.filter(**filters).order_by('-reported_at')
     colonies = Colony.objects.all()
+
+    # Obtener las opciones de tipos de incidencia del modelo
+    incident_types = Incident.IncidentType.choices
 
     context = {
         'incidents': incidents,
         'colony_id': colony_id or '',
         'is_resolved': is_resolved or '',
+        'incident_type': incident_type or '',
+        'incident_types': incident_types,
         'colonies': colonies
     }
 
@@ -352,7 +360,7 @@ def multi_form_view(request):
                 if colony_form.is_valid():
                     colony_form.save()
                     success_message = "Colonia guardada exitosamente"
-                    colony_form = ColonyForm()  # Reset form after success
+                    colony_form = ColonyForm()
                 else:
                     error_message = "Error al guardar la colonia. Por favor revisa los campos."
 
@@ -361,7 +369,7 @@ def multi_form_view(request):
                 if municipality_form.is_valid():
                     municipality_form.save()
                     success_message = "Municipio guardado exitosamente"
-                    municipality_form = MunicipalityForm()  # Reset form after success
+                    municipality_form = MunicipalityForm()
                 else:
                     error_message = "Error al guardar el municipio. Por favor revisa los campos."
 
@@ -372,7 +380,7 @@ def multi_form_view(request):
                         name=zone_form.cleaned_data['name']
                     )
                     success_message = "Zona guardada exitosamente"
-                    zone_form = ZoneForm()  # Reset form after success
+                    zone_form = ZoneForm()
                 else:
                     error_message = "Error al guardar la zona. Por favor revisa los campos."
 
@@ -380,15 +388,15 @@ def multi_form_view(request):
                 location_form = LocationForm(request.POST, request.FILES)
                 if location_form.is_valid():
                     Location.objects.create(
-                        nombre=location_form.cleaned_data.get('nombre') or 'Ubicación sin nombre',
+                        # nombre=location_form.cleaned_data.get('nombre') or 'Ubicación sin nombre',
                         address=location_form.cleaned_data['address'],
-                        description=location_form.cleaned_data.get('description', ''),
+                        # description=location_form.cleaned_data.get('description', ''),
                         municipality=location_form.cleaned_data['municipality'],
                         latitude=location_form.cleaned_data.get('latitude'),
                         longitude=location_form.cleaned_data.get('longitude'),
                     )
                     success_message = "Ubicación guardada exitosamente"
-                    location_form = LocationForm()  # Reset form after success
+                    location_form = LocationForm()
                 else:
                     error_message = "Error al guardar la ubicación. Por favor revisa los campos."
                     

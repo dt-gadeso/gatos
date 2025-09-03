@@ -88,7 +88,23 @@
                                         <i class="fas fa-id-card" style="color: #9c27b0; margin-right: 8px; font-size: 18px;"></i>
                                         <label for="{{ form.carnet_gatos.id_for_label }}" class="area-edit-label" style="margin: 0; color: #9c27b0 !important; font-weight: 600;">{{ form.carnet_gatos.label }}</label>
                                     </div>
-                                    {{ form.carnet_gatos|safe }}
+                                    <div class="custom-file-upload" style="position: relative;">
+                                        <div style="background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%); color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);">
+                                            <i class="fas fa-cloud-upload-alt" style="font-size: 24px; margin-bottom: 5px; display: block;"></i>
+                                            <span style="font-weight: 500;">Subir Carnet de Gatos</span>
+                                        </div>
+                                        {{ form.carnet_gatos|safe }}
+                                    </div>
+                                    {% if user.carnet_gatos %}
+                                    <div class="current-image" style="margin-top: 15px;">
+                                        <p style="color: #666; margin-bottom: 8px;">Carnet actual:</p>
+                                        <img src="{{ user.carnet_gatos.url }}" alt="Carnet de Gatos actual" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                    </div>
+                                    {% endif %}
+                                    <div id="carnet-preview" style="margin-top: 15px; display: none;">
+                                        <p style="color: #666; margin-bottom: 8px;">Vista previa:</p>
+                                        <img id="carnet-preview-image" src="#" alt="Vista previa del carnet" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                    </div>
                                 </div>
 
                                 <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
@@ -293,6 +309,26 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Carnet gatos image preview
+        const carnetInput = document.getElementById("id_carnet_gatos");
+        const carnetPreview = document.getElementById("carnet-preview");
+        const carnetPreviewImage = document.getElementById("carnet-preview-image");
+        
+        if (carnetInput) {
+            carnetInput.addEventListener("change", function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        carnetPreviewImage.src = e.target.result;
+                        carnetPreview.style.display = "block";
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                } else {
+                    carnetPreview.style.display = "none";
+                }
+            });
+        }
+
         // Detectar si el usuario está en modo oscuro
         function detectDarkMode() {
             // Siempre comprueba primero si hay una preferencia guardada en localStorage

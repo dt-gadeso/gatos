@@ -18,9 +18,9 @@ class MunicipalityAdmin(admin.ModelAdmin):
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'address', 'municipality', 'latitude', 'longitude', 'created_at')
+    list_display = ('address', 'municipality', 'latitude', 'longitude', 'created_at') #nombre dentro de eso
     list_filter = ('municipality', 'created_at')
-    search_fields = ('nombre', 'address', 'description')
+    search_fields = ('address', 'description') #nombre
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
 
