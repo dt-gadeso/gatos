@@ -88,10 +88,17 @@ class EditUser(forms.ModelForm):
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+    association = forms.ModelChoiceField(
+        label="Asociación",
+        queryset=Association.objects.all(),
+        required=False,
+        empty_label="-- Selecciona una asociación --",
+        widget=forms.Select(attrs={'class': 'form-control', 'id': 'association'})
+    )
     
     class Meta:
         model = User
-        fields = ['username', 'email', 'phone', 'carnet_gatos', 'casa_acogida', 'tiene_relevo', 'es_capturador', 'tiene_trampa', 'es_free']
+        fields = ['username', 'email', 'phone', 'carnet_gatos', 'casa_acogida', 'tiene_relevo', 'es_capturador', 'tiene_trampa', 'es_free', 'association']
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
@@ -111,6 +118,9 @@ class EditUser(forms.ModelForm):
             self.fields['es_capturador'].initial = 'si' if self.instance.es_capturador else 'no'
             self.fields['tiene_trampa'].initial = 'si' if self.instance.tiene_trampa else 'no'
             self.fields['es_free'].initial = 'si' if self.instance.es_free else 'no'
+
+        if self.instance.association_id:
+                self.fields['association'].initial = self.instance.association
 
 class AssignedRole(forms.ModelForm):
     role = forms.ModelChoiceField(

@@ -4,14 +4,310 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/formularios_multiples.css' %}">
 
+<style>
+/* Contenedor principal */
+.forms-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sección del formulario */
+.form-section {
+    max-width: 600px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.form-section h2 {
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    color: white;
+    margin: 0;
+    padding: 1.5rem 2rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Formulario */
+form {
+    padding: 2rem;
+}
+
+/* Grupos de formulario */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+/* Controles del formulario */
+.form-control, 
+input[type="text"],
+input[type="date"],
+input[type="datetime-local"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.875rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #333;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-control:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #1976d2;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Select específico */
+select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.875rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+}
+
+/* Textarea específico */
+textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+}
+
+/* Fila del formulario para fechas */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Mensajes de error */
+.error-message {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: #ffebee;
+    border-radius: 4px;
+    border-left: 3px solid #d32f2f;
+}
+
+/* Botón de envío */
+.btn-submit {
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    color: white;
+    padding: 0.875rem 2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 1rem;
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+}
+
+.btn-submit:hover {
+    background: linear-gradient(135deg, #1565c0, #0d47a1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+/* Acciones del formulario */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-cancel {
+    background: #757575;
+    color: white;
+    padding: 0.875rem 2rem;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background: #616161;
+    transform: translateY(-1px);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .forms-container {
+        padding: 1rem;
+    }
+    
+    .form-section {
+        margin: 0;
+    }
+    
+    form {
+        padding: 1.5rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .form-section h2 {
+        padding: 1rem 1.5rem;
+        font-size: 1.25rem;
+    }
+}
+
+/* Animaciones suaves */
+.form-group {
+    animation: slideUp 0.3s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.2s; }
+.form-group:nth-child(3) { animation-delay: 0.3s; }
+.form-group:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estados de campo ocultos (para futuras funcionalidades) */
+.resolution-field {
+    display: none;
+    transition: all 0.3s ease;
+}
+
+.resolution-field.show {
+    display: block;
+}
+</style>
+
 <div class="forms-container">
     <div class="form-section">
         <h2>Nuevo Aviso</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn-submit">Guardar</button>
+            
+            <!-- Título -->
+            <div class="form-group">
+                {{ form.title.label_tag }}
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="error-message">
+                        {{ form.title.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Tipo de Aviso -->
+            <div class="form-group">
+                {{ form.alert_type.label_tag }}
+                {{ form.alert_type }}
+                {% if form.alert_type.errors %}
+                    <div class="error-message">
+                        {{ form.alert_type.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Descripción -->
+            <div class="form-group">
+                {{ form.description.label_tag }}
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="error-message">
+                        {{ form.description.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Fechas -->
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form.start_date.label_tag }}
+                    {{ form.start_date }}
+                    {% if form.start_date.errors %}
+                        <div class="error-message">
+                            {{ form.start_date.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.end_date.label_tag }}
+                    {{ form.end_date }}
+                    {% if form.end_date.errors %}
+                        <div class="error-message">
+                            {{ form.end_date.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Guardar Aviso</button>
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Formulario de nuevo aviso cargado');
+    
+    // Añadir efecto de enfoque mejorado
+    const inputs = document.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.classList.remove('focused');
+        });
+    });
+});
+</script>
+
 {% endblock %}

@@ -240,6 +240,12 @@ def areaEdit(request):
                 if es_free_val is not None:
                     user.es_free = (es_free_val == 'si')
                 
+                association_val = form.cleaned_data.get('association')
+                if association_val:
+                    user.association = association_val
+                else:
+                    user.association = None
+                
                 user.save()
                 return redirect('areaStaff')
             else:

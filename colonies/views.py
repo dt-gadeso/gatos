@@ -7,6 +7,8 @@ from .form import LocationForm, MunicipalityForm, ZoneForm, ColonyForm, EditInci
 from django.contrib.auth.decorators import login_required
 from django.views.defaults import page_not_found
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+
 
 def mi_error_404(request, exception):
     path = request.path
@@ -43,8 +45,6 @@ def get_locations_json(request):
     for location in locations:
         locations_data.append({
             'id': location.id,
-            # 'name': location.nombre or location.address,
-            # 'description': location.description or '',
             'address': location.address,
             'latitude': float(location.latitude),
             'longitude': float(location.longitude),
@@ -86,8 +86,6 @@ def save_location(request):
                     municipality = Municipality.objects.create(name="Default Municipality")
 
             location = Location.objects.create(
-                # nombre=data.get('name') or data.get('nombre') or 'Ubicación sin nombre',
-                # description=data.get('description', ''),
                 address=data.get('address', data.get('name', 'Dirección no especificada')),
                 latitude=data.get('latitude'),
                 longitude=data.get('longitude'),
@@ -388,9 +386,7 @@ def multi_form_view(request):
                 location_form = LocationForm(request.POST, request.FILES)
                 if location_form.is_valid():
                     Location.objects.create(
-                        # nombre=location_form.cleaned_data.get('nombre') or 'Ubicación sin nombre',
                         address=location_form.cleaned_data['address'],
-                        # description=location_form.cleaned_data.get('description', ''),
                         municipality=location_form.cleaned_data['municipality'],
                         latitude=location_form.cleaned_data.get('latitude'),
                         longitude=location_form.cleaned_data.get('longitude'),
@@ -414,104 +410,68 @@ def multi_form_view(request):
 
 @csrf_exempt
 def save_relief(request):
-    if request.method == 'GET':
-        return render(request, 'formNewRelief.html', {'form': ReliefForm()})
-
-    elif request.method == 'POST':
-        is_ajax = False
-        try:
-            if request.content_type == 'application/json':
-                if not request.body:
-                    return JsonResponse({'success': False, 'error': 'El cuerpo de la petición está vacío'}, status=400)
-                data = json.loads(request.body)
-                is_ajax = True
-                form = ReliefForm(data)
-            else:
-                form = ReliefForm(request.POST)
-
-            if form.is_valid():
-                relief = Relief.objects.create(
-                    description=form.cleaned_data['description'],
-                    start_date=form.cleaned_data['start_date'],
-                    end_date=form.cleaned_data['end_date']
-                )
-                if is_ajax:
-                    return JsonResponse({'success': True, 'message': 'Alivio guardado exitosamente', 'id': relief.id})
-                return redirect('colonies')
-
-            else:
-                if is_ajax:
-                    return JsonResponse({'success': False, 'errors': form.errors}, status=400)
-                return render(request, 'formNewRelief.html', {'form': form})
-
-        except json.JSONDecodeError:
-            return JsonResponse({'success': False, 'error': 'JSON inválido'}, status=400)
-        except Exception as e:
-            if is_ajax:
-                return JsonResponse({'success': False, 'error': str(e)}, status=400)
-            return render(request, 'formNewRelief.html', {
-                'form': ReliefForm(),
-                'error': str(e)
-            })
-
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
+    if request.method == 'POST':
+        form = ReliefForm(request.POST)
+        if form.is_valid():
+            relief = form.save()
+            messages.success(request, 'Aviso creado exitosamente.')
+            return redirect('searchReliefs')
+    else:
+        form = ReliefForm()
+    
+    return render(request, 'formNewRelief.html', {'form': form})
 
 @login_required
 def editRelief(request, relief_id):
     relief = get_object_or_404(Relief, id=relief_id)
-
-    if request.method == 'GET':
-        form = EditReliefForm(instance=relief)
-        return render(request, 'formEditRelief.html', {
-            'form': form,
-            'relief': relief
-        })
-
-    else:
+    
+    if request.method == 'POST':
         form = EditReliefForm(request.POST, instance=relief)
         if form.is_valid():
-            try:
-                form.save()
-                return redirect('colonies')
-            except Exception as e:
-                return render(request, 'formEditRelief.html', {
-                    'form': form,
-                    'relief': relief,
-                    'error': f'Error al guardar el alivio: {str(e)}'
-                })
-        else:
-            return render(request, 'formEditRelief.html', {
-                'form': form,
-                'relief': relief,
-                'error': 'Formulario inválido'
-            })
-
+            form.save()
+            messages.success(request, 'Aviso actualizado exitosamente.')
+            return redirect('searchReliefs')
+    else:
+        form = EditReliefForm(instance=relief)
+    
+    return render(request, 'formEditRelief.html', {'form': form, 'relief': relief})
 @login_required
 def searchReliefs(request):
+    reliefs = Relief.objects.all()
     filters = {}
+    
+    # Filtros de búsqueda
+    title = request.GET.get('title')
+    if title:
+        reliefs = reliefs.filter(title__icontains=title)
+        filters['title'] = title
+    
     description = request.GET.get('description')
-    start_date = request.GET.get('start_date')
-    end_date = request.GET.get('end_date')
-
     if description:
-        filters['description__icontains'] = description
+        reliefs = reliefs.filter(description__icontains=description)
+        filters['description'] = description
+    
+    alert_type = request.GET.get('alert_type')
+    if alert_type:
+        reliefs = reliefs.filter(alert_type=alert_type)
+        filters['alert_type'] = alert_type
+    
+    start_date = request.GET.get('start_date')
     if start_date:
-        filters['start_date__gte'] = start_date
+        reliefs = reliefs.filter(start_date__gte=start_date)
+        filters['start_date'] = start_date
+    
+    end_date = request.GET.get('end_date')
     if end_date:
-        filters['end_date__lte'] = end_date
-
-    reliefs = Relief.objects.filter(**filters).order_by('-start_date')
-
-    context = {
+        reliefs = reliefs.filter(end_date__lte=end_date)
+        filters['end_date'] = end_date
+    
+    reliefs = reliefs.order_by('-created_at')
+    
+    return render(request, 'relief_search_result.html', {
         'reliefs': reliefs,
-        'filters': {
-            'description': description or '',
-            'start_date': start_date or '',
-            'end_date': end_date or ''
-        }
-    }
-
-    return render(request, 'relief_search_result.html', context)
+        'filters': filters
+    })
 
 @login_required
 def duplicateRelief(request, relief_id):
@@ -519,7 +479,6 @@ def duplicateRelief(request, relief_id):
         try:
             original_relief = get_object_or_404(Relief, id=relief_id)
             
-            # Crear una copia del relevo
             new_relief = Relief.objects.create(
                 description=f"Copia de: {original_relief.description}",
                 start_date=original_relief.start_date,
@@ -557,4 +516,7 @@ def deleteRelief(request, relief_id):
             })
     else:
         return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+
+
 

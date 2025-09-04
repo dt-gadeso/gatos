@@ -166,6 +166,17 @@
                                     </div>
                                     {{ form.es_free|safe }}
                                 </div>
+
+                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
+                                    <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #9c27b0, #6a1b9a); border-radius: 0 15px 15px 0;"></div>
+                                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                        <i class="fas fa-building" style="color: #9c27b0; margin-right: 8px; font-size: 18px;"></i>
+                                        <label for="{{ form.association.id_for_label }}" class="area-edit-label" style="margin: 0; color: #9c27b0 !important; font-weight: 600;">
+                                            {{ form.association.label }}
+                                        </label>
+                                    </div>
+                                    {{ form.association|safe }}
+                                </div>
                             </div>
                         </div>
                         

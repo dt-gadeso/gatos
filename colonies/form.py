@@ -7,19 +7,10 @@ class NewLocation(forms.ModelForm):
         model = Location
         fields = ['address', 'municipality', 'latitude', 'longitude']
         widgets = {
-            # 'nombre': forms.TextInput(attrs={
-            #     'class': 'form-control',
-            #     'placeholder': 'Nombre del lugar'
-            # }),
             'address': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Dirección completa'
             }),
-            # 'description': forms.Textarea(attrs={
-            #     'class': 'form-control',
-            #     'rows': 4,
-            #     'placeholder': 'Descripción del lugar'
-            # }),
             'municipality': forms.Select(attrs={
                 'class': 'form-control'
             }),
@@ -58,19 +49,6 @@ class LocationForm(forms.Form):
         queryset=Municipality.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-
-    # nombre = forms.CharField(
-    #     label='Nombre del lugar',
-    #     max_length=100,
-    #     required=False,
-    #     widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el nombre'})
-    # )
-
-    # description = forms.CharField(
-    #     label='Descripción',
-    #     required=False,
-    #     widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese una descripción', 'rows': 3})
-    # )
 
     latitude = forms.DecimalField(
         label='Latitud',
@@ -264,49 +242,73 @@ class EditIncident(forms.ModelForm):
         
         return cleaned_data
     
-class ReliefForm(forms.Form):
-    description = forms.CharField(
-        label='Descripción del relevo',
-        required=False,
-        widget=forms.Textarea(attrs={
-            'class': 'form-control',
-            'placeholder': 'Ingrese una descripción',
-            'rows': 3
-        })
-    )
+class ReliefForm(forms.ModelForm):
+    class Meta:
+        model = Relief
+        fields = ['title', 'alert_type', 'description', 'start_date', 'end_date']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese el título del aviso'
+            }),
+            'alert_type': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese una descripción detallada',
+                'rows': 4
+            }),
+            'start_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date',
+                'placeholder': 'Seleccione la fecha de inicio'
+            }),
+            'end_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date',
+                'placeholder': 'Seleccione la fecha de finalización'
+            }),
+        }
+        labels = {
+            'title': 'Título del aviso',
+            'alert_type': 'Tipo de aviso',
+            'description': 'Descripción',
+            'start_date': 'Fecha de inicio',
+            'end_date': 'Fecha de finalización',
+        }
 
-    start_date = forms.DateField(
-        label='Fecha de inicio',
-        required=False,
-        widget=forms.DateInput(attrs={
-            'class': 'form-control',
-            'type': 'date',
-            'placeholder': 'Seleccione la fecha de inicio'
-        })
-    )
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
 
-    end_date = forms.DateField(
-        label='Fecha de finalización',
-        required=False,
-        widget=forms.DateInput(attrs={
-            'class': 'form-control',
-            'type': 'date',
-            'placeholder': 'Seleccione la fecha de finalización'
-        })
-    )
+        if start_date and end_date and start_date > end_date:
+            raise forms.ValidationError('La fecha de inicio no puede ser posterior a la fecha de finalización.')
+
+        return cleaned_data
 
 class EditReliefForm(forms.ModelForm):
     class Meta:
         model = Relief
-        fields = ['description', 'start_date', 'end_date']
+        fields = ['title', 'alert_type', 'description', 'start_date', 'end_date']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.fields['title'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Ingrese el título del aviso'
+        })
+
+        self.fields['alert_type'].widget.attrs.update({
+            'class': 'form-control'
+        })
+
         self.fields['description'].widget.attrs.update({
             'class': 'form-control',
             'rows': 4,
-            'placeholder': 'Describa el tipo de alivio proporcionado'
+            'placeholder': 'Describa el aviso'
         })
 
         self.fields['start_date'].widget.attrs.update({
@@ -328,3 +330,4 @@ class EditReliefForm(forms.ModelForm):
             raise forms.ValidationError('La fecha de inicio no puede ser posterior a la fecha de finalización.')
 
         return cleaned_data
+
