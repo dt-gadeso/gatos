@@ -46,8 +46,10 @@ class VetCenterForm(forms.ModelForm):
 class VisitForm(forms.ModelForm):
     class Meta:
         model = Visit
-        fields = ['cat', 'vet_center', 'price', 'report_file', 'bill_file', 'user', 'follow_up', 'start_date', 'end_date', 'cat_survived']
+        fields = ['colony', 'colony_user','cat', 'vet_center', 'price', 'report_file', 'bill_file', 'user', 'follow_up', 'start_date', 'end_date', 'cat_survived']
         widgets = {
+            'colony': forms.Select(attrs={'class': 'form-control'}),
+            'colony_user': forms.Select(attrs={'class': 'form-control'}),
             'cat': forms.Select(attrs={'class': 'form-control'}),
             'vet_center': forms.Select(attrs={'class': 'form-control'}),
             'price': forms.NumberInput(attrs={
@@ -73,6 +75,8 @@ class VisitForm(forms.ModelForm):
             'cat_survived': forms.Select(attrs={'class': 'form-select'}, choices=[(True, 'Sí'), (False, 'No')]),
         }
         labels = {
+            'colony': 'Colonia',
+            'colony_user': 'Gestor de colonia',
             'cat': 'Gato',
             'vet_center': 'Centro veterinario',
             'price': 'Precio',

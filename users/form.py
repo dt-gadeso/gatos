@@ -83,7 +83,7 @@ class EditUser(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     es_free = forms.ChoiceField(
-        label='¿Es free?',
+        label='¿Tienes associacion?',
         choices=[('si', 'Sí'), ('no', 'No')],
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
@@ -111,7 +111,6 @@ class EditUser(forms.ModelForm):
         for field in self.fields.values():
             field.required = False
         
-        # Si hay una instancia, configurar los valores iniciales para los campos de elección
         if self.instance and self.instance.pk:
             self.fields['casa_acogida'].initial = 'si' if self.instance.casa_acogida else 'no'
             self.fields['tiene_relevo'].initial = 'si' if self.instance.tiene_relevo else 'no'

@@ -22,6 +22,8 @@ class VetCenter(models.Model):
 
 
 class Visit(models.Model):
+    colony = models.ForeignKey('colonies.Colony', on_delete=models.CASCADE)
+    colony_user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='colony_user')
     cat = models.ForeignKey('cats.Cat', on_delete=models.CASCADE)
     vet_center = models.ForeignKey(VetCenter, on_delete=models.CASCADE)
     price = models.DecimalField(

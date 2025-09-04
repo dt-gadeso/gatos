@@ -129,7 +129,13 @@ class ColonyForm(forms.ModelForm):
     users_colony = forms.CharField(
         label='Voluntarios - Telefono',
         required=False,
-        widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese una descripción', 'rows': 15})
+        widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Nombre - Telefono', 'rows': 15})
+    )
+
+    observations = forms.CharField(
+        label='Observaciones',
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': ' (cerca de una escuela, zona con mucho tráfico, zona con basuras)', 'rows': 15})
     )
 
 
