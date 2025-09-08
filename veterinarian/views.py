@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .form import VetCenterForm, VisitForm
 from .models import VetCenter, Visit
-from colonies.models import Location
+from colonies.models import Location, Relief, Incident
 
 def veterinarian(request):
     locations = Location.objects.all()
@@ -48,6 +48,29 @@ def search_vet_centers(request):
     }
 
     return render(request, 'vet_search_result.html', context)
+
+@login_required
+def tablon(request):
+    # Importamos los modelos necesarios de colonies
+    from colonies.models import Relief, Incident
+    
+    # Obtenemos los avisos ordenados por fecha de inicio
+    reliefs = Relief.objects.all().order_by('-start_date')
+    
+    # Obtenemos las incidencias ordenadas por fecha de reporte
+    incidents = Incident.objects.all().order_by('-reported_at')
+    
+    # Comprobamos si hay incidencias
+    print(f"Número de incidencias encontradas: {incidents.count()}")
+    print(f"Usuario es staff: {request.user.is_staff}")
+    print(f"Usuario es superuser: {request.user.is_superuser}")
+    
+    return render(request, 'tablon.html', {
+        'reliefs': reliefs,
+        'incidents': incidents,
+        'user': request.user  # Agregamos explícitamente el usuario al contexto
+    })
+
 
 @login_required
 def vetcenter_form_view(request):

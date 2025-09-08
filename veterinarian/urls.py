@@ -6,4 +6,5 @@ urlpatterns = [
     path('formNewVetCenter/', views.vetcenter_form_view, name='formNewVetCenter'),
     path('formNewVisit/', views.visit_form_view, name='formNewVisit'),
     path('search/', views.search_vet_centers, name='search_vet_centers'),
+    path('tablon/', views.tablon, name='veterinarian_tablon'),
 ]
