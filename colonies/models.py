@@ -108,3 +108,5 @@ class Relief(models.Model):
         db_table = 'relief'
         verbose_name = 'Aviso'
         verbose_name_plural = 'Avisos'
+
+

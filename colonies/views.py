@@ -517,6 +517,7 @@ def deleteRelief(request, relief_id):
     else:
         return JsonResponse({'success': False, 'error': 'Método no permitido'})
 
-
+def tablon_view(request):
+    return render(request, 'Tablon.html')
 
 

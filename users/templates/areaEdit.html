@@ -320,7 +320,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Carnet gatos image preview
         const carnetInput = document.getElementById("id_carnet_gatos");
         const carnetPreview = document.getElementById("carnet-preview");
         const carnetPreviewImage = document.getElementById("carnet-preview-image");
@@ -340,9 +339,7 @@
             });
         }
 
-        // Detectar si el usuario está en modo oscuro
         function detectDarkMode() {
-            // Siempre comprueba primero si hay una preferencia guardada en localStorage
             const darkModeSetting = localStorage.getItem('darkMode');
             if (darkModeSetting === 'enabled') {
                 document.body.classList.add('dark-mode');
@@ -351,8 +348,7 @@
                 document.body.classList.remove('dark-mode');
                 return false;
             }
-            
-            // Si no hay preferencia guardada, comprueba la preferencia del sistema
+
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 document.body.classList.add('dark-mode');
                 localStorage.setItem('darkMode', 'enabled');
@@ -363,8 +359,7 @@
         }
         
         detectDarkMode();
-        
-        // Animación al cargar la página
+
         const mainContent = document.querySelector('.staff-container');
         mainContent.style.opacity = '0';
         mainContent.style.transform = 'translateY(20px)';
@@ -374,15 +369,13 @@
             mainContent.style.opacity = '1';
             mainContent.style.transform = 'translateY(0)';
         }, 200);
-        
-        // Aplicar efecto hover a las filas de las tablas adaptado al tema
+
         const tableRows = document.querySelectorAll('tbody tr');
         
         function applyTableRowEffects() {
             const isDarkMode = document.body.classList.contains('dark-mode');
             
             tableRows.forEach(row => {
-                // Eliminar los event listeners existentes si los hay
                 const newRow = row.cloneNode(true);
                 row.parentNode.replaceChild(newRow, row);
                 
@@ -401,7 +394,6 @@
         
         applyTableRowEffects();
 
-        // Código para casa de acogida
         const casaAcogida = document.getElementById("id_casa_acogida");
         const tieneRelevoDiv = document.getElementById("tiene-relevo-div");
         const tieneRelevo = document.getElementById("id_tiene_relevo");
@@ -417,11 +409,9 @@
 
         if (casaAcogida) {
             casaAcogida.addEventListener("change", updateRelevoField);
-            // Ejecutar una vez al cargar para asegurar el estado correcto
             updateRelevoField();
         }
 
-        // Código para capturador y trampa
         const esCapturador = document.getElementById("id_es_capturador");
         const tieneTrampaDiv = document.getElementById("tiene-trampa-div");
         const tieneTrampa = document.getElementById("id_tiene_trampa");
@@ -437,11 +427,9 @@
 
         if (esCapturador) {
             esCapturador.addEventListener("change", updateTrampaField);
-            // Ejecutar una vez al cargar para asegurar el estado correcto
             updateTrampaField();
         }
         
-        // Observer para detectar cambios en el modo oscuro/claro en la aplicación
         const darkModeObserver = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
@@ -452,22 +440,18 @@
                         localStorage.setItem('darkMode', 'disabled');
                         removeDarkModeStyles();
                     }
-                    // Actualizar efectos de la tabla cuando cambia el modo
                     applyTableRowEffects();
                 }
             });
         });
-        
-        // Función para aplicar estilos específicos de modo oscuro
+
         function applyDarkModeStyles() {
-            // Usar las clases específicas agregadas
             const personalSection = document.querySelector('.personal-info-section');
             if (personalSection) {
                 personalSection.style.background = 'linear-gradient(135deg, #1a1a1a 0%, #2d1a0f 100%)';
                 personalSection.style.borderColor = '#ff7f50';
                 personalSection.style.boxShadow = '0 10px 30px rgba(255, 127, 80, 0.2), 0 0 0 1px rgba(255, 127, 80, 0.15)';
-                
-                // Actualizar el elemento decorativo de la sección personal
+
                 const decorativePersonal = personalSection.querySelector('.decorative-personal');
                 if (decorativePersonal) {
                     decorativePersonal.style.background = 'radial-gradient(circle, #ff7f50 0%, transparent 70%)';
@@ -480,35 +464,31 @@
                 roleSection.style.background = 'linear-gradient(135deg, #1a1a1a 0%, #0f1a2d 100%)';
                 roleSection.style.borderColor = '#64b5f6';
                 roleSection.style.boxShadow = '0 10px 30px rgba(100, 181, 246, 0.2), 0 0 0 1px rgba(100, 181, 246, 0.15)';
-                
-                // Actualizar el elemento decorativo de la sección de roles
+
                 const decorativeRole = roleSection.querySelector('.decorative-role');
                 if (decorativeRole) {
                     decorativeRole.style.background = 'radial-gradient(circle, #64b5f6 0%, transparent 70%)';
                     decorativeRole.style.opacity = '0.15';
                 }
-                
-                // Actualizar solo los labels de los enhanced-form-group en la sección de roles
+
                 const roleFormGroups = roleSection.querySelectorAll('.enhanced-form-group');
                 roleFormGroups.forEach(group => {
                     const label = group.querySelector('label');
                     if (label) {
                         const icon = label.querySelector('i');
                         if (icon) {
-                            // Mantener los colores existentes de los iconos para los labels
                             if (icon.classList.contains('fa-user-shield')) {
-                                label.style.color = '#5dade2'; // Blue for capturador
+                                label.style.color = '#5dade2'; 
                             } else if (icon.classList.contains('fa-mouse-pointer')) {
-                                label.style.color = '#ff7675'; // Red for trampa
+                                label.style.color = '#ff7675'; 
                             } else if (icon.classList.contains('fa-star')) {
-                                label.style.color = '#6c5ce7'; // Purple for free
+                                label.style.color = '#6c5ce7'; 
                             }
                         }
                     }
                 });
             }
-            
-            // Mejorar área de subida de archivos usando una búsqueda más amplia
+
             const fileUploadDiv = document.querySelector('div[style*="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)"]') ||
                                  document.querySelector('div[style*="background: linear-gradient(135deg, #cc5555 0%, #bb4444 100%)"]');
             if (fileUploadDiv) {
@@ -516,45 +496,40 @@
                 fileUploadDiv.style.boxShadow = '0 4px 15px rgba(204, 85, 85, 0.4)';
             }
         }
-        
-        // Función para remover estilos de modo oscuro
+
         function removeDarkModeStyles() {
-            // Usar las clases específicas agregadas
             const personalSection = document.querySelector('.personal-info-section');
             if (personalSection) {
                 personalSection.style.background = 'linear-gradient(135deg, var(--card-bg, #fff) 0%, var(--light-main-color, #ffe4e1) 100%)';
                 personalSection.style.borderColor = 'var(--main-color, #d2691e)';
                 personalSection.style.boxShadow = '0 10px 30px rgba(210, 105, 30, 0.15), 0 0 0 1px rgba(210, 105, 30, 0.1)';
-                
-                // Restaurar el elemento decorativo de la sección personal
+
                 const decorativePersonal = personalSection.querySelector('.decorative-personal');
                 if (decorativePersonal) {
                     decorativePersonal.style.background = 'radial-gradient(circle, var(--main-color, #d2691e) 0%, transparent 70%)';
                     decorativePersonal.style.opacity = '0.1';
                 }
-                
-                // Restaurar solo los labels de los enhanced-form-group en la sección personal
+
                 const personalFormGroups = personalSection.querySelectorAll('.enhanced-form-group');
                 personalFormGroups.forEach(group => {
                     const label = group.querySelector('label');
                     if (label) {
                         const icon = label.querySelector('i');
                         if (icon) {
-                            // Restaurar los colores originales de los iconos para los labels
                             if (icon.classList.contains('fa-user-circle')) {
-                                label.style.color = 'var(--main-color, #d2691e)'; // Original user color
+                                label.style.color = 'var(--main-color, #d2691e)'; 
                             } else if (icon.classList.contains('fa-envelope')) {
-                                label.style.color = 'var(--secondary-color, #4a86e8)'; // Original email color
+                                label.style.color = 'var(--secondary-color, #4a86e8)'; 
                             } else if (icon.classList.contains('fa-phone')) {
-                                label.style.color = 'var(--tertiary-color, #28a745)'; // Original phone color
+                                label.style.color = 'var(--tertiary-color, #28a745)';
                             } else if (icon.classList.contains('fa-camera')) {
-                                label.style.color = '#ff6b6b'; // Original avatar color
+                                label.style.color = '#ff6b6b'; 
                             } else if (icon.classList.contains('fa-id-card')) {
-                                label.style.color = '#9c27b0'; // Original carnet color
+                                label.style.color = '#9c27b0'; 
                             } else if (icon.classList.contains('fa-home')) {
-                                label.style.color = '#ff9800'; // Original casa acogida color
+                                label.style.color = '#ff9800'; 
                             } else if (icon.classList.contains('fa-user-friends')) {
-                                label.style.color = '#00bcd4'; // Original relevo color
+                                label.style.color = '#00bcd4'; 
                             }
                         }
                     }
@@ -566,35 +541,31 @@
                 roleSection.style.background = 'linear-gradient(135deg, var(--card-bg, #fff) 0%, var(--light-secondary-color, #e6f3ff) 100%)';
                 roleSection.style.borderColor = 'var(--secondary-color, #4a90e2)';
                 roleSection.style.boxShadow = '0 10px 30px rgba(74, 144, 226, 0.15), 0 0 0 1px rgba(74, 144, 226, 0.1)';
-                
-                // Restaurar el elemento decorativo de la sección de roles
+
                 const decorativeRole = roleSection.querySelector('.decorative-role');
                 if (decorativeRole) {
                     decorativeRole.style.background = 'radial-gradient(circle, var(--secondary-color, #4a90e2) 0%, transparent 70%)';
                     decorativeRole.style.opacity = '0.1';
                 }
                 
-                // Restaurar solo los labels de los enhanced-form-group en la sección de roles
                 const roleFormGroups = roleSection.querySelectorAll('.enhanced-form-group');
                 roleFormGroups.forEach(group => {
                     const label = group.querySelector('label');
                     if (label) {
                         const icon = label.querySelector('i');
                         if (icon) {
-                            // Restaurar los colores originales de los iconos para los labels
                             if (icon.classList.contains('fa-user-shield')) {
-                                label.style.color = '#2196f3'; // Original capturador color
+                                label.style.color = '#2196f3'; 
                             } else if (icon.classList.contains('fa-mouse-pointer')) {
-                                label.style.color = '#ff5722'; // Original trampa color
+                                label.style.color = '#ff5722'; 
                             } else if (icon.classList.contains('fa-star')) {
-                                label.style.color = '#4caf50'; // Original free color
+                                label.style.color = '#4caf50'; 
                             }
                         }
                     }
                 });
             }
-            
-            // Restaurar área de subida de archivos usando una búsqueda más amplia
+
             const fileUploadDiv = document.querySelector('div[style*="background: linear-gradient(135deg, #cc5555 0%, #bb4444 100%)"]') ||
                                  document.querySelector('div[style*="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)"]');
             if (fileUploadDiv) {
@@ -602,13 +573,11 @@
                 fileUploadDiv.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.3)';
             }
         }
-        
-        // Aplicar estilos iniciales basados en el modo actual
+
         if (document.body.classList.contains('dark-mode')) {
             applyDarkModeStyles();
         }
         
-        // Configurar el observer para detectar cambios en el atributo class del body
         darkModeObserver.observe(document.body, { attributes: true });
     });
 </script>

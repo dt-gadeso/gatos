@@ -22,8 +22,7 @@ urlpatterns = [
     path('duplicate_relief/<int:relief_id>/', views.duplicateRelief, name='duplicateRelief'),
     path('delete_relief/<int:relief_id>/', views.deleteRelief, name='deleteRelief'),
     path('formularios_multiples/', views.multi_form_view, name='multi_forms'),
-    
-
-]
+    path('tablon/', views.tablon_view, name='tablon'),
+    ]
 
 handler404 = 'colonies.views.mi_error_404'
