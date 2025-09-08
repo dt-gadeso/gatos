@@ -2,5 +2,404 @@
 {% load static %}
 
 {% block content %}
+<div class="tablon-container">
+    <div class="tablon-header">
+        <h1>Tablón de Avisos e Incidencias</h1>
+        <p class="tablon-subtitle">Mantente informado sobre las últimas novedades</p>
+    </div>
 
+    <!-- Sección de Avisos (visible para todos) -->
+    <div class="section-container avisos-section">
+        <div class="section-header">
+            <h2>📢 Avisos</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="cards-grid">
+            {% for relief in reliefs %}
+            <div class="card-wrapper">
+                <div class="custom-card relief-card">
+                    <div class="card-tag {% if relief.alert_type == 'REL' %}tag-primary
+                                     {% elif relief.alert_type == 'LIM' %}tag-success
+                                     {% elif relief.alert_type == 'REF' %}tag-warning
+                                     {% else %}tag-info{% endif %}">
+                        {{ relief.get_alert_type_display }}
+                    </div>
+                    <div class="card-content">
+                        <h3>{{ relief.title }}</h3>
+                        <p class="description">{{ relief.description|truncatewords:30 }}</p>
+                        <div class="card-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Inicio: {{ relief.start_date|default:"No especificada" }}</span>
+                            </div>
+                            {% if relief.end_date %}
+                            <div class="meta-item">
+                                <i class="fas fa-calendar-check"></i>
+                                <span>Fin: {{ relief.end_date }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No hay avisos disponibles en este momento</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Sección de Incidencias (solo visible para administradores) -->
+    {% if user.is_staff %}
+    <div class="section-container incidencias-section">
+        <div class="section-header">
+            <h2>⚠️ Incidencias</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="cards-grid">
+            {% for incident in incidents %}
+            <div class="card-wrapper">
+                <div class="custom-card incident-card {% if incident.is_resolved %}resolved{% else %}pending{% endif %}">
+                    <div class="card-status">
+                        <div class="status-tag {% if incident.is_resolved %}status-success{% else %}status-warning{% endif %}">
+                            {{ incident.is_resolved|yesno:"✓ Resuelto,⏳ Pendiente" }}
+                        </div>
+                        <div class="incident-type-tag {% if incident.incident_type == 'URG' %}type-urgent
+                                                   {% elif incident.incident_type == 'VAN' %}type-vandalism
+                                                   {% elif incident.incident_type == 'CON' %}type-conflict
+                                                   {% elif incident.incident_type == 'ENF' %}type-illness
+                                                   {% elif incident.incident_type == 'ABD' %}type-abandonment
+                                                   {% elif incident.incident_type == 'PAR' %}type-birth
+                                                   {% else %}type-other{% endif %}">
+                            {{ incident.get_incident_type_display }}
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>{{ incident.title }}</h3>
+                        <p class="description">{{ incident.description|truncatewords:30 }}</p>
+                        <div class="card-meta">
+                            {% if incident.cat %}
+                            <div class="meta-item">
+                                <i class="fas fa-cat"></i>
+                                <span>{{ incident.cat.name }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="meta-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>{{ incident.colony.name }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span>{{ incident.reported_at|date:"d/m/Y H:i" }}</span>
+                            </div>
+                        </div>
+                        {% if incident.is_resolved and incident.resolution %}
+                        <div class="resolution-box">
+                            <i class="fas fa-check-circle"></i>
+                            <p>{{ incident.resolution|truncatewords:20 }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-clipboard-check"></i>
+                <p>No hay incidencias registradas en este momento</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    :root {
+        /* Colores modo claro */
+        --bg-main: #f8f9fa;
+        --bg-card: #ffffff;
+        --bg-secondary: #ffffff;
+        --text-primary: #2c3e50;
+        --text-secondary: #7f8c8d;
+        --text-muted: #95a5a6;
+        --border-color: #eee;
+        --shadow-color: rgba(0,0,0,0.1);
+        --shadow-hover: rgba(0,0,0,0.15);
+        --gradient-start: #3498db;
+        --gradient-end: #2ecc71;
+        --resolution-bg: #f1f8f1;
+        --resolution-text: #27ae60;
+        --card-border: transparent;
+    }
+
+    /* Modo oscuro */
+    [data-theme="dark"] {
+        --bg-main: #1e1e1e;
+        --bg-card: #2d2d2d;
+        --bg-secondary: #333333;
+        --text-primary: #ffffff;
+        --text-secondary: #cccccc;
+        --text-muted: #999999;
+        --border-color: #404040;
+        --shadow-color: rgba(0,0,0,0.5);
+        --shadow-hover: rgba(0,0,0,0.7);
+        --gradient-start: #2980b9;
+        --gradient-end: #27ae60;
+        --resolution-bg: #363636;
+        --resolution-text: #2ecc71;
+        --card-border: #404040;
+    }
+
+    .tablon-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: var(--bg-main);
+    }
+
+    .tablon-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .tablon-header h1 {
+        font-size: 2.5rem;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .tablon-subtitle {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .section-container {
+        margin-bottom: 4rem;
+    }
+
+    .section-header {
+        margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+        color: var(--text-primary);
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .section-line {
+        height: 3px;
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        width: 100px;
+        margin-bottom: 2rem;
+    }
+
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .card-wrapper {
+        height: 100%;
+    }
+
+    .custom-card {
+        background: var(--bg-card);
+        border-radius: 15px;
+        box-shadow: 0 3px 15px var(--shadow-color);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        height: 100%;
+        position: relative;
+        border: 1px solid var(--card-border);
+    }
+
+    .custom-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px var(--shadow-hover);
+    }
+
+    .card-tag {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    /* Los colores de los tags se mantienen igual para ambos modos */
+    .tag-primary { background: #3498db; color: white; }
+    .tag-success { background: #2ecc71; color: white; }
+    .tag-warning { background: #f1c40f; color: #2c3e50; }
+    .tag-info { background: #1abc9c; color: white; }
+
+    .card-content {
+        padding: 2rem;
+    }
+
+    .card-content h3 {
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+    }
+
+    .description {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .card-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .meta-item i {
+        color: var(--gradient-start);
+    }
+
+    /* Estilos específicos para incidencias */
+    .incident-card {
+        border-left: 4px solid;
+    }
+
+    .incident-card.resolved {
+        border-color: #2ecc71;
+    }
+
+    .incident-card.pending {
+        border-color: #f1c40f;
+    }
+
+    .card-status {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .status-tag {
+        padding: 0.4rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    /* Los colores de estado se mantienen igual para ambos modos */
+    .status-success { background: #2ecc71; color: white; }
+    .status-warning { background: #f1c40f; color: #2c3e50; }
+
+    .incident-type-tag {
+        padding: 0.4rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    /* Los colores de tipo de incidencia se mantienen igual para ambos modos */
+    .type-urgent { background: #e74c3c; color: white; }
+    .type-vandalism { background: #e67e22; color: white; }
+    .type-conflict { background: #3498db; color: white; }
+    .type-illness { background: #9b59b6; color: white; }
+    .type-abandonment { background: #95a5a6; color: white; }
+    .type-birth { background: #1abc9c; color: white; }
+    .type-other { background: #34495e; color: white; }
+
+    .resolution-box {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: var(--resolution-bg);
+        border-radius: 10px;
+        display: flex;
+        gap: 0.8rem;
+        align-items: flex-start;
+    }
+
+    .resolution-box i {
+        color: var(--resolution-text);
+        font-size: 1.2rem;
+    }
+
+    .resolution-box p {
+        color: var(--resolution-text);
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 3rem;
+        background: var(--bg-secondary);
+        border-radius: 15px;
+        color: var(--text-muted);
+        border: 1px solid var(--border-color);
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--text-secondary);
+    }
+    
+    /* Ajustes adicionales para modo oscuro */
+    [data-theme="dark"] .card-status {
+        background: var(--bg-card);
+    }
+
+    [data-theme="dark"] .resolution-box {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+    }
+    
+    [data-theme="dark"] .meta-item i {
+        color: var(--gradient-start);
+    }
+    
+    [data-theme="dark"] .section-line {
+        opacity: 0.8;
+    }
+    
+    /* Mejoras de contraste para badges en modo oscuro */
+    [data-theme="dark"] .tag-warning {
+        background: #f39c12;
+        color: #000000;
+    }
+    
+    [data-theme="dark"] .status-warning {
+        background: #f39c12;
+        color: #000000;
+    }
+
+    @media (max-width: 768px) {
+        .tablon-container {
+            padding: 1rem;
+        }
+
+        .cards-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .card-status {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+    }
+</style>
 {% endblock %}
