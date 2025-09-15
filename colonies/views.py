@@ -260,6 +260,7 @@ def save_incident(request):
                     colony=form.cleaned_data['colony'],
                     cat=form.cleaned_data['cat']
                 )
+                messages.success(request, f'Nueva incidencia "{incident.title}" creada exitosamente.')
                 if is_ajax:
                     return JsonResponse({'success': True, 'message': 'Incidencia guardada exitosamente', 'id': incident.id})
                 return redirect('colonies')
