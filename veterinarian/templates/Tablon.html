@@ -51,8 +51,8 @@
         </div>
     </div>
 
-    <!-- Sección de Incidencias (solo visible para administradores) -->
-    {% if user.is_staff %}
+    <!-- Sección de Incidencias (visible para usuarios autenticados) -->
+    {% if user.is_superuser %}
     <div class="section-container incidencias-section">
         <div class="section-header">
             <h2>⚠️ Incidencias</h2>

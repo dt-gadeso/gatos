@@ -22,10 +22,10 @@ class VetCenter(models.Model):
 
 
 class Visit(models.Model):
-    colony = models.ForeignKey('colonies.Colony', on_delete=models.CASCADE)
-    colony_user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='colony_user')
-    cat = models.ForeignKey('cats.Cat', on_delete=models.CASCADE)
-    vet_center = models.ForeignKey(VetCenter, on_delete=models.CASCADE)
+    colony = models.ForeignKey('colonies.Colony', on_delete=models.CASCADE, null=True, blank=True)
+    colony_user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='colony_user', null=True, blank=True)
+    cat = models.ForeignKey('cats.Cat', on_delete=models.CASCADE, null=True, blank=True)
+    vet_center = models.ForeignKey(VetCenter, on_delete=models.CASCADE, null=True, blank=True)
     price = models.DecimalField(
         max_digits=10, 
         decimal_places=2, 
@@ -38,6 +38,14 @@ class Visit(models.Model):
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     cat_survived = models.BooleanField(default=True, verbose_name="¿El gato sobrevivió?")
+    returned_to_colony = models.BooleanField(default=False, null=True, blank=True, verbose_name="¿Ha vuelto a la colonia?")
+    HOUSING_CHOICES = [
+        ('none', 'Ninguno'),
+        ('foster', 'Casa de acogida'),
+        ('adoption', 'Adopción')
+    ]
+    housing_type = models.CharField(max_length=10, choices=HOUSING_CHOICES, default='none', null=True, blank=True, verbose_name="Tipo de alojamiento")
+    housing_address = models.TextField(blank=True, null=True, verbose_name="Dirección de acogida/adopción")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

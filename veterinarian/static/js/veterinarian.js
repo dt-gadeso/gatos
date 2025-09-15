@@ -96,6 +96,77 @@ document.addEventListener('DOMContentLoaded', function() {
     
     observer.observe(document.body, { attributes: true });
 
+    // Gestión de campos dinámicos en el formulario de visitas
+    const catSurvivedSelect = document.getElementById('id_cat_survived');
+    const returnedToColonySelect = document.getElementById('id_returned_to_colony');
+    const housingTypeSelect = document.getElementById('id_housing_type');
+
+    if (catSurvivedSelect && returnedToColonySelect && housingTypeSelect) {
+        console.log('Campos encontrados:', { 
+            catSurvived: catSurvivedSelect,
+            returnedToColony: returnedToColonySelect,
+            housingType: housingTypeSelect 
+        });
+
+        const housingAddressGroup = document.querySelector('[for="id_housing_address"]')?.parentElement;
+        console.log('Campo de dirección:', housingAddressGroup);
+
+        // Function to handle visibility of returned to colony field
+        function handleCatSurvivedChange() {
+            console.log('Cambió estado de supervivencia:', catSurvivedSelect.value);
+            const returnedToColonyGroup = returnedToColonySelect.closest('.form-group');
+            const housingTypeGroup = housingTypeSelect.closest('.form-group');
+            
+            console.log('Valor actual de cat_survived:', catSurvivedSelect.value);
+            if (catSurvivedSelect.value === 'True' || catSurvivedSelect.value === 'true') {
+                console.log('El gato sobrevivió, mostrando campos adicionales');
+                if (returnedToColonyGroup) returnedToColonyGroup.style.display = 'block';
+                handleReturnedToColonyChange();
+            } else {
+                console.log('El gato no sobrevivió, ocultando campos');
+                if (returnedToColonyGroup) returnedToColonyGroup.style.display = 'none';
+                if (housingTypeGroup) housingTypeGroup.style.display = 'none';
+                if (housingAddressGroup) housingAddressGroup.style.display = 'none';
+            }
+        }
+
+        // Function to handle visibility of housing fields
+        function handleReturnedToColonyChange() {
+            console.log('Valor actual de returned_to_colony:', returnedToColonySelect.value);
+            const housingTypeGroup = housingTypeSelect.closest('.form-group');
+            
+            if (returnedToColonySelect.value === 'False' || returnedToColonySelect.value === 'false') {
+                console.log('No volvió a la colonia, mostrando opciones de alojamiento');
+                if (housingTypeGroup) housingTypeGroup.style.display = 'block';
+                handleHousingTypeChange();
+            } else {
+                console.log('Volvió a la colonia, ocultando opciones de alojamiento');
+                if (housingTypeGroup) housingTypeGroup.style.display = 'none';
+                if (housingAddressGroup) housingAddressGroup.style.display = 'none';
+            }
+        }
+
+        // Function to handle visibility of address field
+        function handleHousingTypeChange() {
+            console.log('Cambió tipo de alojamiento:', housingTypeSelect.value);
+            if (housingTypeSelect.value !== 'none') {
+                console.log('Mostrando campo de dirección');
+                if (housingAddressGroup) housingAddressGroup.style.display = 'block';
+            } else {
+                console.log('Ocultando campo de dirección');
+                if (housingAddressGroup) housingAddressGroup.style.display = 'none';
+            }
+        }
+
+        // Add event listeners
+        catSurvivedSelect.addEventListener('change', handleCatSurvivedChange);
+        returnedToColonySelect.addEventListener('change', handleReturnedToColonyChange);
+        housingTypeSelect.addEventListener('change', handleHousingTypeChange);
+
+        // Initial setup
+        handleCatSurvivedChange();
+    }
+
     // Animación suave para los botones
     const buttons = document.querySelectorAll('.btn-primary, .map-btn, .btn-management');
     buttons.forEach(button => {

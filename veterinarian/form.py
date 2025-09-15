@@ -46,8 +46,25 @@ class VetCenterForm(forms.ModelForm):
 class VisitForm(forms.ModelForm):
     class Meta:
         model = Visit
-        fields = ['colony', 'colony_user','cat', 'vet_center', 'price', 'report_file', 'bill_file', 'user', 'follow_up', 'start_date', 'end_date', 'cat_survived']
+        fields = ['colony', 'colony_user','cat', 'vet_center', 'price', 'report_file', 'bill_file', 'user', 'follow_up', 'start_date', 'end_date', 'cat_survived', 'returned_to_colony', 'housing_type', 'housing_address']
         widgets = {
+            'cat_survived': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'id_cat_survived',
+            }, choices=[('True', 'Sí'), ('False', 'No')]),
+            'returned_to_colony': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'id_returned_to_colony',
+            }, choices=[('True', 'Sí'), ('False', 'No')]),
+            'housing_type': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'id_housing_type',
+            }),
+            'housing_address': forms.Textarea(attrs={
+                'class': 'form-control',
+                'id': 'id_housing_address',
+                'rows': 3,
+            }),
             'colony': forms.Select(attrs={'class': 'form-control'}),
             'colony_user': forms.Select(attrs={'class': 'form-control'}),
             'cat': forms.Select(attrs={'class': 'form-control'}),
@@ -73,6 +90,12 @@ class VisitForm(forms.ModelForm):
                 'type': 'date'
             }),
             'cat_survived': forms.Select(attrs={'class': 'form-select'}, choices=[(True, 'Sí'), (False, 'No')]),
+            'returned_to_colony': forms.Select(attrs={'class': 'form-select'}, choices=[(True, 'Sí'), (False, 'No')]),
+            'housing_type': forms.Select(attrs={'class': 'form-select'}),
+            'housing_address': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3
+            }),
         }
         labels = {
             'colony': 'Colonia',
