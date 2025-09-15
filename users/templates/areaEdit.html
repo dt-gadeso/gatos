@@ -149,13 +149,13 @@
                                     {{ form.es_capturador|safe }}
                                 </div>
 
-                                <div class="form-group area-edit-form-group enhanced-form-group" id="tiene-trampa-div" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" id="trap-type-div" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative; {% if not form.instance.es_capturador %}display: none;{% endif %}">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #ff5722, #d84315); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                                        <i class="fas fa-mouse-pointer" style="color: #ff5722; margin-right: 8px; font-size: 18px;"></i>
-                                        <label for="{{ form.tiene_trampa.id_for_label }}" class="area-edit-label" style="margin: 0; color: #ff5722 !important; font-weight: 600;">{{ form.tiene_trampa.label }}</label>
+                                        <i class="fas fa-box-open" style="color: #ff5722; margin-right: 8px; font-size: 18px;"></i>
+                                        <label for="{{ form.trap_type.id_for_label }}" class="area-edit-label" style="margin: 0; color: #ff5722 !important; font-weight: 600;">{{ form.trap_type.label }}</label>
                                     </div>
-                                    {{ form.tiene_trampa|safe }}
+                                    {{ form.trap_type|safe }}
                                 </div>
 
                                 <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
@@ -319,266 +319,70 @@
 </main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const carnetInput = document.getElementById("id_carnet_gatos");
-        const carnetPreview = document.getElementById("carnet-preview");
-        const carnetPreviewImage = document.getElementById("carnet-preview-image");
-        
-        if (carnetInput) {
-            carnetInput.addEventListener("change", function() {
-                if (this.files && this.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        carnetPreviewImage.src = e.target.result;
-                        carnetPreview.style.display = "block";
-                    };
-                    reader.readAsDataURL(this.files[0]);
-                } else {
-                    carnetPreview.style.display = "none";
-                }
-            });
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    // Variables para la vista previa del carnet
+    const carnetInput = document.getElementById("id_carnet_gatos");
+    const carnetPreview = document.getElementById("carnet-preview");
+    const carnetPreviewImage = document.getElementById("carnet-preview-image");
 
-        function detectDarkMode() {
-            const darkModeSetting = localStorage.getItem('darkMode');
-            if (darkModeSetting === 'enabled') {
-                document.body.classList.add('dark-mode');
-                return true;
-            } else if (darkModeSetting === 'disabled') {
-                document.body.classList.remove('dark-mode');
-                return false;
+    // Vista previa del carnet
+    if (carnetInput && carnetPreview && carnetPreviewImage) {
+        carnetInput.addEventListener("change", function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    carnetPreviewImage.src = e.target.result;
+                    carnetPreview.style.display = "block";
+                };
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                carnetPreview.style.display = "none";
             }
+        });
+    }
 
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('darkMode', 'enabled');
-                return true;
-            }
-            
-            return false;
-        }
-        
-        detectDarkMode();
+    // Variables para casa de acogida y relevo
+    const casaAcogida = document.getElementById("id_casa_acogida");
+    const tieneRelevoDiv = document.getElementById("tiene-relevo-div");
+    const tieneRelevo = document.getElementById("id_tiene_relevo");
 
-        const mainContent = document.querySelector('.staff-container');
-        mainContent.style.opacity = '0';
-        mainContent.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-            mainContent.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-            mainContent.style.opacity = '1';
-            mainContent.style.transform = 'translateY(0)';
-        }, 200);
-
-        const tableRows = document.querySelectorAll('tbody tr');
-        
-        function applyTableRowEffects() {
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            
-            tableRows.forEach(row => {
-                const newRow = row.cloneNode(true);
-                row.parentNode.replaceChild(newRow, row);
-                
-                newRow.addEventListener('mouseover', function() {
-                    if (isDarkMode) {
-                        this.style.backgroundColor = '#444444';
-                    } else {
-                        this.style.backgroundColor = '#f0f0f0';
-                    }
-                });
-                newRow.addEventListener('mouseout', function() {
-                    this.style.backgroundColor = '';
-                });
-            });
-        }
-        
-        applyTableRowEffects();
-
-        const casaAcogida = document.getElementById("id_casa_acogida");
-        const tieneRelevoDiv = document.getElementById("tiene-relevo-div");
-        const tieneRelevo = document.getElementById("id_tiene_relevo");
-
-        function updateRelevoField() {
-            if (casaAcogida && casaAcogida.value === "si" && tieneRelevoDiv) {
-                tieneRelevoDiv.style.display = "block";
-            } else if (tieneRelevoDiv && tieneRelevo) {
-                tieneRelevoDiv.style.display = "none";
+    // Manejo de casa de acogida y relevo
+    function updateRelevoField() {
+        if (casaAcogida && tieneRelevoDiv && tieneRelevo) {
+            const mostrar = casaAcogida.value === "si";
+            tieneRelevoDiv.style.display = mostrar ? "block" : "none";
+            if (!mostrar) {
                 tieneRelevo.value = "no";
             }
         }
+    }
 
-        if (casaAcogida) {
-            casaAcogida.addEventListener("change", updateRelevoField);
-            updateRelevoField();
-        }
+    if (casaAcogida) {
+        casaAcogida.addEventListener("change", updateRelevoField);
+        updateRelevoField();
+    }
 
-        const esCapturador = document.getElementById("id_es_capturador");
-        const tieneTrampaDiv = document.getElementById("tiene-trampa-div");
-        const tieneTrampa = document.getElementById("id_tiene_trampa");
+    // Variables para capturador y tipo de trampa
+    const esCapturador = document.getElementById("id_es_capturador");
+    const trapTypeDiv = document.getElementById("trap-type-div");
+    const trapType = document.getElementById("id_trap_type");
 
-        function updateTrampaField() {
-            if (esCapturador && esCapturador.value === "si" && tieneTrampaDiv) {
-                tieneTrampaDiv.style.display = "block";
-            } else if (tieneTrampaDiv && tieneTrampa) {
-                tieneTrampaDiv.style.display = "none";
-                tieneTrampa.value = "no";
+    // Manejo de capturador y tipo de trampa
+    function updateTrapTypeField() {
+        if (esCapturador && trapTypeDiv && trapType) {
+            const mostrar = esCapturador.value === "si";
+            trapTypeDiv.style.display = mostrar ? "block" : "none";
+            trapType.disabled = !mostrar;
+            if (!mostrar) {
+                trapType.value = "";
             }
         }
+    }
 
-        if (esCapturador) {
-            esCapturador.addEventListener("change", updateTrampaField);
-            updateTrampaField();
-        }
-        
-        const darkModeObserver = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                    if (document.body.classList.contains('dark-mode')) {
-                        localStorage.setItem('darkMode', 'enabled');
-                        applyDarkModeStyles();
-                    } else {
-                        localStorage.setItem('darkMode', 'disabled');
-                        removeDarkModeStyles();
-                    }
-                    applyTableRowEffects();
-                }
-            });
-        });
-
-        function applyDarkModeStyles() {
-            const personalSection = document.querySelector('.personal-info-section');
-            if (personalSection) {
-                personalSection.style.background = 'linear-gradient(135deg, #1a1a1a 0%, #2d1a0f 100%)';
-                personalSection.style.borderColor = '#ff7f50';
-                personalSection.style.boxShadow = '0 10px 30px rgba(255, 127, 80, 0.2), 0 0 0 1px rgba(255, 127, 80, 0.15)';
-
-                const decorativePersonal = personalSection.querySelector('.decorative-personal');
-                if (decorativePersonal) {
-                    decorativePersonal.style.background = 'radial-gradient(circle, #ff7f50 0%, transparent 70%)';
-                    decorativePersonal.style.opacity = '0.15';
-                }
-                
-            
-            const roleSection = document.querySelector('.role-options-section');
-            if (roleSection) {
-                roleSection.style.background = 'linear-gradient(135deg, #1a1a1a 0%, #0f1a2d 100%)';
-                roleSection.style.borderColor = '#64b5f6';
-                roleSection.style.boxShadow = '0 10px 30px rgba(100, 181, 246, 0.2), 0 0 0 1px rgba(100, 181, 246, 0.15)';
-
-                const decorativeRole = roleSection.querySelector('.decorative-role');
-                if (decorativeRole) {
-                    decorativeRole.style.background = 'radial-gradient(circle, #64b5f6 0%, transparent 70%)';
-                    decorativeRole.style.opacity = '0.15';
-                }
-
-                const roleFormGroups = roleSection.querySelectorAll('.enhanced-form-group');
-                roleFormGroups.forEach(group => {
-                    const label = group.querySelector('label');
-                    if (label) {
-                        const icon = label.querySelector('i');
-                        if (icon) {
-                            if (icon.classList.contains('fa-user-shield')) {
-                                label.style.color = '#5dade2'; 
-                            } else if (icon.classList.contains('fa-mouse-pointer')) {
-                                label.style.color = '#ff7675'; 
-                            } else if (icon.classList.contains('fa-star')) {
-                                label.style.color = '#6c5ce7'; 
-                            }
-                        }
-                    }
-                });
-            }
-
-            const fileUploadDiv = document.querySelector('div[style*="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)"]') ||
-                                 document.querySelector('div[style*="background: linear-gradient(135deg, #cc5555 0%, #bb4444 100%)"]');
-            if (fileUploadDiv) {
-                fileUploadDiv.style.background = 'linear-gradient(135deg, #cc5555 0%, #bb4444 100%)';
-                fileUploadDiv.style.boxShadow = '0 4px 15px rgba(204, 85, 85, 0.4)';
-            }
-        }
-
-        function removeDarkModeStyles() {
-            const personalSection = document.querySelector('.personal-info-section');
-            if (personalSection) {
-                personalSection.style.background = 'linear-gradient(135deg, var(--card-bg, #fff) 0%, var(--light-main-color, #ffe4e1) 100%)';
-                personalSection.style.borderColor = 'var(--main-color, #d2691e)';
-                personalSection.style.boxShadow = '0 10px 30px rgba(210, 105, 30, 0.15), 0 0 0 1px rgba(210, 105, 30, 0.1)';
-
-                const decorativePersonal = personalSection.querySelector('.decorative-personal');
-                if (decorativePersonal) {
-                    decorativePersonal.style.background = 'radial-gradient(circle, var(--main-color, #d2691e) 0%, transparent 70%)';
-                    decorativePersonal.style.opacity = '0.1';
-                }
-
-                const personalFormGroups = personalSection.querySelectorAll('.enhanced-form-group');
-                personalFormGroups.forEach(group => {
-                    const label = group.querySelector('label');
-                    if (label) {
-                        const icon = label.querySelector('i');
-                        if (icon) {
-                            if (icon.classList.contains('fa-user-circle')) {
-                                label.style.color = 'var(--main-color, #d2691e)'; 
-                            } else if (icon.classList.contains('fa-envelope')) {
-                                label.style.color = 'var(--secondary-color, #4a86e8)'; 
-                            } else if (icon.classList.contains('fa-phone')) {
-                                label.style.color = 'var(--tertiary-color, #28a745)';
-                            } else if (icon.classList.contains('fa-camera')) {
-                                label.style.color = '#ff6b6b'; 
-                            } else if (icon.classList.contains('fa-id-card')) {
-                                label.style.color = '#9c27b0'; 
-                            } else if (icon.classList.contains('fa-home')) {
-                                label.style.color = '#ff9800'; 
-                            } else if (icon.classList.contains('fa-user-friends')) {
-                                label.style.color = '#00bcd4'; 
-                            }
-                        }
-                    }
-                });
-            }
-            
-            const roleSection = document.querySelector('.role-options-section');
-            if (roleSection) {
-                roleSection.style.background = 'linear-gradient(135deg, var(--card-bg, #fff) 0%, var(--light-secondary-color, #e6f3ff) 100%)';
-                roleSection.style.borderColor = 'var(--secondary-color, #4a90e2)';
-                roleSection.style.boxShadow = '0 10px 30px rgba(74, 144, 226, 0.15), 0 0 0 1px rgba(74, 144, 226, 0.1)';
-
-                const decorativeRole = roleSection.querySelector('.decorative-role');
-                if (decorativeRole) {
-                    decorativeRole.style.background = 'radial-gradient(circle, var(--secondary-color, #4a90e2) 0%, transparent 70%)';
-                    decorativeRole.style.opacity = '0.1';
-                }
-                
-                const roleFormGroups = roleSection.querySelectorAll('.enhanced-form-group');
-                roleFormGroups.forEach(group => {
-                    const label = group.querySelector('label');
-                    if (label) {
-                        const icon = label.querySelector('i');
-                        if (icon) {
-                            if (icon.classList.contains('fa-user-shield')) {
-                                label.style.color = '#2196f3'; 
-                            } else if (icon.classList.contains('fa-mouse-pointer')) {
-                                label.style.color = '#ff5722'; 
-                            } else if (icon.classList.contains('fa-star')) {
-                                label.style.color = '#4caf50'; 
-                            }
-                        }
-                    }
-                });
-            }
-
-            const fileUploadDiv = document.querySelector('div[style*="background: linear-gradient(135deg, #cc5555 0%, #bb4444 100%)"]') ||
-                                 document.querySelector('div[style*="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)"]');
-            if (fileUploadDiv) {
-                fileUploadDiv.style.background = 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)';
-                fileUploadDiv.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.3)';
-            }
-        }
-
-        if (document.body.classList.contains('dark-mode')) {
-            applyDarkModeStyles();
-        }
-        
-        darkModeObserver.observe(document.body, { attributes: true });
-    });
+    if (esCapturador) {
+        esCapturador.addEventListener("change", updateTrapTypeField);
+        updateTrapTypeField();
+    }
+});
 </script>
 {% endblock %}

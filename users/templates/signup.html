@@ -39,6 +39,16 @@
         <div class="signup-form-group signup-tiene-relevo" id="tiene-relevo-div">
             {{ form.tiene_relevo.label_tag }}<br>{{ form.tiene_relevo }}
         </div>
+        <div class="signup-form-group" style="margin-bottom: 20px;">
+            <div style="margin-bottom: 10px;">
+                {{ form.es_capturador.label_tag }}<br>
+                {{ form.es_capturador }}
+            </div>
+            <div id="trap-type-div" style="display: none; margin-top: 10px; padding: 10px; border-left: 3px solid #4a86e8; background-color: #f8f9fa;">
+                {{ form.trap_type.label_tag }}<br>
+                {{ form.trap_type }}
+            </div>
+        </div>
         <div class="signup-button-container">
             <button type="submit" class="signup-button">Crear Cuenta</button>
         </div>
@@ -46,46 +56,74 @@
 </main>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Referencias a elementos DOM
+        const form = document.getElementById("signup-form");
         const casaAcogida = document.getElementById("id_casa_acogida");
         const tieneRelevoDiv = document.getElementById("tiene-relevo-div");
         const tieneRelevo = document.getElementById("id_tiene_relevo");
-        
-        // Image preview for carnet_gatos
+        const esCapturador = document.getElementById("id_es_capturador");
+        const trapTypeDiv = document.getElementById("trap-type-div");
+        const trapType = document.getElementById("id_trap_type");
         const carnetInput = document.getElementById("id_carnet_gatos");
         const carnetPreview = document.getElementById("carnet-preview");
-        
-        carnetInput.addEventListener("change", function() {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    carnetPreview.src = e.target.result;
-                    carnetPreview.style.display = "block";
-                };
-                reader.readAsDataURL(this.files[0]);
-            } else {
-                carnetPreview.style.display = "none";
-            }
-        });
 
+        // Vista previa del carnet
+        if (carnetInput && carnetPreview) {
+            carnetInput.onchange = function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        carnetPreview.src = e.target.result;
+                        carnetPreview.style.display = "block";
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                } else {
+                    carnetPreview.style.display = "none";
+                }
+            };
+        }
+
+        // Manejo del campo de relevo
         function updateRelevoField() {
-            if (casaAcogida.value === "si") {
-                tieneRelevoDiv.style.display = "block";
-                tieneRelevo.required = true;
-            } else {
-                tieneRelevoDiv.style.display = "none";
-                tieneRelevo.value = "no";
-                tieneRelevo.required = false;
+            if (casaAcogida && tieneRelevoDiv && tieneRelevo) {
+                const mostrar = casaAcogida.value === "si";
+                tieneRelevoDiv.style.display = mostrar ? "block" : "none";
+                tieneRelevo.required = mostrar;
+                if (!mostrar) tieneRelevo.value = "no";
             }
         }
 
-        casaAcogida.addEventListener("change", updateRelevoField);
-        updateRelevoField();
-
-        document.getElementById("signup-form").addEventListener("submit", function() {
-            if (casaAcogida.value !== "si") {
-                tieneRelevo.value = "no";
+        // Manejo del campo de tipo de trampa
+        function updateTrapTypeField() {
+            if (esCapturador && trapTypeDiv && trapType) {
+                const mostrar = esCapturador.value === "si";
+                console.log('Es capturador seleccionado:', mostrar);
+                trapTypeDiv.style.display = mostrar ? "block" : "none";
+                trapType.disabled = !mostrar;
+                if (!mostrar) trapType.value = "";
             }
-        });
+        }
+
+        // Configurar eventos
+        if (casaAcogida) {
+            casaAcogida.onchange = updateRelevoField;
+            updateRelevoField();
+        }
+
+        if (esCapturador) {
+            esCapturador.onchange = updateTrapTypeField;
+            updateTrapTypeField();
+        }
+
+        // Validación del formulario
+        if (form) {
+            form.onsubmit = function(e) {
+                if (casaAcogida && casaAcogida.value !== "si" && tieneRelevo) {
+                    tieneRelevo.value = "no";
+                }
+                return true;
+            };
+        }
     });
 </script>
 {% endblock %}

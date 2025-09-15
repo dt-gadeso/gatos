@@ -35,12 +35,13 @@
     </select>
   </div>
 
-  <div id="trampa-div" class="role-trampa-div">
-    <label for="tiene_trampa">¿Tiene trampa?</label>
-    <select name="tiene_trampa" id="tiene_trampa">
-      <option value="">-- Selecciona --</option>
-      <option value="si">Sí</option>
-      <option value="no">No</option>
+  <div id="trap-type-div" class="role-trap-type-div">
+    <label for="trap_type">Tipo de trampa:</label>
+    <select name="trap_type" id="trap_type">
+      <option value="">-- Sin trampa --</option>
+      {% for trap_type in trap_types %}
+        <option value="{{ trap_type.id }}">{{ trap_type.name }}</option>
+      {% endfor %}
     </select>
   </div>
 
@@ -61,8 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const roleSelect = document.getElementById('role');
     const associationDiv = document.getElementById('association-div');
     const associationSelect = document.getElementById('association');
-    const trampaDiv = document.getElementById('trampa-div');
-    const trampaSelect = document.getElementById('tiene_trampa');
+    const trapTypeDiv = document.getElementById('trap-type-div');
+    const trapTypeSelect = document.getElementById('trap_type');
     const userSearch = document.getElementById('user-search');
     const userSelect = document.getElementById('user-select');
     const associationSearch = document.getElementById('association-search');
@@ -72,13 +73,18 @@ document.addEventListener('DOMContentLoaded', function () {
         if (selectedRole === 'presidente/a' || selectedRole === 'miembro') {
             associationDiv.style.display = 'block';
             associationSelect.required = true;
-            trampaDiv.style.display = 'none';
-            trampaSelect.required = false;
+            trapTypeDiv.style.display = 'none';
+            trapTypeSelect.required = false;
+        } else if (selectedRole === 'capturador') {
+            associationDiv.style.display = 'none';
+            associationSelect.required = false;
+            trapTypeDiv.style.display = 'block';
+            trapTypeSelect.required = false;
         } else {
             associationDiv.style.display = 'none';
             associationSelect.required = false;
-            trampaDiv.style.display = 'none';
-            trampaSelect.required = false;
+            trapTypeDiv.style.display = 'none';
+            trapTypeSelect.required = false;
         }
     }
 

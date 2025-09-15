@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .form import CreateNewUser, LoginUser,EditUser, AssociationForm
-from .models import User, Role, Member, Manager, Association
+from .models import User, Role, Member, Manager, Association, TrapType
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.db.models.signals import post_save
@@ -50,13 +50,18 @@ def signup(request):
                     tiene_relevo_val = request.POST.get('tiene_relevo')
                     if casa_acogida_val != 'si':
                         tiene_relevo_val = 'no'
+                    es_capturador_val = form.cleaned_data.get('es_capturador')
+                    trap_type_val = form.cleaned_data.get('trap_type')
+                    
                     user = User(
                         username=form.cleaned_data.get('username'),
                         email=form.cleaned_data.get('email'),
                         phone=form.cleaned_data.get('phone'),
                         carnet_gatos=form.cleaned_data.get('carnet_gatos'),
                         casa_acogida=(casa_acogida_val == 'si'),
-                        tiene_relevo=(tiene_relevo_val == 'si')
+                        tiene_relevo=(tiene_relevo_val == 'si'),
+                        es_capturador=(es_capturador_val == 'si'),
+                        trap_type=trap_type_val if es_capturador_val == 'si' else None
                     )
                     user.set_password(form.cleaned_data.get('password'))
                     user.save()
@@ -113,18 +118,15 @@ def assign_role(request):
     roles = Role.objects.all()
     users = User.objects.all()
     associations = Association.objects.all()
+    trap_types = TrapType.objects.all()
     selected_role_id = request.POST.get('role_id')
     selected_association_id = request.POST.get('association_id')
-    tiene_trampa = request.POST.get('tiene_trampa')
-    show_association = False
-    show_trampa = False
     error = None
 
     if selected_role_id:
         try:
             role = Role.objects.get(id=selected_role_id)
             show_association = role.name.lower() in ['presidente/a', 'miembro']
-            show_trampa = False
         except Role.DoesNotExist:
             error = "Rol inválido"
 
@@ -146,7 +148,7 @@ def assign_role(request):
 
             user.es_capturador = False
             user.es_free = False
-            user.tiene_trampa = False
+            user.trap_type = None
 
             if role.name.lower() == 'presidente/a':
                 Manager.objects.update_or_create(user=user, defaults={'association': association})
@@ -154,7 +156,9 @@ def assign_role(request):
                 Member.objects.update_or_create(user=user, defaults={'association': association})
             elif role.name.lower() == 'capturador':
                 user.es_capturador = True
-                user.tiene_trampa = (tiene_trampa == 'si')
+                selected_trap_type = request.POST.get('trap_type')
+                if selected_trap_type:
+                    user.trap_type = TrapType.objects.get(id=selected_trap_type)
             elif role.name.lower() == 'free':
                 user.es_free = True
 
@@ -167,10 +171,10 @@ def assign_role(request):
         'roles': roles,
         'users': users,
         'associations': associations,
+        'trap_types': trap_types,
         'selected_role_id': int(selected_role_id) if selected_role_id else None,
         'selected_association_id': int(selected_association_id) if selected_association_id else None,
         'show_association': show_association,
-        'show_trampa': show_trampa,
         'error': error
     })
 
@@ -230,11 +234,15 @@ def areaEdit(request):
                 
                 es_capturador_val = form.cleaned_data.get('es_capturador')
                 if es_capturador_val is not None:
-                    user.es_capturador = (es_capturador_val == 'si')
-                
-                tiene_trampa_val = form.cleaned_data.get('tiene_trampa')
-                if tiene_trampa_val is not None:
-                    user.tiene_trampa = (tiene_trampa_val == 'si')
+                    es_capturador_nuevo = (es_capturador_val == 'si')
+                    user.es_capturador = es_capturador_nuevo
+                    # Solo permitir tipo de trampa si es capturador
+                    if not es_capturador_nuevo:
+                        user.trap_type = None
+
+                trap_type_val = form.cleaned_data.get('trap_type')
+                if user.es_capturador:
+                    user.trap_type = trap_type_val
                 
                 es_free_val = form.cleaned_data.get('es_free')
                 if es_free_val is not None:

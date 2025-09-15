@@ -51,16 +51,12 @@ def search_vet_centers(request):
 
 @login_required
 def tablon(request):
-    # Importamos los modelos necesarios de colonies
     from colonies.models import Relief, Incident
-    
-    # Obtenemos los avisos ordenados por fecha de inicio
+
     reliefs = Relief.objects.all().order_by('-start_date')
-    
-    # Obtenemos las incidencias ordenadas por fecha de reporte
+
     incidents = Incident.objects.all().order_by('-reported_at')
-    
-    # Comprobamos si hay incidencias
+
     print(f"Número de incidencias encontradas: {incidents.count()}")
     print(f"Usuario es staff: {request.user.is_staff}")
     print(f"Usuario es superuser: {request.user.is_superuser}")
@@ -68,7 +64,7 @@ def tablon(request):
     return render(request, 'tablon.html', {
         'reliefs': reliefs,
         'incidents': incidents,
-        'user': request.user  # Agregamos explícitamente el usuario al contexto
+        'user': request.user
     })
 
 
@@ -86,7 +82,6 @@ def vetcenter_form_view(request):
         else:
             return render(request, 'formNewVetCenter.html', {'form': form, 'error': 'Formulario inválido'})
 
-# Esta función fue eliminada por ser parte de la funcionalidad de ayuntamientos
 
 @login_required
 def visit_form_view(request):
@@ -137,5 +132,3 @@ def visits_list_view(request):
         'visits': visits,
         'user_association': request.user.association if hasattr(request.user, 'association') else None
     })
-
-# Esta función fue eliminada por ser parte de la funcionalidad de ayuntamientos

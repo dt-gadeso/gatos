@@ -3,6 +3,18 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
 
+class TrapType(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        db_table = 'trap_types'
+
+
 class Role(models.Model):
     name = models.CharField(max_length=50)
     
@@ -40,7 +52,7 @@ class User(AbstractUser):
     activo = models.BooleanField(default=True)
     es_capturador = models.BooleanField(default=False)
     es_free = models.BooleanField(default=False)
-    tiene_trampa = models.BooleanField(default=False)
+    trap_type = models.ForeignKey(TrapType, on_delete=models.SET_NULL, null=True, blank=True, related_name='users')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -102,8 +114,31 @@ class Manager(models.Model):
 
 
 @receiver(post_migrate)
-def create_default_roles(sender, **kwargs):
+def create_default_roles_and_traps(sender, **kwargs):
     _ = kwargs
     if sender.name == 'users':
+        # Create default roles
         Role.objects.get_or_create(name='miembro')
         Role.objects.get_or_create(name='presidente/a')
+        
+        # Create default trap types
+        TrapType.objects.get_or_create(
+            name='Jaula',
+            defaults={'description': 'Trampa tipo jaula tradicional para gatos'}
+        )
+        TrapType.objects.get_or_create(
+            name='Guillotina',
+            defaults={'description': 'Trampa de tipo guillotina'}
+        )
+        TrapType.objects.get_or_create(
+            name='Drop',
+            defaults={'description': 'Trampa tipo caída'}
+        )
+        TrapType.objects.get_or_create(
+            name="No tengo trampa",
+            defaults={'description': "Usuario capturador sin trampa propia"}
+        )
+        TrapType.objects.get_or_create(
+            name='Otra',
+            defaults={'description': 'Otro tipo de trampa'}
+        )
