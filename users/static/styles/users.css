@@ -146,8 +146,98 @@
 }
 
 /* Login Form Styles */
+.login-main {
+    max-width: 500px;
+    margin: 40px auto;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px var(--shadow-color);
+    padding: 32px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.login-title {
+    text-align: center;
+    color: var(--main-color);
+    margin-bottom: 24px;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.login-form-group {
+    margin-bottom: 16px;
+}
+
+.login-form-group label {
+    display: block;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.login-form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--input-border);
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    transition: all 0.3s ease;
+}
+
+.login-form-group input:focus {
+    outline: none;
+    border-color: var(--main-color);
+    box-shadow: 0 0 0 3px var(--main-color-shadow);
+}
+
+.login-form-group input:hover {
+    background-color: var(--input-bg-hover);
+}
+
 .login-error {
-    color: red;
+    color: var(--alert-danger-text);
+    background-color: var(--alert-danger-bg);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid var(--alert-danger-text);
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.login-button-container {
+    text-align: center;
+    margin-top: 24px;
+}
+
+.login-button {
+    background: var(--main-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 40px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.login-button:hover {
+    background: var(--main-color-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--main-color-shadow);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Area Edit Styles */

@@ -29,7 +29,6 @@
                         {% endif %}
                         
                         <div class="area-edit-section personal-info-section" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, var(--light-main-color, #ffe4e1) 100%); border: 2px solid var(--main-color, #d2691e); border-radius: 20px; padding: 35px; margin-bottom: 35px; box-shadow: 0 10px 30px rgba(210, 105, 30, 0.15), 0 0 0 1px rgba(210, 105, 30, 0.1); position: relative; overflow: hidden;">
-                            <!-- Decorative element -->
                             <div class="decorative-personal" style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: radial-gradient(circle, var(--main-color, #d2691e) 0%, transparent 70%); opacity: 0.1; border-radius: 50%;"></div>
                             
                             <div style="display: flex; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 3px solid var(--main-color, #d2691e);">
@@ -320,12 +319,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Variables para la vista previa del carnet
     const carnetInput = document.getElementById("id_carnet_gatos");
     const carnetPreview = document.getElementById("carnet-preview");
     const carnetPreviewImage = document.getElementById("carnet-preview-image");
 
-    // Vista previa del carnet
     if (carnetInput && carnetPreview && carnetPreviewImage) {
         carnetInput.addEventListener("change", function() {
             if (this.files && this.files[0]) {
@@ -341,12 +338,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Variables para casa de acogida y relevo
     const casaAcogida = document.getElementById("id_casa_acogida");
     const tieneRelevoDiv = document.getElementById("tiene-relevo-div");
     const tieneRelevo = document.getElementById("id_tiene_relevo");
 
-    // Manejo de casa de acogida y relevo
     function updateRelevoField() {
         if (casaAcogida && tieneRelevoDiv && tieneRelevo) {
             const mostrar = casaAcogida.value === "si";
@@ -362,12 +357,10 @@ document.addEventListener('DOMContentLoaded', function() {
         updateRelevoField();
     }
 
-    // Variables para capturador y tipo de trampa
     const esCapturador = document.getElementById("id_es_capturador");
     const trapTypeDiv = document.getElementById("trap-type-div");
     const trapType = document.getElementById("id_trap_type");
 
-    // Manejo de capturador y tipo de trampa
     function updateTrapTypeField() {
         if (esCapturador && trapTypeDiv && trapType) {
             const mostrar = esCapturador.value === "si";
@@ -384,7 +377,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTrapTypeField();
     }
 
-    // Manejo de asociación
     const esFree = document.getElementById("id_es_free");
     const associationDiv = document.getElementById("association-div");
     const association = document.getElementById("association");

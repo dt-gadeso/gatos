@@ -1,24 +1,26 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="{% static 'styles/login.css' %}">
-    <link rel="stylesheet" href="{% static 'styles/users.css' %}">
-</head>
-<body>
-    <h1>Iniciar Sesión</h1>
-    <form method="POST" action="/users/signin/">
+<link rel="stylesheet" href="{% static 'styles/users.css' %}">
+
+<main class="login-main">
+    <h1 class="login-title">Iniciar Sesión</h1>
+    <form method="POST" action="/users/signin/" id="login-form">
         {% csrf_token %}
         {% if error %}
         <p class="login-error">{{ error }}</p>
         {% endif %}
 
-        {{ form.as_p }}
-        <button type="submit">Login</button>
+        <div class="login-form-group">
+            {{ form.username.label_tag }}<br>{{ form.username }}
+        </div>
+        <div class="login-form-group">
+            {{ form.password.label_tag }}<br>{{ form.password }}
+        </div>
+        
+        <div class="login-button-container">
+            <button type="submit" class="login-button">Iniciar Sesión</button>
+        </div>
     </form>
-</body>
-</html>
+</main>
 {% endblock %}
