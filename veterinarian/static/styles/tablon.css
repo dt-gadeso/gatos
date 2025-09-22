@@ -1,0 +1,432 @@
+:root {
+    /* Colores modo claro - compatibles con el diseño base */
+    --bg-main: transparent; /* Usar el fondo del body */
+    --bg-card: #ffffff;
+    --bg-secondary: #ffe4e1; /* Consistente con el footer */
+    --text-primary: #333333; /* Consistente con body */
+    --text-secondary: #d2691e; /* Consistente con h2, h3 */
+    --text-muted: #666666;
+    --border-color: #ffd1cc; /* Consistente con footer border */
+    --shadow-color: rgba(255,192,203,0.15); /* Consistente con cards */
+    --shadow-hover: rgba(255,192,203,0.25);
+    --gradient-start: #d2691e;
+    --gradient-end: #ff6b6b;
+    --resolution-bg: #f1f8f1;
+    --resolution-text: #27ae60;
+    --card-border: transparent;
+}
+
+/* Animación fadeIn */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modo oscuro - compatible con el sistema de toggle del sitio */
+body.dark-mode {
+    --bg-main: transparent; /* Mantener transparente para usar el fondo del body */
+    --bg-card: #2d2d2d;
+    --bg-secondary: #333333;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-muted: #999999;
+    --border-color: #404040;
+    --shadow-color: rgba(0,0,0,0.3);
+    --shadow-hover: rgba(0,0,0,0.5);
+    --gradient-start: #ff6b6b;
+    --gradient-end: #d2691e;
+    --resolution-bg: #363636;
+    --resolution-text: #2ecc71;
+    --card-border: #404040;
+}
+
+.tablon-container {
+    max-width: 1200px;
+    margin: 40px auto 24px auto; /* Consistente con main en index.css */
+    padding: 24px; /* Consistente con main */
+    background: #fff; /* Fondo blanco como main */
+    border-radius: 18px; /* Consistente con main */
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08); /* Consistente con main */
+    animation: fadeIn 1s;
+    transition: all 0.3s ease;
+}
+
+.tablon-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.tablon-header h1 {
+    font-size: 2.5rem;
+    color: var(--text-secondary); /* Usar el color naranja del sitio */
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px; /* Consistente con h2, h3 del sitio */
+    transition: color 0.3s ease;
+}
+
+.tablon-subtitle {
+    color: var(--text-primary); /* Color principal para el subtítulo */
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.section-container {
+    margin-bottom: 4rem;
+}
+
+.section-header {
+    margin-bottom: 2rem;
+}
+
+.section-header h2 {
+    color: var(--text-secondary); /* Usar el color naranja consistente */
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    letter-spacing: 1px; /* Consistente con el sitio */
+    transition: color 0.3s ease;
+}
+
+.section-line {
+    height: 3px;
+    background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+    width: 120px; /* Más ancho para mejor impacto visual */
+    margin-bottom: 2rem;
+    border-radius: 2px;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    align-items: start; /* Mejor alineación */
+}
+
+.card-wrapper {
+    height: 100%;
+    display: flex; /* Para mejor control de altura */
+    flex-direction: column;
+}
+
+.custom-card {
+    background: var(--bg-card);
+    border-radius: 15px;
+    box-shadow: 0 2px 8px var(--shadow-color); /* Sombra más sutil inicialmente */
+    transition: all 0.3s ease;
+    overflow: hidden;
+    flex: 1; /* Ocupar todo el espacio disponible */
+    position: relative;
+    border: 1px solid var(--card-border);
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-card:hover {
+    transform: translateY(-3px); /* Menos movimiento */
+    box-shadow: 0 4px 16px var(--shadow-hover);
+}
+
+.card-tag {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.4rem 0.8rem; /* Tamaño más compacto */
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 2; /* Asegurar que esté encima */
+}
+
+/* Tags colors - mejorados para mejor contraste */
+.tag-primary { 
+    background: linear-gradient(135deg, #3498db, #2980b9); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+.tag-success { 
+    background: linear-gradient(135deg, #2ecc71, #27ae60); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(46, 204, 113, 0.3);
+}
+.tag-warning { 
+    background: linear-gradient(135deg, #f1c40f, #f39c12); 
+    color: #2c3e50; 
+    box-shadow: 0 2px 4px rgba(241, 196, 15, 0.3);
+    font-weight: 700; /* Más peso para mejor legibilidad */
+}
+.tag-info { 
+    background: linear-gradient(135deg, #1abc9c, #16a085); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(26, 188, 156, 0.3);
+}
+
+.card-content {
+    padding: 2rem;
+    flex: 1; /* Ocupar el espacio restante */
+    display: flex;
+    flex-direction: column;
+}
+
+.card-content h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    line-height: 1.4;
+    padding-right: 100px; /* Espacio para el tag */
+}
+
+.description {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    flex: 1; /* Empujar los meta items hacia abajo */
+}
+
+.card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* Más espacio entre items */
+    margin-top: auto; /* Pegar al fondo */
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.meta-item i {
+    color: var(--gradient-start);
+    width: 16px; /* Ancho fijo para alineación */
+    text-align: center;
+}
+
+/* Incident specific styles */
+.incident-card {
+    border-left: 4px solid;
+}
+
+.incident-card.resolved {
+    border-color: #2ecc71;
+}
+
+.incident-card.pending {
+    border-color: #f1c40f;
+}
+
+.card-status {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.status-tag {
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Status colors - mejorados */
+.status-success { 
+    background: linear-gradient(135deg, #2ecc71, #27ae60); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(46, 204, 113, 0.3);
+}
+.status-warning { 
+    background: linear-gradient(135deg, #f39c12, #e67e22); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(243, 156, 18, 0.3);
+}
+
+.incident-type-tag {
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Incident type colors - mejorados con gradientes */
+.type-urgent { 
+    background: linear-gradient(135deg, #e74c3c, #c0392b); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+}
+.type-vandalism { 
+    background: linear-gradient(135deg, #e67e22, #d35400); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(230, 126, 34, 0.3);
+}
+.type-conflict { 
+    background: linear-gradient(135deg, #3498db, #2980b9); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+.type-illness { 
+    background: linear-gradient(135deg, #9b59b6, #8e44ad); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(155, 89, 182, 0.3);
+}
+.type-abandonment { 
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(149, 165, 166, 0.3);
+}
+.type-birth { 
+    background: linear-gradient(135deg, #1abc9c, #16a085); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(26, 188, 156, 0.3);
+}
+.type-other { 
+    background: linear-gradient(135deg, #34495e, #2c3e50); 
+    color: white; 
+    box-shadow: 0 2px 4px rgba(52, 73, 94, 0.3);
+}
+
+.resolution-box {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--resolution-bg);
+    border-radius: 10px;
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+}
+
+.resolution-box i {
+    color: var(--resolution-text);
+    font-size: 1.2rem;
+}
+
+.resolution-box p {
+    color: var(--resolution-text);
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    background: var(--bg-secondary);
+    border-radius: 15px;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+}
+
+/* Dark mode specific adjustments */
+body.dark-mode .tablon-container {
+    background: #2d2d2d;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+body.dark-mode .card-status {
+    background: var(--bg-card);
+}
+
+body.dark-mode .resolution-box {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+body.dark-mode .meta-item i {
+    color: var(--gradient-start);
+}
+
+body.dark-mode .section-line {
+    opacity: 0.8;
+}
+
+/* Dark mode badge contrast improvements */
+body.dark-mode .tag-warning {
+    background: #f39c12;
+    color: #000000;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .tablon-container {
+        max-width: 95%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .tablon-container {
+        margin: 10px;
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .tablon-header h1 {
+        font-size: 2rem;
+    }
+    
+    .tablon-subtitle {
+        font-size: 1rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .card-status {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+        padding: 1rem 1.5rem;
+    }
+    
+    .card-content {
+        padding: 1.5rem;
+    }
+    
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tablon-container {
+        margin: 5px;
+        padding: 12px;
+    }
+    
+    .card-content {
+        padding: 1rem;
+    }
+    
+    .card-content h3 {
+        font-size: 1.2rem;
+    }
+    
+    .card-tag {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin-bottom: 0.5rem;
+        display: inline-block;
+    }
+}
