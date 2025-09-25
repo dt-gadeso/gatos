@@ -100,10 +100,26 @@
                 
                 <div class="form-group" data-tooltip="Estado actual del gato">
                     <label for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
-                    {{ form.status }}
+                    <select name="status" class="form-control" id="id_status" onchange="toggleIllnessDescription()">
+                        <option value="V">Vivo</option>
+                        <option value="E">Enfermo</option>
+                        <option value="M">Muerto</option>
+                    </select>
                     {% if form.status.errors %}
                         <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
                             {% for error in form.status.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group" id="illness-description-group" data-tooltip="Describe la enfermedad del gato" style="display: none;">
+                    <label for="id_illness_description">Descripción de la enfermedad</label>
+                    <textarea name="illness_description" class="form-control" placeholder="Describe la enfermedad del gato..." rows="3" id="id_illness_description"></textarea>
+                    {% if form.illness_description.errors %}
+                        <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                            {% for error in form.illness_description.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
                         </div>
@@ -136,4 +152,28 @@
     
     <!-- Script comentado temporalmente para evitar interferencia -->
     <!-- <script src="{% static 'js/form-enhanced.js' %}"></script> -->
+    
+    <script>
+        function toggleIllnessDescription() {
+            const statusSelect = document.getElementById('id_status');
+            const illnessGroup = document.getElementById('illness-description-group');
+            const illnessTextarea = document.getElementById('id_illness_description');
+            
+            if (statusSelect && illnessGroup && illnessTextarea) {
+                if (statusSelect.value === 'E') {
+                    illnessGroup.style.display = 'block';
+                    illnessTextarea.required = true;
+                } else {
+                    illnessGroup.style.display = 'none';
+                    illnessTextarea.required = false;
+                    illnessTextarea.value = '';
+                }
+            }
+        }
+        
+        // Ejecutar al cargar la página para verificar el estado inicial
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleIllnessDescription();
+        });
+    </script>
 {% endblock %}

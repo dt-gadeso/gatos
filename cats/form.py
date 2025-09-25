@@ -23,7 +23,7 @@ class CreateCat(forms.Form):
     )
     birthday = forms.DateField(
         label='Fecha de nacimiento',
-        required=True,
+        required=False,
         widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
     )
     sex = forms.ChoiceField(
@@ -39,7 +39,17 @@ class CreateCat(forms.Form):
     status = forms.ChoiceField(
         label='Estado del gato',
         choices=[('V', 'Vivo'), ('E', 'Enfermo'), ('M', 'Muerto')],
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={'class': 'form-control', 'onchange': 'toggleIllnessDescription()'})
+    )
+    illness_description = forms.CharField(
+        label='Descripción de la enfermedad',
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Describe la enfermedad del gato...',
+            'rows': 3,
+            'style': 'display: none;'
+        })
     )
     colony = forms.ModelChoiceField(
         label='Colonia',
@@ -79,10 +89,20 @@ class CreateCat(forms.Form):
                 raise ValidationError('Birthday seems too old.')
         return birthday
 
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get('status')
+        illness_description = cleaned_data.get('illness_description')
+        
+        if status == 'E' and not illness_description:
+            raise ValidationError('Debe describir la enfermedad cuando el estado es "Enfermo".')
+        
+        return cleaned_data
+
 class EditCat(forms.ModelForm):
     class Meta:
         model = Cat
-        fields = ['catname', 'photo_file', 'chip', 'birthday', 'sex', 'sterilized', 'status', 'colony']
+        fields = ['catname', 'photo_file', 'chip', 'birthday', 'sex', 'sterilized', 'status', 'illness_description', 'colony']
         widgets = {
             'catname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del gato'}),
             'photo_file': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
@@ -90,7 +110,8 @@ class EditCat(forms.ModelForm):
             'birthday': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'sex': forms.Select(attrs={'class': 'form-control form-select'}),
             'sterilized': forms.Select(attrs={'class': 'form-control form-select'}),
-            'status': forms.Select(attrs={'class': 'form-control form-select'}),
+            'status': forms.Select(attrs={'class': 'form-control form-select', 'onchange': 'toggleIllnessDescription()'}),
+            'illness_description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Describe la enfermedad del gato...', 'rows': 3}),
             'colony': forms.Select(attrs={'class': 'form-control form-select'}),
         }
         labels = {
@@ -101,6 +122,7 @@ class EditCat(forms.ModelForm):
             'sex': 'Sexo',
             'sterilized': 'Esterilizado',
             'status': 'Estado del gato',
+            'illness_description': 'Descripción de la enfermedad',
             'colony': 'Colonia',
         }
     

@@ -115,7 +115,7 @@
                                     {{ form.casa_acogida|safe }}
                                 </div>
 
-                                <div class="form-group area-edit-form-group enhanced-form-group" id="tiene-relevo-div" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
+                                <div class="form-group area-edit-form-group enhanced-form-group" id="tiene-relevo-div" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative; display: block !important;">
                                     <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #00bcd4, #0097a7); border-radius: 0 15px 15px 0;"></div>
                                     <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                         <i class="fas fa-user-friends" style="color: #00bcd4; margin-right: 8px; font-size: 18px;"></i>
@@ -344,11 +344,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateRelevoField() {
         if (casaAcogida && tieneRelevoDiv && tieneRelevo) {
-            const mostrar = casaAcogida.value === "si";
-            tieneRelevoDiv.style.display = mostrar ? "block" : "none";
-            if (!mostrar) {
-                tieneRelevo.value = "no";
-            }
+            // Siempre mostrar el campo de relevo, no depende de casa de acogida
+            tieneRelevoDiv.style.display = "block";
         }
     }
 

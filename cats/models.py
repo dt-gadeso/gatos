@@ -20,6 +20,7 @@ class Cat(models.Model):
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     sterilized = models.BooleanField(default=False)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='V', verbose_name="Estado del gato")
+    illness_description = models.TextField(blank=True, null=True, verbose_name="Descripción de la enfermedad")
     colony = models.ForeignKey('colonies.Colony', on_delete=models.CASCADE)
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{% static 'styles/users.css' %}">
 
 <main class="signup-main">
-    <h1 class="signup-title">Registrar-se</h1>
+    <h1 class="signup-title">Registro</h1>
     <form action="/users/signup/" method="POST" enctype="multipart/form-data" id="signup-form">
         {% csrf_token %}
         {% if error %}

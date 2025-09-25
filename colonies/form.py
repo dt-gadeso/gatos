@@ -209,7 +209,7 @@ class IncidentForm(forms.ModelForm):
 class EditIncident(forms.ModelForm):
     class Meta:
         model = Incident
-        fields = ['title', 'incident_type', 'description', 'start_date', 'end_date', 'is_resolved', 'resolution', 'colony']
+        fields = ['title', 'incident_type', 'description', 'start_date', 'end_date', 'is_resolved', 'resolution', 'colony', 'cat']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

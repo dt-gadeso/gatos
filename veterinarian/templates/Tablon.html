@@ -41,6 +41,13 @@
                             </div>
                             {% endif %}
                         </div>
+                        {% if user.is_superuser %}
+                        <div class="card-actions">
+                            <a href="{% url 'editRelief' relief.id %}" class="edit-btn relief-edit">
+                                <i class="fas fa-edit"></i> Editar aviso
+                            </a>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -103,6 +110,11 @@
                             <p>{{ incident.resolution|truncatewords:20 }}</p>
                         </div>
                         {% endif %}
+                        <div class="card-actions">
+                            <a href="{% url 'editIncident' incident.id %}" class="edit-btn incident-edit">
+                                <i class="fas fa-edit"></i> Editar incidencia
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

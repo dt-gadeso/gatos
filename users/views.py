@@ -122,6 +122,7 @@ def assign_role(request):
     selected_role_id = request.POST.get('role_id')
     selected_association_id = request.POST.get('association_id')
     error = None
+    show_association = False
 
     if selected_role_id:
         try:
