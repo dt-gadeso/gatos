@@ -8,35 +8,42 @@
     <body>
         {% extends 'base.html' %}
         {% block content %}
+        <header>
+            <img src="{% static 'logo.jp2' %}" alt="Logo FELINAPP" style="max-width: 180px; height: auto; display: block; margin: 0 auto 1rem auto;" />
+            <h1>FELINAPP: la gestión de colonias felinas en una sola herramienta gratuita</h1>
+        </header>
+
         <main>
-            <div class="card">
-                <h2>Bienvenido a nuestro progama en progreso </h2>
-                <p>Aqui haremos una pequeña explicacion sobre la APP</p>
-            </div>
             <section>
-                <h3>Sobre la APP</h3>
-                <h4>Funcionalitats principals</h4>
-                <p>L'aplicació cobreix un ecosistema complet de gestió que inclou</p>
-                <h4>Gestió d'usuaris:</h4>
-                <p>Usuaris amb diferents rols (voluntaris, administradors, etc.)
-                    Associacions de protecció animal amb els seus membres
-                    Ajuntaments i centres veterinaris</p>
-                <h4>Gestió territorial:</h4>
-                <p>Municipis organitzats per zones territorials
-                    Colònies de gats geolocalitzades amb gestors assignats
-                    Mapa interactiu per visualitzar ubicacions</p>
-                    
-                <h4>Seguiment dels animals:</h4>
-                <p>Registre individual de cada gat
-                    Historial d'observacions (estat de salut, comportament,desaparicions)
-                    Control veterinari amb registre de visites</p>
-                <h4>Coordinació institucional:</h4>
-                    
-                <p>Convenis entre administracions públiques i centres veterinaris
-                    Gestió de serveis veterinaris disponibles</p>
+                <article>
+                    <p>FELINAPP es una plataforma digital abierta y colaborativa diseñada para llevar el censo integral de gatos comunitarios y mejorar la gestión de colonias felinas en los municipios.</p>
+                </article>
+                <article>
+                    <h2>Características principales</h2>
+                    <ul>
+                        <li>Registrar cada gato con su ficha individual: datos identificativos, estado de salud, seguimiento e historial médico.</li>
+                        <li>Localizar colonias y puntos de alimentación en mapas interactivos.</li>
+                        <li>Asignar alimentadoras responsables y coordinar tareas entre gestoras.</li>
+                        <li>Documentar incidencias y hacer seguimiento hasta su resolución.</li>
+                        <li>Generar informes útiles para ayuntamientos y entidades, con datos claros y verificables.</li>
+                    </ul>
+                </article>
+                <article>
+                    <h2>🌍 Open source</h2>
+                    <p>FELINAPP es una herramienta abierta y gratuita: cualquier ayuntamiento o asociación puede adaptarla a su realidad y contribuir a hacerla crecer.</p>
+                </article>
+                <article>
+                    <h2>🤝 ¿Por qué FELINAPP?</h2>
+                    <p>Porque cuidar colonias no es solo alimentar o capturar. Es construir un sistema de datos transparente que:</p>
+                    <ul>
+                        <li>Mejora el bienestar de los gatos.</li>
+                        <li>Da soporte y visibilidad a las gestoras.</li>
+                        <li>Facilita el trabajo técnico de los ayuntamientos.</li>
+                        <li>Reduce conflictos vecinales con información clara y verificable.</li>
+                    </ul>
+                    <p>Con FELINAPP, la información se convierte en bienestar y cada gato cuenta.</p>
+                </article>
             </section>
         </main>
-        
-        {% endblock %}
     </body>
 </html>

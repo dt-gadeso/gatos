@@ -214,14 +214,24 @@ def sterilized_counter(request):
     
     try:
         if is_admin:
-            # Admin puede ver todas las colonias
             colonies = Colony.objects.all()
+            cats_qs = Cat.objects.all()
         else:
-            # Usuario normal solo puede ver sus colonias
             colonies = Colony.objects.filter(user=user)
-        
+            cats_qs = Cat.objects.filter(colony__in=colonies)
+
         colonies_data = []
-        
+
+        # Totales generales
+        general_totals = cats_qs.aggregate(
+            total_male_sterilized=Count('id', filter=Q(sex='M', sterilized=True)),
+            total_female_sterilized=Count('id', filter=Q(sex='F', sterilized=True)),
+            total_male=Count('id', filter=Q(sex='M')),
+            total_female=Count('id', filter=Q(sex='F')),
+            total_sterilized=Count('id', filter=Q(sterilized=True)),
+            total_cats=Count('id')
+        )
+
         for colony in colonies:
             try:
                 cats_data = Cat.objects.filter(colony=colony).aggregate(
@@ -232,7 +242,7 @@ def sterilized_counter(request):
                     total_sterilized=Count('id', filter=Q(sterilized=True)),
                     total_cats=Count('id')
                 )
-                
+
                 colonies_data.append({
                     'colony': colony,
                     'male_sterilized': cats_data['total_male_sterilized'] or 0,
@@ -245,17 +255,26 @@ def sterilized_counter(request):
             except Exception as e:
                 print(f"Error processing colony {colony.id}: {e}")
                 continue
-    
+
     except Exception as e:
         print(f"Error in sterilized_counter: {e}")
         colonies_data = []
-    
+        general_totals = {
+            'total_male_sterilized': 0,
+            'total_female_sterilized': 0,
+            'total_male': 0,
+            'total_female': 0,
+            'total_sterilized': 0,
+            'total_cats': 0,
+        }
+
     context = {
         'colonies_data': colonies_data,
         'is_admin': is_admin,
-        'user': user
+        'user': user,
+        'general_totals': general_totals
     }
-    
+
     return render(request, 'sterilized_counter.html', context)
 
 @login_required

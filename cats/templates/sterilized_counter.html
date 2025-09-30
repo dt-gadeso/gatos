@@ -18,6 +18,65 @@
         </div>
     {% endif %}
 
+    <!-- Contador General de Todos los Gatos -->
+    <div class="general-counter">
+        <h3>Contador General de Todos los Gatos</h3>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-card male">
+                    <div class="stat-header">
+                        <span class="icon">♂</span>
+                        <span class="label">Machos</span>
+                    </div>
+                    <div class="stat-numbers">
+                        <span class="sterilized">{{ general_totals.total_male_sterilized }}</span>
+                        <span class="separator">/</span>
+                        <span class="total">{{ general_totals.total_male }}</span>
+                    </div>
+                    <div class="stat-label">Esterilizados</div>
+                    {% if general_totals.total_male > 0 %}
+                        <div class="percentage">
+                            {% widthratio general_totals.total_male_sterilized general_totals.total_male 100 %}%
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="stat-card female">
+                    <div class="stat-header">
+                        <span class="icon">♀</span>
+                        <span class="label">Hembras</span>
+                    </div>
+                    <div class="stat-numbers">
+                        <span class="sterilized">{{ general_totals.total_female_sterilized }}</span>
+                        <span class="separator">/</span>
+                        <span class="total">{{ general_totals.total_female }}</span>
+                    </div>
+                    <div class="stat-label">Esterilizadas</div>
+                    {% if general_totals.total_female > 0 %}
+                        <div class="percentage">
+                            {% widthratio general_totals.total_female_sterilized general_totals.total_female 100 %}%
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="total-stats">
+                <div class="total-card">
+                    <div class="total-header">Total General</div>
+                    <div class="total-numbers">
+                        <span class="sterilized">{{ general_totals.total_sterilized }}</span>
+                        <span class="separator">/</span>
+                        <span class="total">{{ general_totals.total_cats }}</span>
+                    </div>
+                    <div class="total-label">Esterilizados</div>
+                    {% if general_totals.total_cats > 0 %}
+                        <div class="total-percentage">
+                            {% widthratio general_totals.total_sterilized general_totals.total_cats 100 %}%
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
     {% if colonies_data %}
         <div class="colonies-grid">
             {% for data in colonies_data %}
@@ -29,7 +88,6 @@
                             <p class="colony-manager">Responsable: {{ data.colony.manager.username }}</p>
                         {% endif %}
                     </div>
-                    
                     <div class="stats-container">
                         <div class="stat-row">
                             <div class="stat-card male">
@@ -49,7 +107,6 @@
                                     </div>
                                 {% endif %}
                             </div>
-                            
                             <div class="stat-card female">
                                 <div class="stat-header">
                                     <span class="icon">♀</span>
@@ -68,7 +125,6 @@
                                 {% endif %}
                             </div>
                         </div>
-                        
                         <div class="total-stats">
                             <div class="total-card">
                                 <div class="total-header">Total General</div>

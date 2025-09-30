@@ -342,3 +342,74 @@ def admin_delete_user(request):
         return JsonResponse({'message': f'Usuario {user_to_delete.username} eliminado con éxito'}, status=200)
     return JsonResponse({'error': 'No autorizado o método inválido'}, status=400)
 
+
+@login_required
+def user_management(request):
+    """Vista para gestión simplificada de usuarios - Solo administradores"""
+    if not request.user.is_superuser:
+        return redirect('/')
+    
+    # Consulta básica sin optimizaciones complejas
+    users = User.objects.all().order_by('-created_at')
+    
+    return render(request, 'user_management.html', {
+        'users': users,
+    })
+
+
+@login_required
+def user_edit_admin(request, user_id):
+    """Vista para editar usuario - Solo administradores"""
+    if not request.user.is_superuser:
+        return redirect('/')
+    
+    user_to_edit = get_object_or_404(User, id=user_id)
+    roles = Role.objects.all()
+    associations = Association.objects.all()
+    trap_types = TrapType.objects.all()
+    
+    if request.method == 'POST':
+        # Actualizar datos del usuario
+        user_to_edit.username = request.POST.get('username', user_to_edit.username)
+        user_to_edit.email = request.POST.get('email', user_to_edit.email)
+        user_to_edit.first_name = request.POST.get('first_name', '')
+        user_to_edit.last_name = request.POST.get('last_name', '')
+        user_to_edit.phone = request.POST.get('phone', '')
+        user_to_edit.activo = request.POST.get('activo') == 'on'
+        user_to_edit.casa_acogida = request.POST.get('casa_acogida') == 'on'
+        user_to_edit.tiene_relevo = request.POST.get('tiene_relevo') == 'on'
+        user_to_edit.es_capturador = request.POST.get('es_capturador') == 'on'
+        user_to_edit.es_free = request.POST.get('es_free') == 'on'
+        
+        # Actualizar rol
+        role_id = request.POST.get('role')
+        if role_id:
+            user_to_edit.role = get_object_or_404(Role, id=role_id)
+        else:
+            user_to_edit.role = None
+            
+        # Actualizar asociación
+        association_id = request.POST.get('association')
+        if association_id:
+            user_to_edit.association = get_object_or_404(Association, id=association_id)
+        else:
+            user_to_edit.association = None
+            
+        # Actualizar tipo de trampa
+        trap_type_id = request.POST.get('trap_type')
+        if trap_type_id:
+            user_to_edit.trap_type = get_object_or_404(TrapType, id=trap_type_id)
+        else:
+            user_to_edit.trap_type = None
+        
+        user_to_edit.save()
+        
+        return JsonResponse({'success': True, 'message': 'Usuario actualizado correctamente'})
+    
+    return render(request, 'user_edit_admin.html', {
+        'user_to_edit': user_to_edit,
+        'roles': roles,
+        'associations': associations,
+        'trap_types': trap_types
+    })
+

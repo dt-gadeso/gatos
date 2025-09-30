@@ -302,102 +302,94 @@
 }
 
 .area-edit-section {
-    background-color: var(--section-bg, #f9f9f9) !important;
-    border-radius: 12px !important;
-    padding: 25px !important;
-    margin-bottom: 25px !important;
-    border-left: 4px solid var(--main-color, #d2691e) !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+    background-color: var(--section-bg, #f9f9f9);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-left: 4px solid var(--main-color, #d2691e);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .area-edit-section-title {
-    color: var(--main-color, #d2691e) !important;
-    margin-bottom: 25px !important;
-    font-weight: 600 !important;
-    font-size: 1.3rem !important;
-    border-bottom: 2px solid var(--main-color, #d2691e) !important;
-    padding-bottom: 8px !important;
+    color: var(--main-color, #d2691e);
+    margin-bottom: 25px;
+    font-weight: 600;
+    font-size: 1.3rem;
+    border-bottom: 2px solid var(--main-color, #d2691e);
+    padding-bottom: 8px;
 }
 
 .area-edit-form-container {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
-    gap: 20px !important;
-    align-items: start !important;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    align-items: start;
 }
 
 .area-edit-form-group {
-    display: flex !important;
-    flex-direction: column !important;
-    margin-bottom: 0 !important;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
 }
 
-/* Form Input Styles with higher specificity */
-.area-edit-label,
-.area-edit-form-group label,
-label[for*="id_"] {
-    display: block !important;
-    margin-bottom: 8px !important;
-    font-weight: 600 !important;
-    color: var(--text-color, #333) !important;
-    font-size: 0.95rem !important;
+/* Form Input Styles with higher specificity - Solo para páginas de usuarios */
+body[data-page="users"] .area-edit-label,
+body[data-page="users"] .area-edit-form-group label,
+body[data-page="users"] label[for*="id_"] {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-color, #333);
+    font-size: 0.95rem;
 }
 
-.area-edit-input,
-#id_username,
-#id_email,
-#id_phone,
-#id_carnet_gatos,
-#id_casa_acogida,
-#id_tiene_relevo,
-#id_avatar_file,
-#id_es_capturador,
-#id_tiene_trampa,
-#id_es_free,
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-select,
-input[type="file"] {
-    width: 100% !important;
-    padding: 12px 15px !important;
-    border: 2px solid var(--input-border, #e9ecef) !important;
-    border-radius: 8px !important;
-    font-size: 15px !important;
-    transition: all 0.3s ease !important;
-    background-color: var(--input-bg, #fff) !important;
-    color: var(--input-text, #333) !important;
-    box-sizing: border-box !important;
+/* Estilos específicos para inputs de usuarios - Solo aplica en páginas de usuarios */
+body[data-page="users"] .area-edit-input,
+body[data-page="users"] #id_username,
+body[data-page="users"] #id_email,
+body[data-page="users"] #id_phone,
+body[data-page="users"] #id_carnet_gatos,
+body[data-page="users"] #id_casa_acogida,
+body[data-page="users"] #id_tiene_relevo,
+body[data-page="users"] #id_avatar_file,
+body[data-page="users"] #id_es_capturador,
+body[data-page="users"] #id_tiene_trampa,
+body[data-page="users"] #id_es_free {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--input-border, #e9ecef);
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background-color: var(--input-bg, #fff);
+    color: var(--input-text, #333);
+    box-sizing: border-box;
 }
 
-#id_avatar_file {
-    padding: 10px !important;
-    background-color: var(--input-bg, #f8f9fa) !important;
-    font-size: 14px !important;
-    cursor: pointer !important;
+body[data-page="users"] #id_avatar_file {
+    padding: 10px;
+    background-color: var(--input-bg, #f8f9fa);
+    font-size: 14px;
+    cursor: pointer;
 }
 
-#id_avatar_file:hover {
-    background-color: var(--input-bg-hover, #f1f3f5) !important;
+body[data-page="users"] #id_avatar_file:hover {
+    background-color: var(--input-bg-hover, #f1f3f5);
 }
 
-.area-edit-input:focus,
-#id_username:focus,
-#id_email:focus,
-#id_phone:focus,
-#id_carnet_gatos:focus,
-#id_casa_acogida:focus,
-#id_tiene_relevo:focus,
-#id_avatar_file:focus,
-#id_es_capturador:focus,
-#id_tiene_trampa:focus,
-#id_es_free:focus,
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="tel"]:focus,
-select:focus,
-input[type="file"]:focus {
-    border-color: var(--main-color, #d2691e) !important;
+/* Focus states - Solo para páginas de usuarios */
+body[data-page="users"] .area-edit-input:focus,
+body[data-page="users"] #id_username:focus,
+body[data-page="users"] #id_email:focus,
+body[data-page="users"] #id_phone:focus,
+body[data-page="users"] #id_carnet_gatos:focus,
+body[data-page="users"] #id_casa_acogida:focus,
+body[data-page="users"] #id_tiene_relevo:focus,
+body[data-page="users"] #id_avatar_file:focus,
+body[data-page="users"] #id_es_capturador:focus,
+body[data-page="users"] #id_tiene_trampa:focus,
+body[data-page="users"] #id_es_free:focus {
+    border-color: var(--main-color, #d2691e);
     box-shadow: 0 0 0 3px var(--main-color-shadow, rgba(210, 105, 30, 0.2)) !important;
     outline: none !important;
     /* Removed transform to prevent movement */
@@ -563,41 +555,45 @@ input[type="file"]:focus {
     }
 }
 
-/* ESTILOS ESPECÍFICOS PARA EL FORMULARIO AREA EDIT */
-.area-edit-section {
-    background-color: var(--section-bg) !important;
-    border-radius: 15px !important;
-    padding: 30px !important;
-    margin-bottom: 30px !important;
-    border-left: 5px solid var(--main-color) !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+/* ESTILOS ESPECÍFICOS PARA EL FORMULARIO AREA EDIT - Solo para páginas de usuarios */
+.user-area-edit .area-edit-section,
+body[data-page="area-edit"] .area-edit-section {
+    background-color: var(--section-bg);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border-left: 5px solid var(--main-color);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.area-edit-section-title {
-    color: var(--main-color) !important;
-    font-size: 1.4rem !important;
-    font-weight: 700 !important;
-    margin-bottom: 25px !important;
-    padding-bottom: 10px !important;
-    border-bottom: 3px solid var(--main-color) !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
+.user-area-edit .area-edit-section-title,
+body[data-page="area-edit"] .area-edit-section-title {
+    color: var(--main-color);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--main-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.area-edit-form-container {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
-    gap: 25px !important;
-    align-items: start !important;
+.user-area-edit .area-edit-form-container,
+body[data-page="area-edit"] .area-edit-form-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    align-items: start;
 }
 
-.area-edit-form-group {
-    background: white !important;
-    padding: 20px !important;
-    border-radius: 12px !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
-    border: 1px solid #e9ecef !important;
-    transition: all 0.3s ease !important;
+.user-area-edit .area-edit-form-group,
+body[data-page="area-edit"] .area-edit-form-group {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
 }
 
 /* Removed hover effects to prevent form element movement */
@@ -710,80 +706,88 @@ input[type="file"]:focus {
     }
 }
 
-/* Enhanced form group styles for improved visual appeal */
-.enhanced-form-group {
+/* Enhanced form group styles for improved visual appeal - Solo para páginas de usuarios */
+.user-forms .enhanced-form-group,
+body[data-page="users"] .enhanced-form-group {
     transform: translateY(0);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Removed hover effects to prevent form element movement */
-
-/* Enhanced input styling */
-.enhanced-form-group input,
-.enhanced-form-group select {
-    border: 2px solid transparent !important;
-    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    font-size: 16px !important;
-    padding: 15px 20px !important;
+/* Enhanced input styling - Solo para páginas de usuarios */
+.user-forms .enhanced-form-group input,
+.user-forms .enhanced-form-group select,
+body[data-page="users"] .enhanced-form-group input,
+body[data-page="users"] .enhanced-form-group select {
+    border: 2px solid transparent;
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 16px;
+    padding: 15px 20px;
 }
 
-.enhanced-form-group input:focus,
-.enhanced-form-group select:focus {
-    background: linear-gradient(135deg, #fff 0%, #fff 100%) !important;
-    border-color: var(--main-color, #d2691e) !important;
+.user-forms .enhanced-form-group input:focus,
+.user-forms .enhanced-form-group select:focus,
+body[data-page="users"] .enhanced-form-group input:focus,
+body[data-page="users"] .enhanced-form-group select:focus {
+    background: linear-gradient(135deg, #fff 0%, #fff 100%);
+    border-color: var(--main-color, #d2691e);
     box-shadow: 0 0 0 4px var(--main-color-shadow, rgba(210, 105, 30, 0.15)), 
-                0 8px 25px rgba(0,0,0,0.1) !important;
-    /* Removed transform to prevent movement */
+                0 8px 25px rgba(0,0,0,0.1);
 }
 
-/* Enhanced label styling */
-.enhanced-form-group label {
-    font-weight: 600 !important;
-    font-size: 14px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    margin: 0 !important;
+/* Enhanced label styling - Solo para páginas de usuarios */
+.user-forms .enhanced-form-group label,
+body[data-page="users"] .enhanced-form-group label {
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
 }
 
-/* File upload enhanced styling */
-.custom-file-upload input[type="file"] {
-    position: absolute !important;
-    opacity: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    top: 0 !important;
-    left: 0 !important;
-    cursor: pointer !important;
+/* File upload enhanced styling - Solo para páginas de usuarios */
+.user-forms .custom-file-upload input[type="file"],
+body[data-page="users"] .custom-file-upload input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    cursor: pointer;
 }
 
-.custom-file-upload {
-    position: relative !important;
-    overflow: hidden !important;
+.user-forms .custom-file-upload,
+body[data-page="users"] .custom-file-upload {
+    position: relative;
+    overflow: hidden;
 }
 
-/* Dark mode enhancements */
-.dark-mode .enhanced-form-group {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%) !important;
-    border-color: #555 !important;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3) !important;
+/* Dark mode enhancements - Solo para páginas de usuarios */
+.dark-mode .user-forms .enhanced-form-group,
+.dark-mode body[data-page="users"] .enhanced-form-group {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border-color: #555;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
 }
 
-/* Removed dark mode hover effects to prevent form element movement */
-
-.dark-mode .enhanced-form-group input,
-.dark-mode .enhanced-form-group select {
-    background: linear-gradient(135deg, #2a2a2a 0%, #333 100%) !important;
-    color: #f1f1f1 !important;
-    border-color: #666 !important;
+.dark-mode .user-forms .enhanced-form-group input,
+.dark-mode .user-forms .enhanced-form-group select,
+.dark-mode body[data-page="users"] .enhanced-form-group input,
+.dark-mode body[data-page="users"] .enhanced-form-group select {
+    background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
+    color: #f1f1f1;
+    border-color: #666;
 }
 
-.dark-mode .enhanced-form-group input:focus,
-.dark-mode .enhanced-form-group select:focus {
-    background: linear-gradient(135deg, #333 0%, #404040 100%) !important;
-    border-color: var(--main-color, #ff7f50) !important;
+.dark-mode .user-forms .enhanced-form-group input:focus,
+.dark-mode .user-forms .enhanced-form-group select:focus,
+.dark-mode body[data-page="users"] .enhanced-form-group input:focus,
+.dark-mode body[data-page="users"] .enhanced-form-group select:focus {
+    background: linear-gradient(135deg, #333 0%, #404040 100%);
+    border-color: var(--main-color, #ff7f50);
     box-shadow: 0 0 0 4px rgba(255, 127, 80, 0.3), 
-                0 8px 25px rgba(0,0,0,0.3) !important;
+                0 8px 25px rgba(0,0,0,0.3);
 }
 
 /* Dark mode section backgrounds */
@@ -1056,4 +1060,243 @@ input[type="text"], input[type="email"], input[type="tel"], select, input[type="
 .personal-info-section:hover {
     transform: none !important;
     box-shadow: inherit !important;
+}
+
+/* Estilos específicos para el panel de gestión de usuarios */
+.admin-panel-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+}
+
+.admin-panel-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
+    color: white;
+    text-decoration: none;
+}
+
+.admin-panel-button i {
+    margin-right: 8px;
+}
+
+.management-card {
+    background: white;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.management-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.search-section-modern {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.modern-table {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.modern-table thead th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 18px 15px;
+    border: none;
+}
+
+.modern-table tbody tr {
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.modern-table tbody tr:hover {
+    background: #f8f9fa;
+    transform: scale(1.01);
+}
+
+.modern-table td {
+    padding: 16px 15px;
+    border-top: 1px solid #f1f3f4;
+    vertical-align: middle;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e9ecef;
+}
+
+.role-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.role-admin {
+    background: #ffe4e1;
+    color: #d2691e;
+}
+
+.role-miembro {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.role-presidente {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.status-active-dot {
+    background: #4caf50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+.status-inactive-dot {
+    background: #f44336;
+    box-shadow: 0 0 8px rgba(244, 67, 54, 0.5);
+}
+
+.action-button-modern {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin: 0 2px;
+}
+
+.btn-edit-modern {
+    background: linear-gradient(45deg, #2196f3, #21cbf3);
+    color: white;
+}
+
+.btn-edit-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+    color: white;
+}
+
+.btn-delete-modern {
+    background: linear-gradient(45deg, #f44336, #ff6b6b);
+    color: white;
+}
+
+.btn-delete-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+    color: white;
+}
+
+/* Responsive design para dispositivos móviles */
+@media (max-width: 768px) {
+    .management-card {
+        margin-bottom: 15px;
+    }
+    
+    .search-section-modern {
+        padding: 15px;
+    }
+    
+    .modern-table {
+        font-size: 12px;
+    }
+    
+    .action-button-modern {
+        padding: 6px 8px;
+        font-size: 10px;
+    }
+    
+    .admin-panel-button {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
+/* ===============================
+   ESTILOS ESPECÍFICOS PARA EVITAR CONFLICTOS
+   =============================== */
+
+/* Solo aplicar estilos intensivos en páginas de usuarios */
+body[data-page="users"] input[type="text"],
+body[data-page="users"] input[type="email"],
+body[data-page="users"] input[type="tel"],
+body[data-page="users"] select {
+    /* Resetear estilos globales problemáticos */
+    width: auto;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Estilos específicos para gestión de usuarios */
+.user-management-container input[type="text"],
+.user-management-container input[type="email"],
+.user-management-container select {
+    border: 2px solid var(--input-border);
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    background: var(--input-bg);
+    color: var(--input-text);
+}
+
+.user-management-container input:focus,
+.user-management-container select:focus {
+    border-color: var(--main-color);
+    box-shadow: 0 0 8px var(--main-color-shadow);
+}
+
+/* Reset de estilos problemáticos para el resto de la aplicación */
+body:not([data-page="users"]) .area-edit-section,
+body:not([data-page="users"]) .area-edit-form-group,
+body:not([data-page="users"]) .enhanced-form-group {
+    /* Resetear estilos que pueden afectar otras páginas */
+    all: unset;
+    display: block;
+}
+
+/* Scope todos los estilos de usuario dentro de contenedores específicos */
+.user-area-edit,
+.user-management-container,
+.signup-main,
+.login-main {
+    /* Contenedores principales donde se aplican los estilos específicos de usuarios */
+    position: relative;
 }

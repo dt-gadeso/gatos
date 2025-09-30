@@ -1,19 +1,15 @@
-/* Estilos base consistentes */
-body {
+/* Estilos específicos para la página de área staff */
+.staff-page-wrapper {
     background: linear-gradient(135deg, #f0f0f0 60%, #ffe4e1 100%);
+    min-height: 100vh;
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #333;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    transition: all 0.3s ease;
+    padding: 20px 0;
 }
 
-main {
+.staff-page-wrapper main {
     max-width: 1200px;
-    margin: 40px auto 24px auto;
+    margin: 20px auto;
     padding: 24px;
     background: #fff;
     border-radius: 18px;
@@ -22,14 +18,14 @@ main {
     transition: all 0.3s ease;
 }
 
-.staff-container {
+.staff-page-wrapper .staff-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     font-family: 'Segoe UI', Arial, sans-serif;
 }
 
-.staff-header {
+.staff-page-wrapper .staff-header {
     background: linear-gradient(135deg, #d2691e, #ff8c42);
     padding: 20px;
     border-radius: 14px;
@@ -39,7 +35,8 @@ main {
     text-align: center;
 }
 
-.staff-header h2, .staff-header h3 {
+.staff-page-wrapper .staff-header h2, 
+.staff-page-wrapper .staff-header h3 {
     color: white;
     margin: 0;
     letter-spacing: 1px;
@@ -111,7 +108,7 @@ main {
     box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
 }
 
-.staff-form {
+.staff-page-wrapper .staff-form {
     background: #fff;
     padding: 24px;
     border-radius: 14px;
@@ -119,18 +116,18 @@ main {
     margin-bottom: 24px;
 }
 
-.form-group {
+.staff-page-wrapper .form-group {
     margin-bottom: 20px;
 }
 
-.form-group label {
+.staff-page-wrapper .form-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
     color: #333;
 }
 
-.form-group input {
+.staff-page-wrapper .form-group input {
     width: 100%;
     padding: 12px;
     border: 2px solid #e9ecef;
@@ -139,13 +136,14 @@ main {
     font-size: 14px;
 }
 
-.form-group input:focus {
+.staff-page-wrapper .form-group input:focus {
     outline: none;
     border-color: #d2691e;
     box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
 }
 
-/* Navegación */
+/* Navegación - COMENTADO para evitar conflictos con otras páginas */
+/*
 nav {
     background: #ffe4e1;
     padding: 12px 0;
@@ -190,8 +188,10 @@ nav a.active {
     color: #a0522d;
     border-bottom: 2px solid #a0522d;
 }
+*/
 
-/* Footer */
+/* Footer - COMENTADO para evitar conflictos */
+/*
 footer {
     position: relative;
     background: #ffe4e1;
@@ -212,7 +212,7 @@ footer a {
 }
 
 footer a:hover i {
-    color: #d2691e !important;
+    color: #d2691e ;
 }
 
 footer i {
@@ -220,9 +220,10 @@ footer i {
     vertical-align: middle;
     margin-right: 4px;
 }
+*/
 
 /* Estilos para la sección de administración */
-.admin-section {
+.staff-page-wrapper .admin-section {
     background: #f8f9fa;
     padding: 20px;
     border-radius: 14px;
@@ -266,7 +267,7 @@ footer i {
 }
 
 .text-danger {
-    color: #dc3545 !important;
+    color: #dc3545 ;
 }
 
 /* Estilos específicos para Casa de Acogida */
@@ -335,113 +336,113 @@ footer i {
 
 /* Modo oscuro */
 .dark-mode {
-    background: linear-gradient(135deg, #1a1a1a 60%, #2a2a2a 100%) !important;
-    color: #f0f0f0 !important;
+    background: linear-gradient(135deg, #1a1a1a 60%, #2a2a2a 100%) ;
+    color: #f0f0f0 ;
 }
 
 .dark-mode main {
-    background: #232323 !important;
-    color: #f1f1f1 !important;
+    background: #232323 ;
+    color: #f1f1f1 ;
 }
 
 .dark-mode .staff-header {
-    background: linear-gradient(135deg, #ffb380, #ff9f4a) !important;
-    color: #222 !important;
+    background: linear-gradient(135deg, #ffb380, #ff9f4a) ;
+    color: #222 ;
 }
 
 .dark-mode .staff-header h2, 
 .dark-mode .staff-header h3 {
-    color: #222 !important;
+    color: #222 ;
 }
 
 .dark-mode .staff-table {
-    background: #2a2a2a !important;
-    color: #f1f1f1 !important;
+    background: #2a2a2a ;
+    color: #f1f1f1 ;
 }
 
 .dark-mode .staff-table th {
-    background: linear-gradient(135deg, #ffb380, #ff9f4a) !important;
-    color: #222 !important;
+    background: linear-gradient(135deg, #ffb380, #ff9f4a) ;
+    color: #222 ;
 }
 
 .dark-mode .staff-table td {
-    border-bottom-color: #444 !important;
-    color: #f1f1f1 !important;
+    border-bottom-color: #444 ;
+    color: #f1f1f1 ;
 }
 
 .dark-mode .staff-table tr:hover {
-    background: #333 !important;
-    color: #f1f1f1 !important;
+    background: #333 ;
+    color: #f1f1f1 ;
 }
 
 .dark-mode .staff-form {
-    background: #2a2a2a !important;
-    color: #f1f1f1 !important;
+    background: #2a2a2a ;
+    color: #f1f1f1 ;
 }
 
-.dark-mode .form-group label {
-    color: #f1f1f1 !important;
+.dark-mode .staff-page-wrapper .form-group label {
+    color: #f1f1f1;
 }
 
-.dark-mode .form-group input {
-    background: #333 !important;
-    color: #f1f1f1 !important;
-    border-color: #555 !important;
+.dark-mode .staff-page-wrapper .form-group input {
+    background: #333;
+    color: #f1f1f1;
+    border-color: #555;
 }
 
-.dark-mode .form-group input:focus {
-    border-color: #ffb380 !important;
-    box-shadow: 0 0 0 3px rgba(255, 179, 128, 0.1) !important;
+.dark-mode .staff-page-wrapper .form-group input:focus {
+    border-color: #ffb380;
+    box-shadow: 0 0 0 3px rgba(255, 179, 128, 0.1);
 }
 
-.dark-mode .admin-section {
-    background: #2a2a2a !important;
-    color: #f1f1f1 !important;
-    border-left-color: #ff4757 !important;
+.dark-mode .staff-page-wrapper .admin-section {
+    background: #2a2a2a;
+    color: #f1f1f1;
+    border-left-color: #ff4757 ;
 }
 
 .dark-mode .admin-section h4 {
-    color: #ff4757 !important;
+    color: #ff4757 ;
 }
 
 .dark-mode .alert-warning {
-    background: #3a3a3a !important;
-    color: #ffb380 !important;
-    border-color: #555 !important;
+    background: #3a3a3a ;
+    color: #ffb380 ;
+    border-color: #555 ;
 }
 
 .dark-mode nav {
-    background: #222 !important;
-    color: #f1f1f1 !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+    background: #222 ;
+    color: #f1f1f1 ;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) ;
 }
 
 .dark-mode nav a {
-    color: #f1f1f1 !important;
+    color: #f1f1f1 ;
 }
 
 .dark-mode nav a.active {
-    color: #ffb380 !important;
-    border-bottom-color: #ffb380 !important;
+    color: #ffb380 ;
+    border-bottom-color: #ffb380 ;
 }
 
 .dark-mode nav a:hover {
-    color: #ffb380 !important;
+    color: #ffb380 ;
 }
 
 .dark-mode footer {
-    background: #222 !important;
-    color: #f1f1f1 !important;
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.3) !important;
-    border-top-color: #444 !important;
+    background: #222 ;
+    color: #f1f1f1 ;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.3) ;
+    border-top-color: #444 ;
 }
 
 .dark-mode footer a {
-    color: #ffb380 !important;
+    color: #ffb380 ;
 }
 
 .dark-mode footer i {
-    color: #ffb380 !important;
+    color: #ffb380 ;
 }
 
 /* Botón de modo oscuro */
@@ -450,30 +451,30 @@ footer i {
     right: 30px;
     bottom: 7px;
     z-index: 9999;
-    background: #d2691e !important;
-    color: white !important;
-    border: none !important;
-    padding: 12px 16px !important;
-    border-radius: 25px !important;
-    cursor: pointer !important;
-    font-weight: bold !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3) !important;
+    background: #d2691e ;
+    color: white ;
+    border: none ;
+    padding: 12px 16px ;
+    border-radius: 25px ;
+    cursor: pointer ;
+    font-weight: bold ;
+    transition: all 0.3s ease ;
+    box-shadow: 0 4px 15px rgba(210, 105, 30, 0.3) ;
 }
 
 #darkModeToggle:hover {
-    background: #a0522d !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(210, 105, 30, 0.4) !important;
+    background: #a0522d ;
+    transform: translateY(-2px) ;
+    box-shadow: 0 6px 20px rgba(210, 105, 30, 0.4) ;
 }
 
 .dark-mode #darkModeToggle {
-    background: #ffb380 !important;
-    color: #222 !important;
+    background: #ffb380 ;
+    color: #222 ;
 }
 
 .dark-mode #darkModeToggle:hover {
-    background: #ff9f4a !important;
+    background: #ff9f4a ;
 }
 
 @media (max-width: 768px) {

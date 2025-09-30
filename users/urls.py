@@ -16,4 +16,7 @@ urlpatterns = [
     path('search_users/', views.search_users, name='search_users'),
     path('search_associations/', views.search_associations, name='search_associations'),
     path('admin_delete_user/', views.admin_delete_user, name='admin_delete_user'),
+    # Gestión de usuarios
+    path('management/', views.user_management, name='user_management'),
+    path('edit/<int:user_id>/', views.user_edit_admin, name='user_edit_admin'),
 ]
