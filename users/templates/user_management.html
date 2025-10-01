@@ -94,6 +94,26 @@
         transform: translateY(-1px);
     }
     
+    .export-btn {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .export-btn:hover {
+        background: #218838;
+        transform: translateY(-1px);
+        color: white;
+        text-decoration: none;
+    }
+    
     .users-table {
         background: var(--card-bg);
         border-radius: 10px;
@@ -285,6 +305,10 @@
             <button id="clearFilters" class="clear-btn">
                 <i class="fas fa-times"></i> Limpiar
             </button>
+            
+            <a href="{% url 'export_users_excel' %}" class="export-btn">
+                <i class="fas fa-file-excel"></i> Exportar Excel
+            </a>
         </div>
     </div>
     

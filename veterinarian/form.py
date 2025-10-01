@@ -46,7 +46,7 @@ class VetCenterForm(forms.ModelForm):
 class VisitForm(forms.ModelForm):
     class Meta:
         model = Visit
-        fields = ['colony', 'colony_user','cat', 'vet_center', 'price', 'report_file', 'bill_file', 'user', 'follow_up', 'start_date', 'end_date', 'cat_survived', 'returned_to_colony', 'housing_type', 'housing_address']
+        fields = ['colony', 'colony_user','cat', 'vet_center', 'price', 'report_file', 'bill_file', 'user', 'follow_up', 'start_date', 'end_date', 'cat_survived', 'returned_to_colony', 'housing_type', 'housing_address', 'adoption_file']
         widgets = {
             'cat_survived': forms.Select(attrs={
                 'class': 'form-control',
@@ -96,8 +96,9 @@ class VisitForm(forms.ModelForm):
                 'class': 'form-control',
                 'rows': 3
             }),
+            'adoption_file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
-        labels = {
+    labels = {
             'colony': 'Colonia',
             'colony_user': 'Gestor de colonia',
             'cat': 'Gato',
@@ -109,7 +110,8 @@ class VisitForm(forms.ModelForm):
             'follow_up': 'Seguimiento',
             'start_date': 'Fecha de inicio',
             'end_date': 'Fecha de fin',
-            'cat_survived': '¿El gato sobrevivió?'
+            'cat_survived': '¿El gato sobrevivió?',
+            'adoption_file': 'Archivo de adopción (opcional)'
         }
 
     def __init__(self, *args, **kwargs):

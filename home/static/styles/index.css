@@ -1,48 +1,306 @@
 body{
-    background: linear-gradient(135deg, #f0f0f0 60%, #ffe4e1 100%);
-    font-family: 'Segoe UI', Arial, sans-serif;
-    color: #333;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e8f5e8 50%, #ffe4e1 100%);
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    color: #2c3e50;
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    transition: all 0.3s ease;
+    line-height: 1.6;
 }
 
-main {
+/* Hero Section */
+.hero-section {
+    background: rgba(255, 255, 255, 0.95);
+    color: #2c3e50;
+    padding: 60px 20px;
+    text-align: center;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    margin: 20px auto 40px auto;
+    max-width: 1000px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.hero-header {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.logo {
+    max-width: 180px;
+    height: auto;
+    margin: 0 auto 30px auto;
+    display: block;
+    border-radius: 15px;
+    box-shadow: 0 4px 16px rgba(255,255,255,0.2);
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    margin: 0;
+    color: #34495e;
+    font-weight: 400;
     max-width: 600px;
-    margin: 40px auto 24px auto;
-    padding: 24px;
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    animation: fadeIn 1s;
-    transition: all 0.3s ease;
+    margin: 0 auto;
+}
+
+/* Main Content */
+.main-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px 40px 20px;
+}
+
+.content-section {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr;
 }
 
 .card {
-    background: #ffe4e1;
-    border-radius: 14px;
-    padding: 24px 18px;
-    margin-bottom: 24px;
-    box-shadow: 0 2px 8px rgba(255,192,203,0.15);
-    text-align: center;
-    transition: transform 0.2s;
+    background: rgba(255, 228, 225, 0.8);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
 .card:hover {
-    transform: scale(1.03);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
 }
 
-h2, h3 {
-    color: #d2691e;
-    margin-top: 0;
-    letter-spacing: 1px;
-    transition: color 0.3s ease;
+.card:hover::before {
+    opacity: 1;
 }
 
-section {
-    margin-top: 18px;
+.hero-card {
+    text-align: center;
+    background: rgba(255, 228, 225, 0.8);
+    color: #2c3e50;
+}
+
+.hero-card .logo {
+    max-width: 180px;
+    height: auto;
+    margin: 0 auto 30px auto;
+    display: block;
+    border-radius: 15px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.hero-card .logo:hover {
+    transform: scale(1.05);
+}
+
+.hero-card .hero-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    line-height: 1.2;
+}
+
+.hero-card .hero-subtitle {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #34495e;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.intro-card {
+    text-align: center;
+    background: rgba(255, 228, 225, 0.8);
+    color: #2c3e50;
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.7;
+}
+
+.features-card h2,
+.opensource-card h2,
+.why-card h2 {
+    color: #2c3e50;
+    margin: 0 0 25px 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.features-card h2 i {
+    color: #f39c12;
+}
+
+.opensource-card h2 i {
+    color: #27ae60;
+}
+
+.why-card h2 i {
+    color: #e74c3c;
+}
+
+.features-list,
+.benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.features-list li,
+.benefits-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    font-size: 1.05rem;
+    transition: all 0.2s ease;
+}
+
+.features-list li:last-child,
+.benefits-list li:last-child {
+    border-bottom: none;
+}
+
+.features-list li:hover,
+.benefits-list li:hover {
+    background: rgba(102, 126, 234, 0.05);
+    padding-left: 10px;
+    border-radius: 8px;
+}
+
+.features-list li i,
+.benefits-list li i {
+    color: #667eea;
+    font-size: 1.2rem;
+    margin-top: 2px;
+    min-width: 20px;
+}
+
+.why-intro {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: #34495e;
+}
+
+.conclusion {
+    margin-top: 25px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-card .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .hero-card .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .main-content {
+        padding: 0 15px 30px 15px;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+    
+    .features-card h2,
+    .opensource-card h2,
+    .why-card h2 {
+        font-size: 1.5rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+}
+
+@media (min-width: 769px) {
+    .content-section {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+            "hero hero"
+            "intro intro"
+            "features opensource"
+            "why why";
+    }
+    
+    .hero-card {
+        grid-area: hero;
+    }
+    
+    .intro-card {
+        grid-area: intro;
+    }
+    
+    .features-card {
+        grid-area: features;
+    }
+    
+    .opensource-card {
+        grid-area: opensource;
+    }
+    
+    .why-card {
+        grid-area: why;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 footer {

@@ -46,6 +46,7 @@ class Visit(models.Model):
     ]
     housing_type = models.CharField(max_length=10, choices=HOUSING_CHOICES, default='none', null=True, blank=True, verbose_name="Tipo de alojamiento")
     housing_address = models.TextField(blank=True, null=True, verbose_name="Dirección de acogida/adopción")
+    adoption_file = models.FileField(upload_to='veterinarian/field/adoption', blank=True, null=True, verbose_name="Archivo de adopción")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

@@ -34,7 +34,7 @@
         {% csrf_token %}
         
         {% for field in form %}
-            <div class="form-group">
+            <div class="form-group" id="group-{{ field.name }}">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {{ field }}
                 {% if field.errors %}
@@ -47,6 +47,12 @@
                 {% endif %}
             </div>
         {% endfor %}
+
+        <div class="form-group" id="adoption-file-group" style="display:none;">
+            <label for="adoption_file">Archivo de adopción</label>
+            <input type="file" name="adoption_file" id="adoption_file" class="form-control" />
+        </div>
+        {% endfor %}
         
         <div class="form-buttons">
             <button type="submit" class="btn-primary">📅 Guardar Visita</button>
@@ -58,4 +64,23 @@
 </div>
 
 <script src="{% static 'js/veterinarian.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var housingTypeSelect = document.getElementById('id_housing_type');
+    var adoptionFileGroup = document.getElementById('adoption-file-group');
+    function handleHousingTypeChange() {
+        if (housingTypeSelect && adoptionFileGroup) {
+            if (housingTypeSelect.value === 'adoption') {
+                adoptionFileGroup.style.display = 'block';
+            } else {
+                adoptionFileGroup.style.display = 'none';
+            }
+        }
+    }
+    if (housingTypeSelect) {
+        housingTypeSelect.addEventListener('change', handleHousingTypeChange);
+        handleHousingTypeChange();
+    }
+});
+</script>
 {% endblock %}

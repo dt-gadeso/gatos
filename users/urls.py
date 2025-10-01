@@ -19,4 +19,6 @@ urlpatterns = [
     # Gestión de usuarios
     path('management/', views.user_management, name='user_management'),
     path('edit/<int:user_id>/', views.user_edit_admin, name='user_edit_admin'),
+    # Exportación
+    path('export-excel/', views.export_users_excel, name='export_users_excel'),
 ]

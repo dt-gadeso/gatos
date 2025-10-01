@@ -6,10 +6,13 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+from datetime import datetime
 
 class Staff(View):
     def get(self, request):
@@ -412,4 +415,74 @@ def user_edit_admin(request, user_id):
         'associations': associations,
         'trap_types': trap_types
     })
+
+@login_required
+def export_users_excel(request):
+    """Exportar usuarios a Excel - Solo administradores"""
+    if not request.user.is_superuser:
+        return JsonResponse({'error': 'No autorizado'}, status=403)
+    
+    # Crear workbook y worksheet
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Usuarios"
+    
+    # Estilos
+    header_font = Font(bold=True, color="FFFFFF")
+    header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
+    header_alignment = Alignment(horizontal="center", vertical="center")
+    
+    # Encabezados
+    headers = [
+        'ID', 'Usuario', 'Email', 'Nombre', 'Apellido', 'Teléfono',
+        'Rol', 'Asociación', 'Casa Acogida', 'Tiene Relevo', 'Es Capturador',
+        'Es Free', 'Tipo Trampa', 'Activo', 'Fecha Registro'
+    ]
+    
+    # Escribir encabezados
+    for col, header in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col, value=header)
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = header_alignment
+    
+    # Obtener datos de usuarios
+    users = User.objects.select_related('role', 'association', 'trap_type').all().order_by('id')
+    
+    # Escribir datos
+    for row, user in enumerate(users, 2):
+        ws.cell(row=row, column=1, value=user.id)
+        ws.cell(row=row, column=2, value=user.username)
+        ws.cell(row=row, column=3, value=user.email)
+        ws.cell(row=row, column=4, value=user.first_name or '')
+        ws.cell(row=row, column=5, value=user.last_name or '')
+        ws.cell(row=row, column=6, value=user.phone or '')
+        ws.cell(row=row, column=7, value=user.role.name if user.role else '')
+        ws.cell(row=row, column=8, value=user.association.name if user.association else '')
+        ws.cell(row=row, column=9, value='Sí' if user.casa_acogida else 'No')
+        ws.cell(row=row, column=10, value='Sí' if user.tiene_relevo else 'No')
+        ws.cell(row=row, column=11, value='Sí' if user.es_capturador else 'No')
+        ws.cell(row=row, column=12, value='Sí' if user.es_free else 'No')
+        ws.cell(row=row, column=13, value=user.trap_type.name if user.trap_type else '')
+        ws.cell(row=row, column=14, value='Sí' if user.activo else 'No')
+        ws.cell(row=row, column=15, value=user.created_at.strftime('%d/%m/%Y %H:%M') if user.created_at else '')
+    
+    # Ajustar ancho de columnas
+    column_widths = [5, 15, 25, 15, 15, 15, 15, 20, 12, 12, 12, 8, 15, 8, 18]
+    for col, width in enumerate(column_widths, 1):
+        ws.column_dimensions[ws.cell(row=1, column=col).column_letter].width = width
+    
+    # Preparar respuesta HTTP
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    
+    # Nombre del archivo con fecha actual
+    filename = f'usuarios_mishilovers_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    # Guardar el workbook en la respuesta
+    wb.save(response)
+    
+    return response
 

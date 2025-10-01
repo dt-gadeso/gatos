@@ -94,9 +94,14 @@
             <div class="admin-section mb-4">
                 <h4><i class="fas fa-users-cog"></i> Gestión Avanzada de Usuarios</h4>
                 <p class="text-muted">Accede al panel completo de administración de usuarios con búsqueda y edición.</p>
-                <a href="{% url 'user_management' %}" class="btn btn-primary btn-lg">
-                    <i class="fas fa-search"></i> Buscar y Gestionar Usuarios
-                </a>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="{% url 'user_management' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-search"></i> Buscar y Gestionar Usuarios
+                    </a>
+                    <a href="{% url 'export_users_excel' %}" class="btn btn-success btn-lg">
+                        <i class="fas fa-file-excel"></i> Exportar a Excel
+                    </a>
+                </div>
             </div>
             
             <hr>

@@ -76,7 +76,7 @@
                 </div>
             </div>
             
-            <p class="relief-description">{{ relief.description|truncatewords:30 }}</p>
+            <p class="relief-description">{{ relief.description|urlize|truncatewords:30|safe }}</p>
             
             <div class="relief-meta">
                 <span><strong>Creado:</strong> {{ relief.created_at|date:"d/m/Y H:i" }}</span>
