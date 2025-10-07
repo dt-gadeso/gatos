@@ -5,11 +5,28 @@
 <link rel="stylesheet" href="{% static 'css/formularios_multiples.css' %}">
 
 <div class="form-container">
-    <h2>Nueva Incidencia</h2>
+    <h2>Nueva Colonia</h2>
+    <div class="user-info">
+        <p><strong>Gestor de la colonia:</strong> {{ request.user.username }}</p>
+    </div>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn-submit">Guardar</button>
     </form>
 </div>
+
+<style>
+.user-info {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+}
+.user-info p {
+    margin: 0;
+    color: #333;
+}
+</style>
 {% endblock %}

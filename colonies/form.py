@@ -108,7 +108,7 @@ class ZoneForm(forms.Form):
 class ColonyForm(forms.ModelForm):
     class Meta:
         model = Colony
-        fields = '__all__'
+        fields = ['name', 'location', 'users_colony', 'observations']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el nombre de la colonia'}),
         }
@@ -116,13 +116,6 @@ class ColonyForm(forms.ModelForm):
     location = forms.ModelChoiceField(
         label='Ubicación',
         queryset=Location.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-
-    user = forms.ModelChoiceField(
-        label='Gestor',
-        queryset=User.objects.all(),
-        required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 

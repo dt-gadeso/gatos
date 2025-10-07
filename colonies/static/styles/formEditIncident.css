@@ -222,3 +222,45 @@ input[type="checkbox"] {
         font-size: 1.3rem;
     }
 }
+
+/* 🎨 Tema amarillo solo para el formulario de Nuevo Aviso */
+.yellow-theme {
+    --bg-main: #fffdf5;
+    --bg-card: #ffffff;
+    --text-primary: #333;
+    --text-secondary: #d4a017;
+    --input-border: #e0c95b;
+    --input-focus: #ffcc00;
+    --button-bg: #ffcc00;
+    --button-hover: #e6b800;
+    --shadow-color: rgba(255, 217, 0, 0.15);
+}
+
+/* Aplica solo dentro de yellow-theme */
+.yellow-theme h2 {
+    color: var(--text-secondary);
+}
+
+.yellow-theme .form-group label {
+    color: var(--text-secondary);
+}
+
+.yellow-theme .form-control:focus {
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.3);
+}
+
+.yellow-theme .btn-submit {
+    background: linear-gradient(135deg, var(--button-bg), var(--button-hover));
+    box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
+}
+
+.yellow-theme .btn-submit:hover {
+    background: linear-gradient(135deg, var(--button-hover), var(--button-bg));
+    box-shadow: 0 8px 25px rgba(255, 204, 0, 0.4);
+}
+
+.yellow-theme .form-group.focused {
+    border-left: 4px solid var(--input-focus);
+    background: rgba(255, 235, 59, 0.05);
+}

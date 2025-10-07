@@ -221,6 +221,7 @@ def location_detail(request, location_id):
     }
     return render(request, 'location.html', context)
 
+@login_required
 def new_colony(request):
     if request.method == 'GET':
         form = ColonyForm()
@@ -228,7 +229,9 @@ def new_colony(request):
     elif request.method == 'POST':
         form = ColonyForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            colony = form.save(commit=False)
+            colony.user = request.user
+            colony.save()
             return redirect('colonies')
         return render(request, 'formNewColony.html', {'form': form})
 

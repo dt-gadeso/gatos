@@ -28,7 +28,7 @@ class CreateCat(forms.Form):
     )
     sex = forms.ChoiceField(
         label='Sexo',
-        choices=[('M', 'Macho'), ('F', 'Hembra')],
+        choices=[('M', 'Macho'), ('F', 'Hembra'), ('U', 'Indefinido')],
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     sterilized = forms.ChoiceField(
@@ -38,7 +38,7 @@ class CreateCat(forms.Form):
     )
     status = forms.ChoiceField(
         label='Estado del gato',
-        choices=[('V', 'Vivo'), ('E', 'Enfermo'), ('M', 'Muerto')],
+        choices=[('V', 'Sano'), ('E', 'Enfermo'), ('M', 'Muerto')],
         widget=forms.Select(attrs={'class': 'form-control', 'onchange': 'toggleIllnessDescription()'})
     )
     illness_description = forms.CharField(
@@ -150,7 +150,7 @@ class SearchCatForm(forms.Form):
     )
     sex = forms.ChoiceField(
         label='Sexo',
-        choices=[('', 'Seleccionar sexo'), ('M', 'Macho'), ('F', 'Hembra')],
+        choices=[('', 'Seleccionar sexo'), ('M', 'Macho'), ('F', 'Hembra'), ('U', 'Indefinido')],
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
@@ -162,7 +162,7 @@ class SearchCatForm(forms.Form):
     )
     status = forms.ChoiceField(
         label='Estado',
-        choices=[('', 'Seleccionar estado'), ('V', 'Vivo'), ('E', 'Enfermo'), ('M', 'Fallecido')],
+        choices=[('', 'Seleccionar estado'), ('V', 'Sano'), ('E', 'Enfermo'), ('M', 'Fallecido')],
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )

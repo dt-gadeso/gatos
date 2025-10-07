@@ -3,12 +3,13 @@ from django.db import models
 
 class Cat(models.Model):
     SEX_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female'),
+        ('M', 'Macho'),
+        ('F', 'Hembra'),
+        ('U', 'Indefinido'),
     ]
     
     STATUS_CHOICES = [
-        ('V', 'Vivo'),
+        ('V', 'Sano'),
         ('E', 'Enfermo'),
         ('M', 'Muerto'),
     ]
@@ -17,7 +18,12 @@ class Cat(models.Model):
     photo_file = models.ImageField(upload_to='cats/img/') # Carpeta donde se guardan las cats/imágenes/
     chip = models.CharField(max_length=50, unique=True, null=False)
     birthday = models.DateField(null=False)
-    sex = models.CharField(max_length=1, choices=SEX_CHOICES)
+    sex = models.CharField(max_length=1, choices=SEX_CHOICES, default='U')
+    def clean(self):
+        # Solo permitir esterilización si el sexo es macho o hembra
+        if self.sterilized and self.sex not in ['M', 'F']:
+            from django.core.exceptions import ValidationError
+            raise ValidationError("Solo los gatos macho o hembra pueden ser esterilizados.")
     sterilized = models.BooleanField(default=False)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='V', verbose_name="Estado del gato")
     illness_description = models.TextField(blank=True, null=True, verbose_name="Descripción de la enfermedad")

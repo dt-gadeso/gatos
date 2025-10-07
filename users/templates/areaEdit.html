@@ -105,24 +105,6 @@
                                         <img id="carnet-preview-image" src="#" alt="Vista previa del carnet" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                                     </div>
                                 </div>
-
-                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
-                                    <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #ff9800, #f57c00); border-radius: 0 15px 15px 0;"></div>
-                                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                                        <i class="fas fa-home" style="color: #ff9800; margin-right: 8px; font-size: 18px;"></i>
-                                        <label for="{{ form.casa_acogida.id_for_label }}" class="area-edit-label" style="margin: 0; color: #ff9800 !important; font-weight: 600;">{{ form.casa_acogida.label }}</label>
-                                    </div>
-                                    {{ form.casa_acogida|safe }}
-                                </div>
-
-                                <div class="form-group area-edit-form-group enhanced-form-group" id="tiene-relevo-div" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative; display: block !important;">
-                                    <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #00bcd4, #0097a7); border-radius: 0 15px 15px 0;"></div>
-                                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                                        <i class="fas fa-user-friends" style="color: #00bcd4; margin-right: 8px; font-size: 18px;"></i>
-                                        <label for="{{ form.tiene_relevo.id_for_label }}" class="area-edit-label" style="margin: 0; color: #00bcd4 !important; font-weight: 600;">{{ form.tiene_relevo.label }}</label>
-                                    </div>
-                                    {{ form.tiene_relevo|safe }}
-                                </div>
                             </div>
                         </div>
                         
@@ -175,6 +157,24 @@
                                         </label>
                                     </div>
                                     {{ form.association|safe }}
+                                </div>
+                                
+                                <div class="form-group area-edit-form-group enhanced-form-group" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative;">
+                                    <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #ff9800, #f57c00); border-radius: 0 15px 15px 0;"></div>
+                                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                        <i class="fas fa-home" style="color: #ff9800; margin-right: 8px; font-size: 18px;"></i>
+                                        <label for="{{ form.casa_acogida.id_for_label }}" class="area-edit-label" style="margin: 0; color: #ff9800 !important; font-weight: 600;">{{ form.casa_acogida.label }}</label>
+                                    </div>
+                                    {{ form.casa_acogida|safe }}
+                                </div>
+
+                                <div class="form-group area-edit-form-group enhanced-form-group" id="tiene-relevo-div" style="background: linear-gradient(135deg, var(--card-bg, #fff) 0%, #fafafa 100%); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid var(--input-border, #e9ecef); position: relative; display: block !important;">
+                                    <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #00bcd4, #0097a7); border-radius: 0 15px 15px 0;"></div>
+                                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                        <i class="fas fa-user-friends" style="color: #00bcd4; margin-right: 8px; font-size: 18px;"></i>
+                                        <label for="{{ form.tiene_relevo.id_for_label }}" class="area-edit-label" style="margin: 0; color: #00bcd4 !important; font-weight: 600;">{{ form.tiene_relevo.label }}</label>
+                                    </div>
+                                    {{ form.tiene_relevo|safe }}
                                 </div>
                             </div>
                         </div>

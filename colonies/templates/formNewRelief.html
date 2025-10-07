@@ -1,23 +1,14 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
-<link rel="stylesheet" href="{% static 'styles/styles.css' %}">
-
-<div class="forms-container">
+<div class="forms-container yellow-theme">
     <div class="form-section">
         <h2>Nuevo Aviso</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            
             <!-- Título -->
             <div class="form-group">
                 {{ form.title.label_tag }}
                 {{ form.title }}
                 {% if form.title.errors %}
-                    <div class="error-message">
-                        {{ form.title.errors }}
-                    </div>
+                    <div class="error-message">{{ form.title.errors }}</div>
                 {% endif %}
             </div>
 
@@ -26,9 +17,7 @@
                 {{ form.alert_type.label_tag }}
                 {{ form.alert_type }}
                 {% if form.alert_type.errors %}
-                    <div class="error-message">
-                        {{ form.alert_type.errors }}
-                    </div>
+                    <div class="error-message">{{ form.alert_type.errors }}</div>
                 {% endif %}
             </div>
 
@@ -37,9 +26,7 @@
                 {{ form.description.label_tag }}
                 {{ form.description }}
                 {% if form.description.errors %}
-                    <div class="error-message">
-                        {{ form.description.errors }}
-                    </div>
+                    <div class="error-message">{{ form.description.errors }}</div>
                 {% endif %}
             </div>
 
@@ -49,19 +36,14 @@
                     {{ form.start_date.label_tag }}
                     {{ form.start_date }}
                     {% if form.start_date.errors %}
-                        <div class="error-message">
-                            {{ form.start_date.errors }}
-                        </div>
+                        <div class="error-message">{{ form.start_date.errors }}</div>
                     {% endif %}
                 </div>
-
                 <div class="form-group">
                     {{ form.end_date.label_tag }}
                     {{ form.end_date }}
                     {% if form.end_date.errors %}
-                        <div class="error-message">
-                            {{ form.end_date.errors }}
-                        </div>
+                        <div class="error-message">{{ form.end_date.errors }}</div>
                     {% endif %}
                 </div>
             </div>
@@ -70,23 +52,3 @@
         </form>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Formulario de nuevo aviso cargado');
-    
-    // Añadir efecto de enfoque mejorado
-    const inputs = document.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
-        input.addEventListener('focus', function() {
-            this.parentElement.classList.add('focused');
-        });
-        
-        input.addEventListener('blur', function() {
-            this.parentElement.classList.remove('focused');
-        });
-    });
-});
-</script>
-
-{% endblock %}

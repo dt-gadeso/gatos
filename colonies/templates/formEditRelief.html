@@ -364,9 +364,85 @@ textarea {
     font-size: 12px;
     font-weight: bold;
 }
+/* 🎨 Tema amarillo solo para "Editar Aviso" */
+.yellow-theme {
+    --color-bg: linear-gradient(135deg, #fffdf5 0%, #fff9db 100%);
+    --color-header: linear-gradient(135deg, #ffcc00, #e6b800);
+    --color-border: #ffcc00;
+    --color-hover: #e6b800;
+    --color-text: #333;
+    --color-error-bg: #fff3cd;
+    --color-error-text: #856404;
+    --color-error-border: #ffeeba;
+    --color-shadow: rgba(255, 204, 0, 0.15);
+}
+
+/* Contenedor principal */
+.yellow-theme .forms-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem;
+    background: var(--color-bg);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sección del formulario */
+.yellow-theme .form-section {
+    max-width: 700px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px var(--color-shadow);
+    overflow: hidden;
+}
+
+.yellow-theme .form-section h2 {
+    background: var(--color-header);
+    color: white;
+    margin: 0;
+    padding: 1.5rem 2rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Inputs y textarea */
+.yellow-theme input[type="text"],
+.yellow-theme input[type="date"],
+.yellow-theme input[type="datetime-local"],
+.yellow-theme textarea {
+    border: 2px solid var(--color-border);
+    transition: all 0.3s ease;
+}
+
+.yellow-theme input:focus,
+.yellow-theme textarea:focus {
+    border-color: var(--color-hover);
+    box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+/* Botones */
+.yellow-theme .btn-submit {
+    background: linear-gradient(135deg, var(--color-header), var(--color-hover));
+    color: white;
+    box-shadow: 0 4px 15px var(--color-shadow);
+}
+
+.yellow-theme .btn-submit:hover {
+    background: linear-gradient(135deg, var(--color-hover), var(--color-header));
+    box-shadow: 0 6px 20px var(--color-shadow);
+}
+
+.yellow-theme .btn-cancel {
+    background: linear-gradient(135deg, #ffd966, #e6b800);
+    color: white;
+}
 </style>
 
-<div class="forms-container">
+<div class="forms-container yellow-theme">
     <div class="form-section">
         <h2>Editar Aviso</h2>
         <form method="post" enctype="multipart/form-data">
