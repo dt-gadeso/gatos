@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('veterinarian', '0007_remove_visitservice_vet_service_and_more'),
+        ('veterinarian', '0006_alter_visit_bill_file_alter_visit_report_file'),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='visitservice',
-            name='vet_service',
-        ),
+        # migrations.RemoveField(
+        #     model_name='visitservice',
+        #     name='vet_service',
+        # ),
         migrations.AlterUniqueTogether(
             name='visitservice',
             unique_together=None,
