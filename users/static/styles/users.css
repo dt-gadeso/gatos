@@ -105,7 +105,7 @@
 .signup-main {
     max-width: 500px;
     margin: 40px auto;
-    background: #fff;
+    background: linear-gradient(135deg, #f0f0f0 60%, #ffe4e1 100%);
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.08);
     padding: 32px;
