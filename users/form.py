@@ -75,6 +75,31 @@ class CreateNewUser(forms.Form):
             'autocomplete': 'off'  # Desactivamos el autocompletado para campos de selección
         })
     )
+    casa_acogida = forms.ChoiceField(
+        label='Casa de acogida',
+        choices=[('si', 'Sí'), ('no', 'No')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    tiene_relevo = forms.ChoiceField(
+        label='¿Tiene relevo?',
+        choices=[('si', 'Sí'), ('no', 'No')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    es_free = forms.ChoiceField(
+        label='¿Tienes asociacion?',
+        choices=[('si', 'Sí'), ('no', 'No')],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    association = forms.ModelChoiceField(
+        label="Asociación",
+        queryset=Association.objects.all(),
+        required=False,
+        empty_label="-- Selecciona una asociación --",
+        widget=forms.Select(attrs={'class': 'form-control', 'id': 'association'})
+    )
 
 class LoginUser(forms.Form):
     username = forms.CharField(

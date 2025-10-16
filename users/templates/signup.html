@@ -39,6 +39,12 @@
         <div class="signup-form-group signup-tiene-relevo" id="tiene-relevo-div">
             {{ form.tiene_relevo.label_tag }}<br>{{ form.tiene_relevo }}
         </div>
+        <div class="signup-form-group">
+            {{ form.es_capturador.label_tag }}<br>{{ form.es_capturador }}
+        </div>
+        <div class="signup-form-group" id="trap-type-div" style="display: none;">
+            {{ form.trap_type.label_tag }}<br>{{ form.trap_type }}
+        </div>
         <div class="signup-button-container">
             <button type="submit" class="signup-button">Crear Cuenta</button>
         </div>
